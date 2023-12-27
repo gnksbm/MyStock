@@ -12,10 +12,11 @@ import Domain
 import Core
 
 public struct KISOAuthEndPoint: KISEndPoint {
-    public var request: KISOAuthRequest
+    public var investType: InvestType
+    public var oAuthType: KISOAuthRequest.OAuthType
     
     public var path: String {
-        switch request.oAuthType {
+        switch oAuthType {
         case .webSocket:
             return "/oauth2/Approval"
         case .access:
@@ -43,7 +44,8 @@ public struct KISOAuthEndPoint: KISEndPoint {
         .post
     }
     
-    public init(request: KISOAuthRequest) {
-        self.request = request
+    public init(investType: InvestType, oAuthType: KISOAuthRequest.OAuthType) {
+        self.investType = investType
+        self.oAuthType = oAuthType
     }
 }

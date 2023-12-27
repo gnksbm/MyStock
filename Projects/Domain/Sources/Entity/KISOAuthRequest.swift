@@ -14,11 +14,7 @@ public struct KISOAuthRequest {
 }
 
 public extension KISOAuthRequest {
-    public enum OAuthType {
+    enum OAuthType {
         case webSocket, access
-    }
-    
-    public enum InvestType {
-        case reality, simulation
     }
 }

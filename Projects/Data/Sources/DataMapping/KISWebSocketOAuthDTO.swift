@@ -1,5 +1,5 @@
 //
-//  KisWebSocketOAuthDTO.swift
+//  KISWebSocketOAuthDTO.swift
 //  Data
 //
 //  Created by gnksbm on 2023/12/28.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct KisWebSocketOAuthDTO: Codable {
+struct KISWebSocketOAuthDTO: Codable {
     let approvalKey: String
 
     enum CodingKeys: String, CodingKey {

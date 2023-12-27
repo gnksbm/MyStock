@@ -20,36 +20,41 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
     public var successedFetch = PublishSubject<String>()
     
     public func requestOAuth(request: KISOAuthRequest) {
-        networkService.send(endPoint: KISOAuthEndPoint(request: request))
-            .withUnretained(self)
-            .subscribe(
-                onNext: { repository, data in
-                    let decoder = JSONDecoder()
-                    switch request.oAuthType {
-                    case .access:
-                        do {
-                            let token = try decoder.decode(
-                                KISAccessOAuthDTO.self,
-                                from: data
-                            ).accessToken
-                            repository.successedFetch.onNext(token)
-                        } catch {
-                            repository.successedFetch.onError(error)
-                        }
-                    case .webSocket:
-                        do {
-                            let token = try decoder.decode(
-                                KisWebSocketOAuthDTO.self,
-                                from: data
-                            ).approvalKey
-                            repository.successedFetch.onNext(token)
-                        } catch {
-                            repository.successedFetch.onError(error)
-                        }
+        networkService.send(
+            endPoint: KISOAuthEndPoint(
+                investType: request.investType,
+                oAuthType: request.oAuthType
+            )
+        )
+        .withUnretained(self)
+        .subscribe(
+            onNext: { repository, data in
+                let decoder = JSONDecoder()
+                switch request.oAuthType {
+                case .access:
+                    do {
+                        let token = try decoder.decode(
+                            KISAccessOAuthDTO.self,
+                            from: data
+                        ).accessToken
+                        repository.successedFetch.onNext(token)
+                    } catch {
+                        repository.successedFetch.onError(error)
+                    }
+                case .webSocket:
+                    do {
+                        let token = try decoder.decode(
+                            KISWebSocketOAuthDTO.self,
+                            from: data
+                        ).approvalKey
+                        repository.successedFetch.onNext(token)
+                    } catch {
+                        repository.successedFetch.onError(error)
                     }
                 }
-            )
-            .disposed(by: disposeBag)
+            }
+        )
+        .disposed(by: disposeBag)
     }
     
     public init(networkService: NetworkService) {
