@@ -6,6 +6,6 @@ let project = Project.makeProject(
     moduleType: .framework,
     isTestable: true,
     dependencies: [
-        .core
+        .domain,
     ]
 )

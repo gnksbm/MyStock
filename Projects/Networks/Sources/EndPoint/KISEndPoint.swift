@@ -8,12 +8,10 @@
 
 import Foundation
 
-protocol KISEndPoint: EndPoint {
-    var investType: InvestType { get set }
-}
+import Domain
 
-public enum InvestType {
-    case reality, simulation
+protocol KISEndPoint: EndPoint {
+    var request: KISOAuthRequest { get set }
 }
 
 extension KISEndPoint {
@@ -22,7 +20,7 @@ extension KISEndPoint {
     }
     
     public var host: String {
-        switch investType {
+        switch request.investType {
         case .reality:
             return "openapi.koreainvestment.com"
         case .simulation:
@@ -31,7 +29,7 @@ extension KISEndPoint {
     }
     
     public var port: String {
-        switch investType {
+        switch request.investType {
         case .reality:
             return "9443"
         case .simulation:

@@ -10,7 +10,6 @@ import Foundation
 
 import RxSwift
 
-protocol KISOAuthRepository {
-    func requestWebSocket() -> Observable<String>
-    func requestAccess() -> Observable<String>
+public protocol KISOAuthRepository {
+    func requestOAuth(request: KISOAuthRequest)
 }

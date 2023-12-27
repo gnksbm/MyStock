@@ -8,10 +8,11 @@
 
 import Foundation
 
+import Domain
 import Core
 
 public struct KISCheckBalanceEndPoint: KISEndPoint {
-    var investType: InvestType
+    var request: KISOAuthRequest
     
     public var path: String {
         "/uapi/domestic-stock/v1/trading/inquire-balance"
@@ -28,25 +29,25 @@ public struct KISCheckBalanceEndPoint: KISEndPoint {
     }
     
     public init(
-        investType: InvestType,
+        request: KISOAuthRequest,
         accountRequest: BalanceRequest,
         authorization: String
     ) {
-        self.investType = investType
+        self.request = request
         self.query = accountRequest.toQuery
         self.header = [
             "content-type": "application/json",
             "authorization": "Bearer \(authorization)", // "Bearer ..."
             "appkey": .kisKey,
             "appsecret": .kisSecret,
-            "tr_id": investType.tradingID
+            "tr_id": request.tradingID
         ]
     }
 }
 
-fileprivate extension InvestType {
+fileprivate extension KISOAuthRequest {
     var tradingID: String {
-        switch self {
+        switch self.investType {
         case .reality:
             return "TTTC8434R"
         case .simulation:

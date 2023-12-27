@@ -6,7 +6,6 @@ let project = Project.makeProject(
     name: "Data",
     moduleType: .framework,
     dependencies: [
-        .domain,
         .networks
     ]
 )
