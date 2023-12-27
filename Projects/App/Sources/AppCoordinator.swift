@@ -7,10 +7,12 @@
 //
 
 import UIKit
-import Core
+
+import FeatureDependency
+import HomeFeature
 
 final class AppCoordinator: Coordinator {
-    var childCoordinators: [Core.Coordinator] = []
+    var childCoordinators: [Coordinator] = []
     
     var navigationController: UINavigationController
     
@@ -19,5 +21,10 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
+        let homeCoordinator = HomeCoordinator(
+            navigationController: navigationController
+        )
+        childCoordinators.append(homeCoordinator)
+        homeCoordinator.start()
     }
 }

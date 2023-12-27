@@ -9,7 +9,7 @@
 import Foundation
 
 public protocol EndPoint {
-    var scheme: String { get }
+    var scheme: Scheme { get }
     var host: String { get }
     var port: String { get }
     var path: String { get }
@@ -19,10 +19,14 @@ public protocol EndPoint {
     var method: HTTPMethod { get }
 }
 
+public enum Scheme: String {
+    case http, https
+}
+
 extension EndPoint {
     var toURLRequest: URLRequest? {
         var urlComponent = URLComponents()
-        urlComponent.scheme = scheme
+        urlComponent.scheme = scheme.rawValue
         urlComponent.host = host
         urlComponent.port = Int(port)
         urlComponent.path = path
