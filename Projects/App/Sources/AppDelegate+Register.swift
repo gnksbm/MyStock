@@ -13,9 +13,9 @@ import Domain
 
 extension AppDelegate {
     func registerDependencies() {
-        DIContainer.register(
-            type: TempRepository.self,
-            DefaultTempRepository()
-        )
+//        DIContainer.register(
+//            type: TempRepository.self,
+//            DefaultTempRepository()
+//        )
     }
 }

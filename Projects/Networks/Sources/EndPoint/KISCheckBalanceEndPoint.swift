@@ -1,5 +1,5 @@
 //
-//  KISAccessOAuthEndPoint.swift
+//  KISCheckBalanceEndPoint.swift
 //  Networks
 //
 //  Created by gnksbm on 2023/12/28.
@@ -10,10 +10,12 @@ import Foundation
 
 import Core
 
-public struct KISAccessOAuthEndPoint: KISEndPoint {
-    var oAuthType: OAuthType
-    
+public struct KISCheckBalanceEndPoint: KISEndPoint {
     var investType: InvestType
+    
+    public var path: String {
+        "/uapi/domestic-stock/v1/trading/inquire-balance"
+    }
     
     public var query: [String : String]
     
@@ -26,12 +28,10 @@ public struct KISAccessOAuthEndPoint: KISEndPoint {
     }
     
     public init(
-        oAuthType: OAuthType,
         investType: InvestType,
         accountRequest: BalanceRequest,
         authorization: String
     ) {
-        self.oAuthType = oAuthType
         self.investType = investType
         self.query = accountRequest.toQuery
         self.header = [

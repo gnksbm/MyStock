@@ -9,6 +9,6 @@
 import Foundation
 import Domain
 
-public final class DefaultTempRepository: TempRepository {
+public final class DefaultTempRepository {
     public init() { }
 }

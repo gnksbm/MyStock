@@ -9,12 +9,7 @@
 import Foundation
 
 protocol KISEndPoint: EndPoint {
-    var oAuthType: OAuthType { get set }
     var investType: InvestType { get set }
-}
-
-public enum OAuthType {
-    case webSocket, access
 }
 
 public enum InvestType {
@@ -41,15 +36,6 @@ extension KISEndPoint {
             return "9443"
         case .simulation:
             return "29443"
-        }
-    }
-    
-    public var path: String {
-        switch oAuthType {
-        case .webSocket:
-            return "/oauth2/Approval"
-        case .access:
-            return "/oauth2/tokenP"
         }
     }
 }

@@ -18,8 +18,7 @@ final class NetworksTests: XCTestCase {
     }
 
     func test_KISAccessOAuthEndPoint() throws {
-        endPoint = KISAccessOAuthEndPoint(
-            oAuthType: .access,
+        endPoint = KISCheckBalanceEndPoint(
             investType: .simulation,
             accountRequest: .init(accountNumber: ""),
             authorization: ""
@@ -27,7 +26,7 @@ final class NetworksTests: XCTestCase {
     }
     
     func test_KISOAuthEndPoint() throws {
-        endPoint = KISWebSocketOAuthEndPoint(
+        endPoint = KISOAuthEndPoint(
             oAuthType: .webSocket,
             investType: .simulation
         )

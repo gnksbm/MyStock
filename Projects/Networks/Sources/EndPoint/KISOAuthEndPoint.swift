@@ -1,5 +1,5 @@
 //
-//  KISWebSocketOAuthEndPoint.swift
+//  KISOAuthEndPoint.swift
 //  Network
 //
 //  Created by gnksbm on 2023/12/27.
@@ -10,7 +10,7 @@ import Foundation
 
 import Core
 
-public struct KISWebSocketOAuthEndPoint: KISEndPoint {
+public struct KISOAuthEndPoint: KISEndPoint {
     public var oAuthType: OAuthType
     public var investType: InvestType
     
@@ -68,5 +68,11 @@ public struct KISWebSocketOAuthEndPoint: KISEndPoint {
     init(oAuthType: OAuthType, investType: InvestType) {
         self.oAuthType = oAuthType
         self.investType = investType
+    }
+}
+
+extension KISOAuthEndPoint {
+    public enum OAuthType {
+        case webSocket, access
     }
 }
