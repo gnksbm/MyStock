@@ -1,7 +1,7 @@
 import XCTest
-@testable import tempFeature
+@testable import HomeFeature
 
-final class tempFeatureTests: XCTestCase {
+final class HomeFeatureTests: XCTestCase {
     override func setUpWithError() throws {
     }
 

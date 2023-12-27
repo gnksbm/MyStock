@@ -2,9 +2,9 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeProject(
-    name: "{{ name }}",
-    moduleType: .framework,
-    isTestable: true,
+    name: "HomeFeature",
+    moduleType: .feature,
     dependencies: [
+        .featureDependency
     ]
 )

@@ -31,22 +31,6 @@ Download Ignored
 
 Set Project
 
-### ios tf_local
-
-```sh
-[bundle exec] fastlane ios tf_local
-```
-
-Local Push to TestFlight
-
-### ios tf_remote
-
-```sh
-[bundle exec] fastlane ios tf_remote
-```
-
-Remote Push to TestFlight
-
 ----
 
 This README.md is auto-generated and will be re-generated every time [_fastlane_](https://fastlane.tools) is run.

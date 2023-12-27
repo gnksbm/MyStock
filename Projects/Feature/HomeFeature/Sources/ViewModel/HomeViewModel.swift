@@ -6,7 +6,7 @@ import FeatureDependency
 import RxSwift
 import RxCocoa
 
-public final class tempViewModel: ViewModel {
+public final class HomeViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     
     public struct Input {

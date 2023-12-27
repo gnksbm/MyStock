@@ -8,5 +8,6 @@ let project = Project.makeProject(
     hasResource: true,
     dependencies: [
         .data,
-    ] + .Feature.allCases.map({ $0.dependency })
+        .domain,
+    ] + .Feature.allCases.map { $0.dependency }
 )

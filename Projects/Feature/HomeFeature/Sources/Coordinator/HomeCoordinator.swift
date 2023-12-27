@@ -2,7 +2,7 @@ import UIKit
 
 import FeatureDependency
 
-public final class tempCoordinator: Coordinator {
+public final class HomeCoordinator: Coordinator {
     public var childCoordinators: [Coordinator] = []
     public var navigationController: UINavigationController
     
@@ -13,11 +13,13 @@ public final class tempCoordinator: Coordinator {
     public func start() {
     }
     
-    public func createtempViewController() -> UINavigationController {
-        let tempViewController = tempViewController(
-            viewModel: tempViewModel()
+    public func createHomeViewController() -> UINavigationController {
+        let homeViewController = HomeViewController(
+            viewModel: HomeViewModel()
         )
-        navigationController = UINavigationController(rootViewController: tempViewController)
+        navigationController = UINavigationController(
+            rootViewController: homeViewController
+        )
         return navigationController
     }
 }

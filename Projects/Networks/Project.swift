@@ -2,9 +2,10 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeProject(
-    name: "tempFeature",
-    moduleType: .feature,
+    name: "Networks",
+    moduleType: .framework,
+    isTestable: true,
     dependencies: [
-        .featureDependency
+        .core
     ]
 )

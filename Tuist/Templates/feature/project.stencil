@@ -3,7 +3,7 @@ import ProjectDescriptionHelpers
 
 let project = Project.makeProject(
     name: "{{ name }}Feature",
-    targetKinds: .feature,
+    moduleType: .feature,
     dependencies: [
         .featureDependency
     ]

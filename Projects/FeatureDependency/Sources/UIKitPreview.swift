@@ -3,7 +3,7 @@
 //  FeatureDependency
 //
 //  Created by gnksbm on 2023/11/25.
-//  Copyright © 2023 https://github.com/gnksbm/Clone_AppStore. All rights reserved.
+//  Copyright © 2023 gnksbm All rights reserved.
 //
 
 import SwiftUI
@@ -15,10 +15,15 @@ public struct UIKitPreview: UIViewControllerRepresentable {
         self.viewController = viewController
     }
     
-    public func makeUIViewController(context: Context) -> some UINavigationController {
+    public func makeUIViewController(
+        context: Context
+    ) -> some UINavigationController {
         return UINavigationController(rootViewController: viewController)
     }
     
-    public func updateUIViewController(_ uiViewController: UIViewControllerType, context: Context) { }
+    public func updateUIViewController(
+        _ uiViewController: UIViewControllerType,
+        context: Context
+    ) { }
 }
 #endif

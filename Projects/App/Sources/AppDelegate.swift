@@ -3,7 +3,7 @@
 //  AppStore
 //
 //  Created by gnksbm on 2023/11/15.
-//  Copyright © 2023 https://github.com/gnksbm/Clone_AppStore. All rights reserved.
+//  Copyright © 2023 gnksbm All rights reserved.
 //
 
 import UIKit
@@ -13,6 +13,7 @@ final class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         setupAppearance()
         registerDependencies()
+        test()
         return true
     }
 

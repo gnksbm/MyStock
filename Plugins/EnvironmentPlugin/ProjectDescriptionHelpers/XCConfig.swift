@@ -8,10 +8,27 @@
 import ProjectDescription
 
 public extension Settings {
-    static let secret: Self = .settings(
+    static let debug: Self = .settings(
         base: .baseSetting.setVersion()
             .setCodeSignManual()
             .setProvisioning(),
+        configurations: [
+            .debug(
+                name: .debug,
+                xcconfig: .relativeToRoot("XCConfig/Debug.xcconfig")
+            ),
+            .release(
+                name: .release,
+                xcconfig: .relativeToRoot("XCConfig/Release.xcconfig")
+            ),
+        ],
+        defaultSettings: .recommended
+    )
+    static let test: Self = .settings(
+        base: .baseSetting.setVersion()
+            .enableTestabilty(),
+//            .setCodeSignManual()
+//            .setProvisioning(),
         configurations: [
             .debug(
                 name: .debug,
@@ -28,6 +45,14 @@ public extension Settings {
 
 public extension SettingsDictionary {
     static let baseSetting: Self = [:]
+    
+    func enableTestabilty() -> SettingsDictionary {
+        merging(
+            [
+                "ENABLE_TESTABILITY": .string("YES")
+            ]
+        )
+    }
     
     func setVersion() -> SettingsDictionary {
         merging(

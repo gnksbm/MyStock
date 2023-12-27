@@ -9,19 +9,30 @@
 import ProjectDescription
 
 public extension InfoPlist {
-    static let infoPlist: Self = .extendingDefault(
-        with: .baseInfoPlist.merging(
-            .additionalInfoPlist,
-            uniquingKeysWith: { oldValue, newValue in
+    static let appInfoPlist: Self = .extendingDefault(
+        with: .baseInfoPlist
+            .merging(.additionalInfoPlist) { oldValue, newValue in
                 newValue
             }
-        )
+            .merging(.secrets) { oldValue, newValue in
+                newValue
+            }
+    )
+    static let frameworkInfoPlist: Self = .extendingDefault(
+        with: .framework
+            .merging(.secrets) { oldValue, newValue in
+                newValue
+            }
     )
 }
 
 public extension [String: InfoPlist.Value] {
+    static let secrets: Self = [
+        "KIS_APP_KEY": "$(KIS_APP_KEY)",
+        "KIS_APP_SECRET": "$(KIS_APP_SECRET)",
+    ]
     static let additionalInfoPlist: Self = [
-        "ITSAppUsesNonExemptEncryption": "NO"
+        "ITSAppUsesNonExemptEncryption": "NO",
     ]
     
     static let baseInfoPlist: Self = [
@@ -40,5 +51,16 @@ public extension [String: InfoPlist.Value] {
                 ]
             ]
         ],
+    ]
+    
+    static let framework: Self = [
+        "CFBundleDevelopmentRegion": "$(DEVELOPMENT_LANGUAGE)",
+        "CFBundleExecutable": "$(EXECUTABLE_NAME)",
+        "CFBundleIdentifier": "$(PRODUCT_BUNDLE_IDENTIFIER)",
+        "CFBundleInfoDictionaryVersion": "6.0",
+        "CFBundleName": "$(PRODUCT_NAME)",
+        "CFBundlePackageType": "FMWK",
+        "CFBundleShortVersionString": "1.0",
+        "CFBundleVersion": "1",
     ]
 }

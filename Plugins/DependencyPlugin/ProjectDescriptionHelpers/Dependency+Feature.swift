@@ -8,14 +8,14 @@
 import ProjectDescription
 
 public extension Array<TargetDependency> {
-    enum Feature: CaseIterable {
-//        case temp
+    enum Feature: String, CaseIterable {
+        case home
         
         public var dependency: TargetDependency {
-            switch self {
-//            case .temp:
-//                return featureModule(name: "temp")
-            }
+            var name = rawValue.map { $0 }
+            name.removeFirst()
+            name.insert(Character(rawValue.first!.uppercased()), at: 0)
+            return featureModule(name: String(name))
         }
         
         private func featureModule(name: String) -> TargetDependency {

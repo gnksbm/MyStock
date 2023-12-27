@@ -40,7 +40,10 @@ extension Project {
                 let framework = frameworkTarget(name: name, entitlements: entitlements, hasResource: hasResource, dependencies: dependencies)
                 result.append(framework)
                 if isTestable {
-                    let test = unitTestTarget(name: name, dependencies: dependencies)
+                    let test = unitTestTarget(
+                        name: name,
+                        dependencies: [.target(framework)]
+                    )
                     result.append(test)
                 }
                 return result
@@ -73,13 +76,13 @@ extension Project {
             product: .app,
             bundleId: .bundleID,
             deploymentTarget: .deploymentTarget,
-            infoPlist: .infoPlist,
+            infoPlist: .appInfoPlist,
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             entitlements: entitlements,
             scripts: [.swiftLint],
             dependencies: dependencies,
-            settings: .secret
+            settings: .debug
         )
         return target
     }
@@ -95,7 +98,7 @@ extension Project {
             product: .app,
             bundleId: .bundleID + ".\(name)DemoApp",
             deploymentTarget: .deploymentTarget,
-            infoPlist: .infoPlist,
+            infoPlist: .appInfoPlist,
             sources: [
                 "Demo/**",
                 "Sources/**"
@@ -120,7 +123,7 @@ extension Project {
             product: .framework,
             bundleId: .bundleID + ".\(name)",
             deploymentTarget: .deploymentTarget,
-            infoPlist: .default,
+            infoPlist: .frameworkInfoPlist,
             sources: ["Sources/**"],
             resources: hasResource ? ["Resources/**"] : nil,
             entitlements: entitlements,
@@ -141,7 +144,7 @@ extension Project {
             product: .unitTests,
             bundleId: .bundleID + ".\(name)Test",
             deploymentTarget: .deploymentTarget,
-            infoPlist: .default,
+            infoPlist: .frameworkInfoPlist,
             sources: ["Tests/**"],
             scripts: isFeature ? [.featureSwiftLint] : [.swiftLint],
             dependencies: dependencies

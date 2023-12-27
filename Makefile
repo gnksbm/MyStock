@@ -1,18 +1,27 @@
-BASE_URL = https://raw.githubusercontent.com/Pepsi-Club/YamYamPick-ignored/main
+generate:
+	tuist fetch
+	tuist generate
 
-define download_file
-	@echo "Downloading $(3) to $(1) using token: $(2)"
-	mkdir -p $(1)
-	curl -H "Authorization: token $(2)" -o $(1)/$(3) $(BASE_URL)/$(3)
-endef
+clean:
+	rm -rf **/**/**/*.xcodeproj
+	rm -rf **/**/*.xcodeproj
+	rm -rf **/*.xcodeproj
+	rm -rf *.xcworkspace
+	rm -rf **/**/**/Derived/
+	rm -rf **/**/Derived/
+	rm -rf **/Derived/
+	rm -rf Derived/
 
-.PHONY: download-privates
+reset:
+	tuist clean
+	rm -rf **/**/**/*.xcodeproj
+	rm -rf **/**/*.xcodeproj
+	rm -rf **/*.xcodeproj
+	rm -rf *.xcworkspace
 
-download-privates: download-xcconfigs download-env
-
-download-xcconfigs:
-	$(call download_file, XCConfig, $(token),Debug.xcconfig)
-	$(call download_file, XCConfig, $(token),Release.xcconfig)
-
-download-env:
-	$(call download_file, fastlane, $(token),.env)
+regenerate:
+	rm -rf **/**/**/*.xcodeproj
+	rm -rf **/**/*.xcodeproj
+	rm -rf **/*.xcodeproj
+	rm -rf *.xcworkspace
+	tuist generate

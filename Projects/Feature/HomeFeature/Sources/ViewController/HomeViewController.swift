@@ -2,10 +2,10 @@ import UIKit
 
 import RxSwift
 
-public final class tempViewController: UIViewController {
-    private let viewModel: tempViewModel
+public final class HomeViewController: UIViewController {
+    private let viewModel: HomeViewModel
     
-    public init(viewModel: tempViewModel) {
+    public init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
         super.init(nibName: nil, bundle: nil)
     }
@@ -22,11 +22,11 @@ public final class tempViewController: UIViewController {
 #if DEBUG
 import SwiftUI
 import FeatureDependency
-struct tempViewController_Preview: PreviewProvider {
+struct HomeViewController_Preview: PreviewProvider {
     static var previews: some View {
         UIKitPreview(
-            tempViewController(
-                viewModel: tempViewModel()
+            HomeViewController(
+                viewModel: HomeViewModel()
             )
         )
     }

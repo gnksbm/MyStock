@@ -1,5 +1,5 @@
 excluded: # 린트 과정에서 무시할 파일 경로. `included`보다 우선순위 높음
-    - Projects/YamYamPick/Sources/Application
+    - Projects/App/Sources/**
     - Tuist
     - Derived
 identifier_name:
@@ -37,10 +37,11 @@ file_length:
     - 1000 # warning
     - 2000 # error
 line_length:
-    - 300
+    - 80
     - 400
 disabled_rules: # 제외하고 싶은 룰
     - conditional_returns_on_newline
+    - identifier_name
     - trailing_comma
     - type_name
     - nesting
