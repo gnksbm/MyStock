@@ -11,7 +11,14 @@ import Foundation
 public struct KISCheckBalanceRequest {
     public let investType: InvestType
     public let accountRequest: BalanceRequest
-    public let authorization: String
+    
+    public init(
+        investType: InvestType,
+        accountRequest: BalanceRequest
+    ) {
+        self.investType = investType
+        self.accountRequest = accountRequest
+    }
 }
 
 public struct BalanceRequest {

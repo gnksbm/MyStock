@@ -11,6 +11,11 @@ import Foundation
 public struct KISOAuthRequest {
     public let oAuthType: OAuthType
     public let investType: InvestType
+    
+    public init(oAuthType: OAuthType, investType: InvestType) {
+        self.oAuthType = oAuthType
+        self.investType = investType
+    }
 }
 
 public extension KISOAuthRequest {

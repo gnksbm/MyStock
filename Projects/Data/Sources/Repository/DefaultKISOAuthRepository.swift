@@ -52,7 +52,8 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
                         repository.successedFetch.onError(error)
                     }
                 }
-            }
+            },
+            onError: { print($0.localizedDescription) }
         )
         .disposed(by: disposeBag)
     }

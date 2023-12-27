@@ -40,7 +40,8 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
                 } catch {
                     repository.successedFetch.onError(error)
                 }
-            }
+            },
+            onError: { print($0.localizedDescription) }
         )
         .disposed(by: disposeBag)
     }

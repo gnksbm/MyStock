@@ -34,7 +34,7 @@ public struct KISOAuthEndPoint: KISEndPoint {
         let body = [
             "grant_type": "client_credentials",
             "appkey": .kisKey,
-            "secretkey": .kisSecret
+            secret: .kisSecret
         ]
         guard let data = try? JSONEncoder().encode(body) else { return nil }
         return data
@@ -47,5 +47,16 @@ public struct KISOAuthEndPoint: KISEndPoint {
     public init(investType: InvestType, oAuthType: KISOAuthRequest.OAuthType) {
         self.investType = investType
         self.oAuthType = oAuthType
+    }
+}
+
+extension KISOAuthEndPoint {
+    var secret: String {
+        switch investType {
+        case .reality:
+            return "appsecret"
+        case .simulation:
+            return "secretkey"
+        }
     }
 }
