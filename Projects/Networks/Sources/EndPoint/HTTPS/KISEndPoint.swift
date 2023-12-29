@@ -10,15 +10,11 @@ import Foundation
 
 import Domain
 
-protocol KISEndPoint: EndPoint {
-    var investType: InvestType { get set }
+protocol KISEndPoint: EndPoint, HTTPSEndPoint {
+    var investType: InvestType { get }
 }
 
 extension KISEndPoint {
-    public var scheme: Scheme {
-        .https
-    }
-    
     public var host: String {
         switch investType {
         case .reality:

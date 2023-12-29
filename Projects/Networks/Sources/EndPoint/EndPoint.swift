@@ -15,16 +15,16 @@ public protocol EndPoint {
     var path: String { get }
     var query: [String: String] { get set }
     var header: [String: String] { get }
-    var body: Data? { get }
+    var body: [String: String] { get }
     var method: HTTPMethod { get }
 }
 
 public enum Scheme: String {
-    case http, https
+    case http, https, ws
 }
 
 extension EndPoint {
-    var toURLRequest: URLRequest? {
+    public var toURLRequest: URLRequest? {
         var urlComponent = URLComponents()
         urlComponent.scheme = scheme.rawValue
         urlComponent.host = host
@@ -38,11 +38,15 @@ extension EndPoint {
         guard let url = urlComponent.url else { return nil }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.toString
-        urlRequest.httpBody = body
-        header.forEach {
-            urlRequest.addValue($0.value, forHTTPHeaderField: $0.key)
+        urlRequest.allHTTPHeaderFields = header
+        if !body.isEmpty {
+            do {
+                let body = try JSONSerialization.data(withJSONObject: body)
+                urlRequest.httpBody = body
+            } catch {
+                print(error.localizedDescription)
+            }
         }
-        
         return urlRequest
     }
 }

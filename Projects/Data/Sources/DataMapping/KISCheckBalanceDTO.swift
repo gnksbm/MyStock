@@ -27,7 +27,7 @@ struct KISCheckBalanceDTO: Codable {
 }
 
 extension KISCheckBalanceDTO {
-    var toDomain: [KISCheckBalanceResponse] {
+    public var toDomain: [KISCheckBalanceResponse] {
         output1.map {
             var division: KISCheckBalanceResponse.Division
             switch $0.tradDvsnName {
@@ -39,11 +39,11 @@ extension KISCheckBalanceDTO {
                 division = .loan
             }
             return .init(
-                tiker: $0.pdno,
+                ticker: $0.pdno,
                 name: $0.prdtName,
                 price: $0.prpr,
                 amount: $0.hldgQty,
-                value: $0.loanAmt,
+                plAmount: $0.evluPflsAmt,
                 division: division
             )
         }
@@ -96,7 +96,8 @@ struct Output2: Codable {
     let bfdyBuyAmt, thdtBuyAmt, nxdyAutoRdptAmt, bfdySllAmt: String
     let thdtSllAmt, d2AutoRdptAmt, bfdyTlexAmt, thdtTlexAmt: String
     let totLoanAmt, sctsEvluAmt, totEvluAmt, nassAmt: String
-    let fncgGldAutoRdptYn, pchsAmtSmtlAmt, evluAmtSmtlAmt, evluPflsSmtlAmt: String
+    let fncgGldAutoRdptYn, pchsAmtSmtlAmt: String
+    let evluAmtSmtlAmt, evluPflsSmtlAmt: String
     let totStlnSlngChgs, bfdyTotAsstEvluAmt, asstIcdcAmt, asstIcdcErngRt: String
 
     enum CodingKeys: String, CodingKey {

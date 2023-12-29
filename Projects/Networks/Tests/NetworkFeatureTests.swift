@@ -18,19 +18,19 @@ final class NetworksTests: XCTestCase {
     }
 
     func test_KISAccessOAuthEndPoint() throws {
-        endPoint = KISCheckBalanceEndPoint(
-            investType: .simulation,
-            accountRequest: .init(accountNumber: ""),
-            authorization: ""
-        )
+//        endPoint = KISCheckBalanceEndPoint(
+//            investType: .simulation,
+//            query: .init(accountNumber: ""),
+//            authorization: ""
+//        )
     }
     
     func test_KISOAuthEndPoint() throws {
-        endPoint = KISOAuthEndPoint(
-            oAuthType: .webSocket,
-            investType: .simulation
-        )
-        sut.send(endPoint: endPoint)
+//        endPoint = KISOAuthEndPoint(
+//            oAuthType: .webSocket,
+//            investType: .simulation
+//        )
+        sut.request(endPoint: endPoint)
             .subscribe { _ in
                 print("Success")
             } onError: { error in

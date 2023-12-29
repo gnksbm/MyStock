@@ -13,7 +13,7 @@ import RxSwift
 public final class DefaultNetworkService: NetworkService {
     public init() { }
     
-    public func send(endPoint: EndPoint) -> Observable<Data> {
+    public func request(endPoint: HTTPSEndPoint) -> Observable<Data> {
         .create { observer in
             guard let urlRequest = endPoint.toURLRequest
             else {

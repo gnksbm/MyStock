@@ -12,7 +12,7 @@ import Domain
 import Core
 
 public struct KISCheckBalanceEndPoint: KISEndPoint {
-    var investType: InvestType
+    let investType: InvestType
     
     public var path: String {
         "/uapi/domestic-stock/v1/trading/inquire-balance"
@@ -22,7 +22,9 @@ public struct KISCheckBalanceEndPoint: KISEndPoint {
     
     public var header: [String : String]
     
-    public var body: Data?
+    public var body: [String: String] {
+        [:]
+    }
     
     public var method: HTTPMethod {
         .get

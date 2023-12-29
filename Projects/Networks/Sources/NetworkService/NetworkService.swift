@@ -11,5 +11,5 @@ import Foundation
 import RxSwift
 
 public protocol NetworkService {
-    func send(endPoint: EndPoint) -> Observable<Data>
+    func request(endPoint: HTTPSEndPoint) -> Observable<Data>
 }

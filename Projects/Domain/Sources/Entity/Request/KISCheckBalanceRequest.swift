@@ -10,20 +10,8 @@ import Foundation
 
 public struct KISCheckBalanceRequest {
     public let investType: InvestType
-    public let accountRequest: BalanceRequest
-    
-    public init(
-        investType: InvestType,
-        accountRequest: BalanceRequest
-    ) {
-        self.investType = investType
-        self.accountRequest = accountRequest
-    }
-}
-
-public struct BalanceRequest {
+    public let marketType: MarketType
     let accountNumber: String
-    let accountCode: String
     let isAfterHour: Bool
     let isOffLine: Bool
     let inquiry: Inquiry
@@ -32,9 +20,19 @@ public struct BalanceRequest {
     let continuousPrimaryKey: String
     let continuousForeignKey: String
     
+    var accountCode: String {
+        switch marketType {
+        case .overseas:
+            return "01"
+        case .domestic:
+            return "08"
+        }
+    }
+    
     public init(
+        investType: InvestType,
+        marketType: MarketType,
         accountNumber: String,
-        accountCode: String = "01",
         isAfterHour: Bool = false,
         isOffLine: Bool = false,
         inquiry: Inquiry = .stocks,
@@ -43,8 +41,9 @@ public struct BalanceRequest {
         continuousPrimaryKey: String = "",
         continuousForeignKey: String = ""
     ) {
+        self.investType = investType
+        self.marketType = marketType
         self.accountNumber = accountNumber
-        self.accountCode = accountCode
         self.isAfterHour = isAfterHour
         self.isOffLine = isOffLine
         self.inquiry = inquiry
@@ -55,7 +54,7 @@ public struct BalanceRequest {
     }
 }
 
-extension BalanceRequest {
+extension KISCheckBalanceRequest {
     public var toQuery: [String: String] {
         [
             // 종합계좌번호
@@ -95,7 +94,7 @@ extension BalanceRequest {
     }
 }
 
-public extension BalanceRequest {
+public extension KISCheckBalanceRequest {
     enum Inquiry: String {
         case loanDate = "01"
         case stocks = "02"

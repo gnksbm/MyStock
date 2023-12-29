@@ -24,10 +24,10 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
         request: KISCheckBalanceRequest,
         authorization: String
     ) {
-        networkService.send(
+        networkService.request(
             endPoint: KISCheckBalanceEndPoint(
                 investType: request.investType,
-                query: request.accountRequest.toQuery,
+                query: request.toQuery,
                 authorization: authorization
             )
         )
@@ -35,7 +35,10 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
         .subscribe(
             onNext: { repository, data in
                 do {
-                    let dto = try JSONDecoder().decode(KISCheckBalanceDTO.self, from: data)
+                    let dto = try JSONDecoder().decode(
+                        KISCheckBalanceDTO.self,
+                        from: data
+                    )
                     repository.successedFetch.onNext(dto.toDomain)
                 } catch {
                     repository.successedFetch.onError(error)

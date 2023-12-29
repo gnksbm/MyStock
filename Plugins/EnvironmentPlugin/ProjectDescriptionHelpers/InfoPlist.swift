@@ -33,6 +33,15 @@ public extension [String: InfoPlist.Value] {
     ]
     static let additionalInfoPlist: Self = [
         "ITSAppUsesNonExemptEncryption": "NO",
+        "NSAppTransportSecurity": [
+            "NSExceptionDomains": [
+                "ops.koreainvestment.com": [
+                    "NSIncludesSubdomains": true,
+                    "NSExceptionAllowsInsecureHTTPLoads": true,
+                    "NSTemporaryExceptionAllowsInsecureWebSocketLoads": true
+                ]
+            ]
+        ]
     ]
     
     static let baseInfoPlist: Self = [

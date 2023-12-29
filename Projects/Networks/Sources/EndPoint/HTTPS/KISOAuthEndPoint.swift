@@ -12,8 +12,9 @@ import Domain
 import Core
 
 public struct KISOAuthEndPoint: KISEndPoint {
-    public var investType: InvestType
-    public var oAuthType: KISOAuthRequest.OAuthType
+    let investType: InvestType
+    
+    let oAuthType: KISOAuthRequest.OAuthType
     
     public var path: String {
         switch oAuthType {
@@ -30,14 +31,12 @@ public struct KISOAuthEndPoint: KISEndPoint {
         ["content-type": "application/json"]
     }
     
-    public var body: Data? {
-        let body = [
+    public var body: [String: String] {
+        [
             "grant_type": "client_credentials",
             "appkey": .kisKey,
             secret: .kisSecret
         ]
-        guard let data = try? JSONEncoder().encode(body) else { return nil }
-        return data
     }
     
     public var method: HTTPMethod {

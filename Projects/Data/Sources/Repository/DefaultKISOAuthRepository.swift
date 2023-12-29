@@ -17,10 +17,10 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
     private let networkService: NetworkService
     private let disposeBag = DisposeBag()
     
-    public var successedFetch = PublishSubject<String>()
+    public let token = PublishSubject<String>()
     
     public func requestOAuth(request: KISOAuthRequest) {
-        networkService.send(
+        networkService.request(
             endPoint: KISOAuthEndPoint(
                 investType: request.investType,
                 oAuthType: request.oAuthType
@@ -37,9 +37,9 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
                             KISAccessOAuthDTO.self,
                             from: data
                         ).accessToken
-                        repository.successedFetch.onNext(token)
+                        repository.token.onNext(token)
                     } catch {
-                        repository.successedFetch.onError(error)
+                        repository.token.onError(error)
                     }
                 case .webSocket:
                     do {
@@ -47,9 +47,9 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
                             KISWebSocketOAuthDTO.self,
                             from: data
                         ).approvalKey
-                        repository.successedFetch.onNext(token)
+                        repository.token.onNext(token)
                     } catch {
-                        repository.successedFetch.onError(error)
+                        repository.token.onError(error)
                     }
                 }
             },
