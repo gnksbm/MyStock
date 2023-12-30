@@ -10,14 +10,10 @@ import UIKit
 
 import FeatureDependency
 import HomeFeature
-import RxSwift
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
-    
-    let price = PublishSubject<String>()
-    let disposeBag = DisposeBag()
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -27,9 +23,6 @@ final class AppCoordinator: Coordinator {
         let homeCoordinator = HomeCoordinator(
             navigationController: navigationController
         )
-        price.bind {
-            homeCoordinator.price.onNext($0)
-        }.disposed(by: disposeBag)
         childCoordinators.append(homeCoordinator)
         homeCoordinator.start()
     }

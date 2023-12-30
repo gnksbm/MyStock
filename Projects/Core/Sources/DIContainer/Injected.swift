@@ -9,14 +9,14 @@
 import Foundation
 
 @propertyWrapper
-struct Injected<T> {
+public struct Injected<T> {
     private var type: T.Type
     
-    var wrappedValue: T {
+    public var wrappedValue: T {
         DIContainer.resolve(type: type)
     }
     
-    init(_ type: T.Type) {
+    public init(_ type: T.Type) {
         self.type = type
     }
 }

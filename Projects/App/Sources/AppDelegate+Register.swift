@@ -7,15 +7,40 @@
 //
 
 import Foundation
+
 import Core
 import Data
 import Domain
+import Networks
 
 extension AppDelegate {
     func registerDependencies() {
-//        DIContainer.register(
-//            type: TempRepository.self,
-//            DefaultTempRepository()
-//        )
+        DIContainer.register(
+            type: HomeUseCase.self,
+            DefaultHomeUseCase(
+                oAuthRepository: oAuthRepository,
+                checkBalanceRepository: checkBalanceRepository
+            )
+        )
+    }
+}
+
+extension AppDelegate {
+    var networkService: NetworkService {
+        DefaultNetworkService()
+    }
+    
+    var webSocketService: WebSocketService {
+        DefaultWebSocketService()
+    }
+}
+
+extension AppDelegate {
+    var oAuthRepository: KISOAuthRepository {
+        DefaultKISOAuthRepository(networkService: networkService)
+    }
+    
+    var checkBalanceRepository: KISCheckBalanceRepository {
+        DefaultKISCheckBalanceRepository(networkService: networkService)
     }
 }

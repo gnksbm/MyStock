@@ -11,5 +11,6 @@ import Foundation
 import RxSwift
 
 public protocol HomeUseCase {
-    func connectWS()
+    var balanceInfo: PublishSubject<[KISCheckBalanceResponse]> { get }
+    func checkAccount(accountNumber: String)
 }

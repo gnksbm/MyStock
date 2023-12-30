@@ -11,6 +11,8 @@ import Foundation
 import RxSwift
 
 public protocol KISCheckBalanceRepository {
+    var fetchResult: PublishSubject<[KISCheckBalanceResponse]> { get }
+    
     func requestBalance(
         request: KISCheckBalanceRequest,
         authorization: String

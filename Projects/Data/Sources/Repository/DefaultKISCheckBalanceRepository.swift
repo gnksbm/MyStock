@@ -19,7 +19,7 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
     private let networkService: NetworkService
     private let disposeBag = DisposeBag()
     
-    public var successedFetch = PublishSubject<[KISCheckBalanceResponse]>()
+    public var fetchResult = PublishSubject<[KISCheckBalanceResponse]>()
     
     public func requestBalance(
         request: KISCheckBalanceRequest,
@@ -37,9 +37,9 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
             onNext: { repository, data in
                 do {
                     let dto = try data.decode(type: KISCheckBalanceDTO.self)
-                    repository.successedFetch.onNext(dto.toDomain)
+                    repository.fetchResult.onNext(dto.toDomain)
                 } catch {
-                    repository.successedFetch.onError(error)
+                    repository.fetchResult.onError(error)
                 }
             },
             onError: { print($0.localizedDescription) }

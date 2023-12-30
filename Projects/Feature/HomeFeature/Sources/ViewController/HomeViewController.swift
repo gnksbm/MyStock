@@ -1,18 +1,19 @@
 import UIKit
-import CryptoKit
 
 import Networks
+import FeatureDependency
 
 import RxSwift
 
-public final class HomeViewController: UIViewController {
+public final class HomeViewController: BaseViewController {
     let price = PublishSubject<String>()
-    private let disposeBag = DisposeBag()
     private let viewModel: HomeViewModel
+    
+    let priceLabel = UILabel()
     
     public init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
+        super.init()
     }
     
     required init?(coder: NSCoder) {
@@ -21,12 +22,58 @@ public final class HomeViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
+        bind()
     }
     
     public override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        testHTTPS()
-        testWS()
+//        testHTTPS()
+//        testWS()
+    }
+    
+    private func configureUI() {
+        [priceLabel].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        NSLayoutConstraint.activate([
+            priceLabel.centerXAnchor.constraint(
+                equalTo: safeArea.centerXAnchor
+            ),
+            priceLabel.centerYAnchor.constraint(
+                equalTo: safeArea.centerYAnchor
+            ),
+        ])
+    }
+    
+    private func bind() {
+        let output = viewModel.transform(
+            input: .init(
+                viewWillAppear: self.rx.methodInvoked(
+                    #selector(UIViewController.viewWillAppear)
+                ).map { _ in }
+            )
+        )
+        
+        output.balanceInfoList
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewController, responseList in
+                    DispatchQueue.main.async {
+                        guard let price = responseList.first?.price
+                        else { return }
+                        viewController.priceLabel.text = price
+                        viewController.priceLabel.textColor = price.checkPrice(
+                            point: 223500
+                        )
+                    }
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
     func testWS() {
@@ -54,6 +101,8 @@ public final class HomeViewController: UIViewController {
                         Response.self,
                         from: data
                     )
+                    _ = response.body.output.iv
+                    _ = response.body.output.key
                 } catch {
                     print(error.localizedDescription)
                 }
@@ -283,7 +332,7 @@ struct Response: Codable {
 struct Body: Codable {
     let rtCD, msgCD, msg1: String
     let output: Output
-
+    
     enum CodingKeys: String, CodingKey {
         case rtCD = "rt_cd"
         case msgCD = "msg_cd"
@@ -299,7 +348,7 @@ struct Output: Codable {
 // MARK: - Header
 struct Header: Codable {
     let trID, trKey, encrypt: String
-
+    
     enum CodingKeys: String, CodingKey {
         case trID = "tr_id"
         case trKey = "tr_key"
