@@ -8,6 +8,7 @@
 
 import Foundation
 
+import Core
 import Domain
 import Networks
 
@@ -35,10 +36,7 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
         .subscribe(
             onNext: { repository, data in
                 do {
-                    let dto = try JSONDecoder().decode(
-                        KISCheckBalanceDTO.self,
-                        from: data
-                    )
+                    let dto = try data.decode(type: KISCheckBalanceDTO.self)
                     repository.successedFetch.onNext(dto.toDomain)
                 } catch {
                     repository.successedFetch.onError(error)

@@ -17,9 +17,17 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
     private let networkService: NetworkService
     private let disposeBag = DisposeBag()
     
-    public let token = PublishSubject<String>()
+    public let accessToken = PublishSubject<KISOAuthToken>()
+    public let wsToken = PublishSubject<KISOAuthToken>()
+    
+    public init(networkService: NetworkService) {
+        self.networkService = networkService
+    }
     
     public func requestOAuth(request: KISOAuthRequest) {
+        if checkUserDefault(request: request) {
+            return
+        }
         networkService.request(
             endPoint: KISOAuthEndPoint(
                 investType: request.investType,
@@ -29,28 +37,37 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         .withUnretained(self)
         .subscribe(
             onNext: { repository, data in
-                let decoder = JSONDecoder()
-                switch request.oAuthType {
-                case .access:
-                    do {
-                        let token = try decoder.decode(
-                            KISAccessOAuthDTO.self,
-                            from: data
-                        ).accessToken
-                        repository.token.onNext(token)
-                    } catch {
-                        repository.token.onError(error)
+                do {
+                    let response = try data.decode(
+                        type: KISAccessOAuthDTO.self
+                    ).toDomain
+                    switch request.oAuthType {
+                    case .access:
+                        repository.accessToken.onNext(response)
+                    case .webSocket:
+                        repository.wsToken.onNext(
+                            .init(
+                                token: response.token,
+                                expireDate: Date.now
+                            )
+                        )
                     }
-                case .webSocket:
-                    do {
-                        let token = try decoder.decode(
-                            KISWebSocketOAuthDTO.self,
-                            from: data
-                        ).approvalKey
-                        repository.token.onNext(token)
-                    } catch {
-                        repository.token.onError(error)
-                    }
+                    let expireDate = response.expireDate
+                    guard let data = expireDate.encode()
+                    else { return }
+                    let tokenType = request.oAuthType.rawValue
+                    let userDefault = UserDefaults.standard
+                    userDefault.setValue(
+                        response.token,
+                        forKey: "\(tokenType)Token"
+                    )
+                    userDefault.setValue(
+                        data,
+                        forKey: "\(tokenType)Date"
+                    )
+                    print("FetchToken: \(expireDate.distance(to: .now))")
+                } catch {
+                    repository.accessToken.onError(error)
                 }
             },
             onError: { print($0.localizedDescription) }
@@ -58,7 +75,22 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         .disposed(by: disposeBag)
     }
     
-    public init(networkService: NetworkService) {
-        self.networkService = networkService
+    private func checkUserDefault(request: KISOAuthRequest) -> Bool {
+        let tokenType = request.oAuthType.rawValue
+        let userDefault = UserDefaults.standard
+        if let token = userDefault.string(forKey: "\(tokenType)Token"),
+           let data = userDefault.data(forKey: "\(tokenType)Date"),
+           let date = try? data.decode(type: Date.self),
+           date.distance(to: .now) < 0 {
+            switch request.oAuthType {
+            case .access:
+                accessToken.onNext(.init(token: token, expireDate: date))
+            case .webSocket:
+                wsToken.onNext(.init(token: token, expireDate: date))
+            }
+            print("\(tokenType) UserDefaultToken: \(date.distance(to: .now))")
+            return true
+        }
+        return false
     }
 }

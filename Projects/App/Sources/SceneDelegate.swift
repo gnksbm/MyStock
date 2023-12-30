@@ -68,36 +68,24 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
                 },
                 onError: { print($0.localizedDescription) }
             ).disposed(by: disposeBag)
-        if let token = UserDefaults.standard.string(forKey: "token"),
-           let data = UserDefaults.standard.data(forKey: "date"),
-           let date = try? JSONDecoder().decode(Date.self, from: data),
-           date.distance(to: .now) < 86400 {
-            print("UserDefaultToken: \(date.distance(to: .now))")
-            oAuth.onNext(token)
-        } else {
-            if let data = UserDefaults.standard.data(forKey: "date"),
-               let date = try? JSONDecoder().decode(Date.self, from: data) {
-                print("FetchToken: \(date.distance(to: .now))")
-            }
-            oAuthRepository.requestOAuth(
-                request: .init(
-                    oAuthType: .access,
-                    investType: .reality
-                )
+        
+        oAuthRepository.accessToken
+            .withUnretained(self)
+            .subscribe(
+                onNext: { appDelegate, response in
+                    appDelegate.oAuth.onNext(response.token)
+                },
+                onError: { print($0.localizedDescription) }
             )
-            oAuthRepository.token
-                .withUnretained(self)
-                .subscribe(
-                    onNext: { appDelegate, token in
-                        guard let data = try? JSONEncoder().encode(Date()) else { return }
-                        UserDefaults.standard.setValue(token, forKey: "token")
-                        UserDefaults.standard.setValue(data, forKey: "date")
-                        appDelegate.oAuth.onNext(token)
-                    },
-                    onError: { print($0.localizedDescription) }
-                )
-                .disposed(by: disposeBag)
-        }
+            .disposed(by: disposeBag)
+        
+        oAuthRepository.requestOAuth(
+            request: .init(
+                oAuthType: .access,
+                investType: .reality
+            )
+        )
+        
         balanceRepository.successedFetch
             .withUnretained(self)
             .subscribe(

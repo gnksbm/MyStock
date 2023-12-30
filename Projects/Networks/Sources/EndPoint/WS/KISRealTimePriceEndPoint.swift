@@ -9,6 +9,7 @@
 import Foundation
 
 import Domain
+import Core
 
 public struct KISRealTimePriceEndPoint: WSEndPoint {
     public var investType: InvestType
@@ -126,10 +127,7 @@ public extension KISRealTimePriceEndPoint {
         } catch {
             print(error.localizedDescription)
         }
-//        guard let data = try? JSONEncoder().encode(requestJson)
-//        else { return nil }
-//        return try? JSONSerialization.jsonObject(with: data)
-        return try? JSONEncoder().encode(requestJson)
+        return requestJson.encode()
     }
     
     struct RequestJson: Encodable {

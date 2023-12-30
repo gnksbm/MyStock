@@ -19,7 +19,7 @@ public struct KISOAuthRequest {
 }
 
 public extension KISOAuthRequest {
-    enum OAuthType {
+    enum OAuthType: String {
         case webSocket, access
     }
 }

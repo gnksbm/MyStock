@@ -8,6 +8,9 @@
 
 import Foundation
 
+import Core
+import Domain
+
 struct KISAccessOAuthDTO: Codable {
     let accessToken: String
     let accessTokenTokenExpired: String
@@ -19,5 +22,16 @@ struct KISAccessOAuthDTO: Codable {
         case accessTokenTokenExpired = "access_token_token_expired"
         case tokenType = "token_type"
         case expiresIn = "expires_in"
+    }
+}
+
+extension KISAccessOAuthDTO {
+    var toDomain: KISOAuthToken {
+        .init(
+            token: accessToken,
+            expireDate: accessTokenTokenExpired.toDate(
+                dateFormat: "yyyy-MM-dd HH:mm:ss"
+            )
+        )
     }
 }

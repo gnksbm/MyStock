@@ -9,6 +9,16 @@
 import Foundation
 
 public extension String {
+    func toDate(dateFormat: String) -> Date {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat
+        guard let date = dateFormatter.date(from: self)
+        else {
+            fatalError("Invalid String to dateFormat")
+        }
+        return date
+    }
+    
     static var kisKey: Self {
         guard let kisKey = Bundle.main.object(
             forInfoDictionaryKey: "KIS_APP_KEY"
@@ -16,6 +26,7 @@ public extension String {
         else { fatalError("실패") }
         return kisKey
     }
+    
     static var kisSecret: Self {
         guard let kisSecret = Bundle.main.object(
             forInfoDictionaryKey: "KIS_APP_SECRET"

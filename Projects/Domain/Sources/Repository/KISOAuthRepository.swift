@@ -11,6 +11,7 @@ import Foundation
 import RxSwift
 
 public protocol KISOAuthRepository {
-    var token: PublishSubject<String> { get }
+    var accessToken: PublishSubject<KISOAuthToken> { get }
+    var wsToken: PublishSubject<KISOAuthToken> { get }
     func requestOAuth(request: KISOAuthRequest)
 }

@@ -25,7 +25,7 @@ public struct KISCheckBalanceRequest {
         case .overseas:
             return "01"
         case .domestic:
-            return "08"
+            return "01"
         }
     }
     
