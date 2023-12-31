@@ -41,6 +41,6 @@ extension HomeViewModel {
     }
     
     public struct Output {
-        let balanceInfoList: BehaviorSubject<[KISCheckBalanceResponse]>
+        let balanceInfoList: BehaviorRelay<[KISCheckBalanceResponse]>
     }
 }

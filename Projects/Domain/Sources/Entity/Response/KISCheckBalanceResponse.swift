@@ -6,7 +6,7 @@
 //  Copyright © 2023 Pepsi-Club. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 public struct KISCheckBalanceResponse: Hashable {
     public let ticker: String
@@ -14,6 +14,7 @@ public struct KISCheckBalanceResponse: Hashable {
     public let price: String
     public let amount: String
     public let plAmount: String
+    public let fluctuationRate: String
     public let division: Division
     
     public var value: String {
@@ -29,6 +30,7 @@ public struct KISCheckBalanceResponse: Hashable {
         price: String,
         amount: String,
         plAmount: String,
+        fluctuationRate: String,
         division: Division
     ) {
         self.ticker = ticker
@@ -36,6 +38,7 @@ public struct KISCheckBalanceResponse: Hashable {
         self.price = price
         self.amount = amount
         self.plAmount = plAmount
+        self.fluctuationRate = fluctuationRate
         self.division = division
     }
     
@@ -45,6 +48,20 @@ public struct KISCheckBalanceResponse: Hashable {
     
     public func hash(into hasher: inout Hasher) {
         hasher.combine(ticker.hashValue)
+    }
+}
+
+public extension KISCheckBalanceResponse {
+    var textColor: UIColor {
+        guard let rate = Double(fluctuationRate)
+        else { return .gray }
+        if rate == 0 {
+            return .black
+        } else if rate > 0 {
+            return .green
+        } else {
+            return .red
+        }
     }
 }
 
@@ -69,6 +86,7 @@ public extension Array<KISCheckBalanceResponse> {
                 price: $0.price,
                 amount: String(amount),
                 plAmount: String(plAmount),
+                fluctuationRate: $0.fluctuationRate,
                 division: $0.division
             )
         }

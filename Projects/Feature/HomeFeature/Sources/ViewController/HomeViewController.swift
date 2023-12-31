@@ -4,12 +4,23 @@ import Networks
 import FeatureDependency
 
 import RxSwift
+import RxCocoa
 
-public final class HomeViewController: BaseViewController {
-    let price = PublishSubject<String>()
+public final class HomeViewController: BaseViewController, UIScrollViewDelegate {
     private let viewModel: HomeViewModel
     
-    let priceLabel = UILabel()
+    lazy var collectionView: UICollectionView = {
+        let layout = makeLayout()
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: layout
+        )
+        collectionView.register(
+            HomeStockCVCell.self,
+            forCellWithReuseIdentifier: HomeStockCVCell.identifier
+        )
+        return collectionView
+    }()
     
     public init(viewModel: HomeViewModel) {
         self.viewModel = viewModel
@@ -26,14 +37,8 @@ public final class HomeViewController: BaseViewController {
         bind()
     }
     
-    public override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-//        testHTTPS()
-//        testWS()
-    }
-    
     private func configureUI() {
-        [priceLabel].forEach {
+        [collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -41,11 +46,17 @@ public final class HomeViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            priceLabel.centerXAnchor.constraint(
-                equalTo: safeArea.centerXAnchor
+            collectionView.topAnchor.constraint(
+                equalTo: safeArea.topAnchor
             ),
-            priceLabel.centerYAnchor.constraint(
-                equalTo: safeArea.centerYAnchor
+            collectionView.leadingAnchor.constraint(
+                equalTo: safeArea.leadingAnchor
+            ),
+            collectionView.trailingAnchor.constraint(
+                equalTo: safeArea.trailingAnchor
+            ),
+            collectionView.bottomAnchor.constraint(
+                equalTo: safeArea.bottomAnchor
             ),
         ])
     }
@@ -60,22 +71,69 @@ public final class HomeViewController: BaseViewController {
         )
         
         output.balanceInfoList
-            .withUnretained(self)
-            .subscribe(
-                onNext: { viewController, responseList in
-                    DispatchQueue.main.async {
-                        guard let price = responseList.first?.price
-                        else { return }
-                        viewController.priceLabel.text = price
-                        viewController.priceLabel.textColor = price.checkPrice(
-                            point: 223500
-                        )
-                    }
+            .bind(
+                to: collectionView.rx.items(
+                    cellIdentifier: HomeStockCVCell.identifier,
+                    cellType: HomeStockCVCell.self
+                ),
+                curriedArgument: { _, item, cell in
+                    cell.prepare(item: item)
                 }
             )
             .disposed(by: disposeBag)
     }
-    
+}
+
+extension HomeViewController {
+    func makeLayout() -> UICollectionViewCompositionalLayout {
+        .init { _, _ in
+            let item = NSCollectionLayoutItem(
+                layoutSize: .init(
+                    widthDimension: .fractionalWidth(1/2),
+                    heightDimension: .fractionalWidth(1/2)
+                )
+            )
+            item.contentInsets = .init(
+                top: 10,
+                leading: 10,
+                bottom: 10,
+                trailing: 10
+            )
+            let hGroup = NSCollectionLayoutGroup.horizontal(
+                layoutSize: .init(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .fractionalWidth(1/2)
+                ),
+                subitems: [item]
+            )
+            let vGroup = NSCollectionLayoutGroup.vertical(
+                layoutSize: .init(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .fractionalWidth(1)
+                ),
+                subitems: [hGroup]
+            )
+            let section = NSCollectionLayoutSection(group: vGroup)
+            return section
+        }
+    }
+}
+
+#if DEBUG
+import SwiftUI
+import FeatureDependency
+struct HomeViewController_Preview: PreviewProvider {
+    static var previews: some View {
+        UIKitPreview(
+            HomeViewController(
+                viewModel: HomeViewModel()
+            )
+        )
+    }
+}
+#endif
+
+extension HomeViewController: URLSessionWebSocketDelegate {
     func testWS() {
         let aprovalKey = "faa648e9-ceee-4554-b134-595fc3e4269b"
         let endPoint = KISRealTimePriceEndPoint(
@@ -112,50 +170,6 @@ public final class HomeViewController: BaseViewController {
         }
     }
     
-    func testHTTPS() {
-        let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 30)
-        view.addSubview(label)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-        ])
-        price.subscribe(
-            onNext: { price in
-                DispatchQueue.main.async {
-                    guard let priceInt = Int(price) else { return }
-                    if priceInt == 223000 {
-                        label.textColor = .white
-                    } else if priceInt > 223000 {
-                        label.textColor = .green
-                    } else if priceInt < 223000 {
-                        label.textColor = .red
-                    }
-                    label.text = price
-                }
-            }
-        )
-        .disposed(by: disposeBag)
-    }
-}
-
-#if DEBUG
-import SwiftUI
-import FeatureDependency
-struct HomeViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UIKitPreview(
-            HomeViewController(
-                viewModel: HomeViewModel()
-            )
-        )
-    }
-}
-#endif
-
-extension HomeViewController: URLSessionWebSocketDelegate {
     public func urlSession(
         _ session: URLSession,
         webSocketTask: URLSessionWebSocketTask,

@@ -44,6 +44,7 @@ extension KISCheckBalanceDTO {
                 price: $0.prpr,
                 amount: $0.hldgQty,
                 plAmount: $0.evluPflsAmt,
+                fluctuationRate: $0.flttRt,
                 division: division
             )
         }

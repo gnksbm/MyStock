@@ -44,7 +44,12 @@ public extension Settings {
 }
 
 public extension SettingsDictionary {
-    static let baseSetting: Self = [:]
+    static let baseSetting: Self = [
+        "OTHER_LDFLAGS" : [
+            "$(inherited) -all_load",
+            "-Xlinker -interposable"
+        ]
+    ]
     
     func enableTestabilty() -> SettingsDictionary {
         merging(
