@@ -1,5 +1,5 @@
 //
-//  KISStockPriceEndPoint.swift
+//  KISChartPriceEndPoint.swift
 //  Networks
 //
 //  Created by gnksbm on 2023/12/30.
@@ -11,9 +11,9 @@ import Foundation
 import Core
 import Domain
 
-public struct KISStockPriceEndPoint: KISEndPoint {
+public struct KISChartPriceEndPoint: KISEndPoint {
     let investType: InvestType
-    let period: CandleType
+    let period: PeriodType
     let ticker: String
     let startDate: String
     let endDate: String
@@ -23,20 +23,7 @@ public struct KISStockPriceEndPoint: KISEndPoint {
         "/uapi/domestic-stock/v1/quotations/inquire-daily-itemchartprice"
     }
     
-    public var query: [String : String] = [:]
-    
-    public var header: [String : String] {
-        [
-            "content-type": "application/json",
-            "authorization": authorization,
-            "appkey": .kisKey,
-            "appsecret": .kisSecret,
-            "tr_id": "FHKST03010100",
-            "custtype": "P"
-        ]
-    }
-    
-    public var body: [String : String] {
+    public var query: [String : String] {
         [
             "fid_cond_mrkt_div_code": "J",
             "fid_input_date_1": startDate,
@@ -47,13 +34,28 @@ public struct KISStockPriceEndPoint: KISEndPoint {
         ]
     }
     
+    public var header: [String : String] {
+        [
+            "content-type": "application/json",
+            "authorization": "Bearer \(authorization)",
+            "appkey": .kisKey,
+            "appsecret": .kisSecret,
+            "tr_id": "FHKST03010100",
+            "custtype": "P"
+        ]
+    }
+    
+    public var body: [String : String] {
+        [:]
+    }
+    
     public var method: HTTPMethod {
         .get
     }
     
     public init(
         investType: InvestType,
-        period: CandleType,
+        period: PeriodType,
         ticker: String,
         startDate: String,
         endDate: String,

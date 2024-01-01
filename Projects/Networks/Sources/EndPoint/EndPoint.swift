@@ -13,7 +13,7 @@ public protocol EndPoint {
     var host: String { get }
     var port: String { get }
     var path: String { get }
-    var query: [String: String] { get set }
+    var query: [String: String] { get }
     var header: [String: String] { get }
     var body: [String: String] { get }
     var method: HTTPMethod { get }

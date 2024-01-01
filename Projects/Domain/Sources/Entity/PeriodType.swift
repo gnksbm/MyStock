@@ -1,5 +1,5 @@
 //
-//  CandleType.swift
+//  PeriodType.swift
 //  Domain
 //
 //  Created by gnksbm on 2023/12/30.
@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum CandleType: String {
+public enum PeriodType: String {
     case day = "D"
     case week = "W"
     case month = "M"

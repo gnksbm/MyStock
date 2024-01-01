@@ -8,18 +8,18 @@
 
 import UIKit
 
-extension CGFloat {
+public extension CGFloat {
     static let screenWidth = UIScreen.main.bounds.width
     static let screenHeight = UIScreen.main.bounds.height
 }
 
-extension IntegerLiteralType {
+public extension IntegerLiteralType {
     var f: CGFloat {
         return CGFloat(self)
     }
 }
 
-extension FloatLiteralType {
+public extension FloatLiteralType {
     var f: CGFloat {
         return CGFloat(self)
     }

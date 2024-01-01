@@ -15,7 +15,6 @@ import Networks
 import RxSwift
 
 public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
-    
     private let networkService: NetworkService
     private let disposeBag = DisposeBag()
     

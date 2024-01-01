@@ -14,7 +14,6 @@ public final class DefaultHomeUseCase: HomeUseCase {
     private let oAuthRepository: KISOAuthRepository
     private let checkBalanceRepository: KISCheckBalanceRepository
     private let disposeBag = DisposeBag()
-    private let token = PublishSubject<String>()
     
     public let balanceInfo = PublishSubject<[KISCheckBalanceResponse]>()
     
@@ -41,7 +40,6 @@ public final class DefaultHomeUseCase: HomeUseCase {
                         ),
                         authorization: token.token
                     )
-                    
                 }
             )
             .disposed(by: disposeBag)

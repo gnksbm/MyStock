@@ -6,10 +6,10 @@ import FeatureDependency
 import RxSwift
 import RxCocoa
 
-public final class HomeViewController: BaseViewController, UIScrollViewDelegate {
+public final class HomeViewController: BaseViewController {
     private let viewModel: HomeViewModel
     
-    lazy var collectionView: UICollectionView = {
+    private lazy var collectionView: UICollectionView = {
         let layout = makeLayout()
         let collectionView = UICollectionView(
             frame: .zero,
@@ -66,7 +66,8 @@ public final class HomeViewController: BaseViewController, UIScrollViewDelegate 
             input: .init(
                 viewWillAppear: self.rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
-                ).map { _ in }
+                ).map { _ in },
+                stockCellTapEvent: collectionView.rx.itemSelected.map { $0.row }
             )
         )
         
@@ -126,7 +127,11 @@ struct HomeViewController_Preview: PreviewProvider {
     static var previews: some View {
         UIKitPreview(
             HomeViewController(
-                viewModel: HomeViewModel()
+                viewModel: HomeViewModel(
+                    coordinator: DefaultHomeCoordinator(
+                        navigationController: .init()
+                    )
+                )
             )
         )
     }

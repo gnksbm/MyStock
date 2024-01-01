@@ -11,8 +11,17 @@ import UIKit
 import Domain
 
 final class HomeStockCVCell: UICollectionViewCell {
-    private let titleLabel = UILabel()
-    private let priceLabel = UILabel()
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
+    
+    private let priceLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        return label
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)

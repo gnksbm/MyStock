@@ -22,6 +22,27 @@ extension AppDelegate {
                 checkBalanceRepository: checkBalanceRepository
             )
         )
+        DIContainer.register(
+            type: HomeChartUseCase.self,
+            DefaultHomeChartPriceUseCase(
+                oAuthRepository: oAuthRepository,
+                chartPriceRepository: chartPriceRepository
+            )
+        )
+    }
+}
+
+extension AppDelegate {
+    var chartPriceRepository: KISChartPriceRepository {
+        DefaultKISChartPriceRepository(networkService: networkService)
+    }
+    
+    var oAuthRepository: KISOAuthRepository {
+        DefaultKISOAuthRepository(networkService: networkService)
+    }
+    
+    var checkBalanceRepository: KISCheckBalanceRepository {
+        DefaultKISCheckBalanceRepository(networkService: networkService)
     }
 }
 
@@ -32,15 +53,5 @@ extension AppDelegate {
     
     var webSocketService: WebSocketService {
         DefaultWebSocketService()
-    }
-}
-
-extension AppDelegate {
-    var oAuthRepository: KISOAuthRepository {
-        DefaultKISOAuthRepository(networkService: networkService)
-    }
-    
-    var checkBalanceRepository: KISCheckBalanceRepository {
-        DefaultKISCheckBalanceRepository(networkService: networkService)
     }
 }
