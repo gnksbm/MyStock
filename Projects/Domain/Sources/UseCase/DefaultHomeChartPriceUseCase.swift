@@ -55,10 +55,6 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
             .withUnretained(self)
             .subscribe { useCase, response in
                 useCase.chartInfo.onNext(response)
-//                guard let data = response.encode() else { return }
-//                print(
-//                    try? JSONSerialization.jsonObject(with: data)
-//                )
             }
             .disposed(by: disposeBag)
         

@@ -20,7 +20,7 @@ public final class HomeViewModel: ViewModel {
     
     public func transform(input: Input) -> Output {
         let output = Output(
-            balanceInfoList: .init(value: [])
+            balanceList: .init(value: [])
         )
         
         input.viewWillAppear
@@ -37,14 +37,14 @@ public final class HomeViewModel: ViewModel {
             .subscribe(
                 onNext: { viewModel, row in
                     viewModel.coordinator.push(
-                        with: output.balanceInfoList.value[row]
+                        with: output.balanceList.value[row]
                     )
                 }
             )
             .disposed(by: disposeBag)
         
         useCase.balanceInfo
-            .bind(to: output.balanceInfoList)
+            .bind(to: output.balanceList)
             .disposed(by: disposeBag)
         return output
     }
@@ -57,6 +57,6 @@ extension HomeViewModel {
     }
     
     public struct Output {
-        let balanceInfoList: BehaviorRelay<[KISCheckBalanceResponse]>
+        let balanceList: BehaviorRelay<[KISCheckBalanceResponse]>
     }
 }

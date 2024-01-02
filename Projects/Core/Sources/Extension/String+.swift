@@ -23,6 +23,7 @@ public extension String {
     func toDate(dateFormat: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
+        dateFormatter.locale = .current
         guard let date = dateFormatter.date(from: self)
         else {
             fatalError("Invalid String to dateFormat")

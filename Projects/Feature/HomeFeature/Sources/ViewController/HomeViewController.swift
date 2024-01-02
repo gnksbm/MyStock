@@ -71,7 +71,7 @@ public final class HomeViewController: BaseViewController {
             )
         )
         
-        output.balanceInfoList
+        output.balanceList
             .bind(
                 to: collectionView.rx.items(
                     cellIdentifier: HomeStockCVCell.identifier,

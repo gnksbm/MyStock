@@ -10,119 +10,174 @@ import SwiftUI
 
 import Core
 
-extension CandleChartView {
-    struct CandleShape {
-        let viewMinHeight: CGFloat
-        let viewMaxHeight: CGFloat
-        let highestPrice: CGFloat
-        let lowestPrice: CGFloat
-        let maxWidth: CGFloat
-        let totalCandleCount: CGFloat
-        let candle: Candle
-        
-        var candleTailHeight: CGFloat {
-            convertViewPoint(distance: candle.highestPrice - candle.lowestPrice)
+public struct CandleShape {
+    private let viewHeight: CGFloat
+    private let viewWidth: CGFloat
+    private let highestPrice: CGFloat
+    private let lowestPrice: CGFloat
+    private let totalCandleCount: CGFloat
+    private let candle: Candle
+    
+    init(
+        viewHeight: CGFloat,
+        viewWidth: CGFloat,
+        highestPrice: CGFloat,
+        lowestPrice: CGFloat,
+        totalCandleCount: CGFloat,
+        candle: Candle
+    ) {
+        self.viewHeight = viewHeight
+        self.highestPrice = highestPrice
+        self.lowestPrice = lowestPrice
+        self.viewWidth = viewWidth
+        self.totalCandleCount = totalCandleCount
+        self.candle = candle
+    }
+}
+
+// MARK: Internal
+
+extension CandleShape {
+    var candleColor: UIColor {
+        candleType.color
+    }
+    
+    func getFrame(_ type: ViewType, heightRatio: Double = 0.8) -> CGRect {
+        let startPoint = (1 - heightRatio) / 2 * viewHeight
+        return .init(
+            x: getX(type),
+            y: getY(type) * heightRatio + startPoint,
+            width: getWidth(type),
+            height: getHeight(type) * heightRatio
+        )
+    }
+    
+    enum ViewType {
+        case tail, body
+    }
+}
+
+// MARK: Private
+// MARK: Common
+
+extension CandleShape {
+    private var startPoint: CGFloat {
+        let price = highestPrice - candle.startPrice
+        return priceToPoint(price: price)
+    }
+    
+    private var closePoint: CGFloat {
+        let price = highestPrice - candle.closePrice
+        return priceToPoint(price: price)
+    }
+    
+    private var candleType: CandleType {
+        if candle.closePrice > candle.startPrice {
+            return .white
+        } else if candle.closePrice == candle.startPrice {
+            return .dodge
+        } else {
+            return .black
         }
+    }
+    
+    private func priceToPoint(price: CGFloat) -> CGFloat {
+        let priceRange = highestPrice - lowestPrice
+        return price / priceRange * viewHeight
+    }
+    
+    private enum CandleType {
+        case white, dodge, black
         
-        var candleTailOffset: CGFloat {
-            tailTopPoint + candleTailHeight / 2
-        }
-        
-        var candleBodyHeight: CGFloat {
-            switch candleType {
+        var color: UIColor {
+            switch self {
             case .white:
-                return whiteCandleHeight
+                return DesignSystemAsset.whiteCandle.color
             case .dodge:
-                return 0
+                return .gray
             case .black:
-                return blackCandleHeight
+                return DesignSystemAsset.blackCandle.color
             }
         }
-        
-        var candleBodyOffset: CGFloat {
-            switch candleType {
-            case .white:
-                return whiteCandleOffset
-            case .dodge:
-                return dodgeCandleOffset
-            case .black:
-                return blackCandleOffset
-            }
+    }
+}
+
+// MARK: Tail
+
+extension CandleShape {
+    private var tailHeight: CGFloat {
+        let price = candle.highestPrice - candle.lowestPrice
+        return priceToPoint(price: price)
+    }
+    
+    private var tailY: CGFloat {
+        let price = highestPrice - candle.highestPrice
+        return priceToPoint(price: price)
+    }
+}
+
+// MARK: Body
+
+extension CandleShape {
+    private var bodyHeight: CGFloat {
+        switch candleType {
+        case .white:
+            return startPoint - closePoint
+        case .dodge:
+            return 1
+        case .black:
+            return closePoint - startPoint
         }
-        
-        var dodgeCandleOffset: CGFloat {
-            dodgeCandleTopPoint
+    }
+    
+    private var bodyY: CGFloat {
+        switch candleType {
+        case .white:
+            return closePoint
+        case .dodge:
+            return startPoint
+        case .black:
+            return startPoint
         }
-        
-        var candleColor: Color {
-            candleType.color
+    }
+}
+
+// MARK: Frame
+
+extension CandleShape {
+    private func getX(_ type: ViewType) -> CGFloat {
+        switch type {
+        case .body:
+            return 0
+        case .tail:
+            return viewWidth / totalCandleCount * 0.9 / 2
         }
-        
-        private var tailTopPoint: CGFloat {
-            let distance = highestPrice - candle.highestPrice
-            return convertViewPoint(distance: distance)
+    }
+    
+    private func getY(_ type: ViewType) -> CGFloat {
+        switch type {
+        case .tail:
+            return tailY
+        case .body:
+            return bodyY
         }
-        
-        private var whiteCandleTopPoint: CGFloat {
-            let whiteCandleTopDistance = highestPrice - candle.closePrice
-            return convertViewPoint(distance: whiteCandleTopDistance)
+    }
+    
+    private func getHeight(_ type: ViewType) -> CGFloat {
+        switch type {
+        case .tail:
+            return tailHeight
+        case .body:
+            return bodyHeight
         }
-        
-        private var whiteCandleHeight: CGFloat {
-            dodgeCandleTopPoint - whiteCandleTopPoint
-        }
-        
-        private var whiteCandleOffset: CGFloat {
-            whiteCandleTopPoint + whiteCandleHeight / 2
-        }
-        
-        private var dodgeCandleTopPoint: CGFloat {
-            let distance = highestPrice - candle.startPrice
-            return convertViewPoint(distance: distance)
-        }
-        
-        private var blackCandleTopPoint: CGFloat {
-            let distance = highestPrice - candle.closePrice
-            return convertViewPoint(distance: distance)
-        }
-        
-        private var blackCandleHeight: CGFloat {
-            blackCandleTopPoint - dodgeCandleTopPoint
-        }
-        
-        private var blackCandleOffset: CGFloat {
-            blackCandleTopPoint - blackCandleHeight / 2
-        }
-        
-        private var candleType: CandleType {
-            if candle.closePrice > candle.startPrice {
-                return .white
-            } else if candle.closePrice == candle.startPrice {
-                return .dodge
-            } else {
-                return .black
-            }
-        }
-        
-        private func convertViewPoint(distance: CGFloat) -> CGFloat {
-            let priceRange = highestPrice - lowestPrice
-            let viewRange = viewMaxHeight - viewMinHeight
-            return distance / priceRange * viewRange
-        }
-        
-        private enum CandleType {
-            case white, dodge, black
-            
-            var color: Color {
-                switch self {
-                case .white:
-                    return .red
-                case .dodge:
-                    return .gray
-                case .black:
-                    return .blue
-                }
-            }
+    }
+    
+    private func getWidth(_ type: ViewType) -> CGFloat {
+        switch type {
+        case .body:
+            return viewWidth / totalCandleCount * 0.9
+        case .tail:
+            return 1
         }
     }
 }

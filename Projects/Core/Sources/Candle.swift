@@ -48,3 +48,29 @@ public struct Candle {
         self.closePrice = closePrice
     }
 }
+
+public extension [Candle] {
+    var highestPrice: Double {
+        var highestPrice = 0.0
+        forEach { candle in
+            if candle.highestPrice > highestPrice {
+                highestPrice = candle.highestPrice
+            }
+        }
+        return highestPrice
+    }
+    
+    var lowestPrice: Double {
+        guard let first = first?.lowestPrice else {
+            print("nil")
+            return 0
+        }
+        var lowestPrice = first
+        forEach { candle in
+            if candle.lowestPrice < lowestPrice {
+                lowestPrice = candle.lowestPrice
+            }
+        }
+        return lowestPrice
+    }
+}

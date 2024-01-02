@@ -11,6 +11,7 @@ import DesignSystem
 
 extension AppDelegate {
     func setupAppearance() {
+        UINavigationBar.appearance().backgroundColor = .systemBackground
         UITabBar.appearance().tintColor = DesignSystemAsset.accentColor.color
         UITabBar.appearance().isTranslucent = true
     }
