@@ -23,6 +23,7 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         window = UIWindow(windowScene: windowScene)
         
         let navigationController = UINavigationController()
+        navigationController.view.backgroundColor = .systemBackground
 
         window?.rootViewController = navigationController
         appFlowCoordinator = AppCoordinator(

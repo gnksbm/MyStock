@@ -51,20 +51,6 @@ public struct KISCheckBalanceResponse: Hashable {
     }
 }
 
-public extension KISCheckBalanceResponse {
-    var textColor: UIColor {
-        guard let rate = Double(fluctuationRate)
-        else { return .gray }
-        if rate == 0 {
-            return .black
-        } else if rate > 0 {
-            return .green
-        } else {
-            return .red
-        }
-    }
-}
-
 public extension Array<KISCheckBalanceResponse> {
     var combineSameTiker: Self {
         var amountDic = [String: Int]()

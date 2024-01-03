@@ -37,6 +37,7 @@ final class HomeChartViewController: BaseViewController {
     }
     
     private func configureUI() {
+        
         [candleChartCV].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -66,19 +67,6 @@ final class HomeChartViewController: BaseViewController {
                 ).map { _ in }
             )
         )
-        
-//        output.candleList
-//            .bind(
-//                to: candleChartCV.rx.items(
-//                    cellIdentifier: CandleChartCVCell.identifier,
-//                    cellType: CandleChartCVCell.self
-//                ),
-//                curriedArgument: { _, item, cell in
-//                    print(item.startPrice)
-////                    cell.drawCandle(shape: <#T##CandleShape#>)
-//                }
-//            )
-//            .disposed(by: disposeBag)
         
         output.candleList
             .withUnretained(self)

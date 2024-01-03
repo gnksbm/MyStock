@@ -9,6 +9,7 @@
 import UIKit
 
 import Domain
+import DesignSystem
 
 final class HomeStockCVCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
@@ -36,12 +37,23 @@ final class HomeStockCVCell: UICollectionViewCell {
         super.prepareForReuse()
         titleLabel.text = ""
         priceLabel.text = ""
+        contentView.layer.borderColor = UIColor.black.cgColor
     }
     
     func prepare(item: KISCheckBalanceResponse) {
         titleLabel.text = item.name
         priceLabel.text = item.price
-        priceLabel.textColor = item.textColor
+        guard let rate = Double(item.fluctuationRate) else { return }
+        var color: UIColor
+        if rate == 0 {
+            color = .black
+        } else if rate > 0 {
+            color = DesignSystemAsset.profit.color
+        } else {
+            color = DesignSystemAsset.loss.color
+        }
+        priceLabel.textColor = color
+        contentView.layer.borderColor = color.cgColor
     }
     
     private func configureUI() {
