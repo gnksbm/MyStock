@@ -41,7 +41,11 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
                     repository.fetchResult.onError(error)
                 }
             },
-            onError: { print($0.localizedDescription) }
+            onError: {
+                print(
+                "\(String(describing: self)): \($0.localizedDescription)"
+                )
+            }
         )
         .disposed(by: disposeBag)
     }

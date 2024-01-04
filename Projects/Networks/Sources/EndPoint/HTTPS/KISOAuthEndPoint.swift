@@ -51,10 +51,10 @@ public struct KISOAuthEndPoint: KISEndPoint {
 
 extension KISOAuthEndPoint {
     var secret: String {
-        switch investType {
-        case .reality:
+        switch oAuthType {
+        case .access:
             return "appsecret"
-        case .simulation:
+        case .webSocket:
             return "secretkey"
         }
     }

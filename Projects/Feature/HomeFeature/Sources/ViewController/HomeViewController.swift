@@ -141,7 +141,7 @@ struct HomeViewController_Preview: PreviewProvider {
 
 extension HomeViewController: URLSessionWebSocketDelegate {
     func testWS() {
-        let aprovalKey = "faa648e9-ceee-4554-b134-595fc3e4269b"
+        let aprovalKey = "049ca8df-e1b7-4a66-9410-edbe1d79d8c7"
         let endPoint = KISRealTimePriceEndPoint(
             approvalKey: aprovalKey,
             ticker: "DNASAAPL",
@@ -170,7 +170,8 @@ extension HomeViewController: URLSessionWebSocketDelegate {
                 } catch {
                     print(error.localizedDescription)
                 }
-            } else if let data {
+            }
+            if let data {
                 print(data.description)
             }
         }
@@ -182,12 +183,12 @@ extension HomeViewController: URLSessionWebSocketDelegate {
         didOpenWithProtocol protocol: String?
     ) {
         print("open with \(`protocol` ?? "NoProtocol")")
-        let aprovalKey = "faa648e9-ceee-4554-b134-595fc3e4269b"
+        let aprovalKey = "049ca8df-e1b7-4a66-9410-edbe1d79d8c7"
         let endPoint = KISRealTimePriceEndPoint(
             approvalKey: aprovalKey,
-            ticker: "DNASAAPL",
+            ticker: "005930",
             investType: .reality,
-            marketType: .overseas
+            marketType: .domestic
         )
         guard let data = endPoint.requestJson else {
             print("\nBad Request\n")
@@ -290,6 +291,7 @@ final class WebSocket: NSObject {
             case let .failure(error):
                 print("Received error \(error)")
             }
+            self.receive(onReceive: onReceive)
         })
     }
     

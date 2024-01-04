@@ -21,19 +21,11 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
     
     public override init() { }
     
-    public func open(endPoint: WSEndPoint) {
-        guard let urlRequest = endPoint.toURLRequest
-        else {
-            receivedMessage.onError(WebSocketError.invalidURL)
-            return
-        }
-        let session = URLSession(
-            configuration: .default,
-            delegate: self,
-            delegateQueue: OperationQueue()
-        )
-        webSocketTask = session.webSocketTask(with: urlRequest)
-        webSocketTask?.resume()
+    deinit {
+        print("deinit")
+    }
+    
+    private func receive() {
         webSocketTask?.receive { [weak self] result in
             switch result {
             case .success(let message):
@@ -48,7 +40,24 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
             case .failure(let error):
                 self?.receivedMessage.onError(error)
             }
+            self?.receive()
         }
+    }
+    
+    public func open(endPoint: WSEndPoint) {
+        guard let urlRequest = endPoint.toURLRequest
+        else {
+            receivedMessage.onError(WebSocketError.invalidURL)
+            return
+        }
+        let session = URLSession(
+            configuration: .default,
+            delegate: self,
+            delegateQueue: OperationQueue()
+        )
+        webSocketTask = session.webSocketTask(with: urlRequest)
+        webSocketTask?.resume()
+        receive()
         startPing()
     }
     
@@ -102,6 +111,7 @@ extension DefaultWebSocketService: URLSessionWebSocketDelegate {
         webSocketTask: URLSessionWebSocketTask,
         didOpenWithProtocol protocol: String?
     ) {
+        print("open")
         didOpenWith()
     }
     

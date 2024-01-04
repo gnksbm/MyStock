@@ -22,6 +22,7 @@ final class HomeChartViewModel: ViewModel {
     
     init(ticker: String) {
         self.ticker = ticker
+        useCase.requestRealTimePrice(ticker: "DNASAAPL", marketType: .overseas)
     }
     
     func transform(input: Input) -> Output {

@@ -17,14 +17,17 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
     
     private let oAuthRepository: KISOAuthRepository
     private let chartPriceRepository: KISChartPriceRepository
+    private let realTimePriceRepository: KISRealTimePriceRepository
     private let disposeBag = DisposeBag()
     
     public init(
         oAuthRepository: KISOAuthRepository,
-        chartPriceRepository: KISChartPriceRepository
+        chartPriceRepository: KISChartPriceRepository,
+        realTimePriceRepository: KISRealTimePriceRepository
     ) {
         self.oAuthRepository = oAuthRepository
         self.chartPriceRepository = chartPriceRepository
+        self.realTimePriceRepository = realTimePriceRepository
     }
     
     public func fetchChart(
@@ -61,6 +64,35 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
         oAuthRepository.requestOAuth(
             request: .init(
                 oAuthType: .access,
+                investType: .reality
+            )
+        )
+    }
+    
+    public func requestRealTimePrice(
+        ticker: String,
+        marketType: MarketType
+    ) {
+        oAuthRepository.wsToken
+            .withUnretained(self)
+            .subscribe(
+                onNext: { useCase, token in
+                    useCase.realTimePriceRepository
+                        .requestData(
+                            request: .init(
+                                approvalKey: token.token,
+                                ticker: ticker,
+                                investType: .reality,
+                                marketType: marketType
+                            )
+                        )
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        oAuthRepository.requestOAuth(
+            request: .init(
+                oAuthType: .webSocket,
                 investType: .reality
             )
         )

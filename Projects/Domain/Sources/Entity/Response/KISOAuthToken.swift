@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct KISOAuthToken {
+public struct KISOAuthToken: Codable {
     public let token: String
     public let expireDate: Date
     

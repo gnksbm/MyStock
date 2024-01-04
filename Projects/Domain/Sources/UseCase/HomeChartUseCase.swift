@@ -21,4 +21,9 @@ public protocol HomeChartUseCase {
         startDate: String,
         endDate: String
     )
+    
+    func requestRealTimePrice(
+        ticker: String,
+        marketType: MarketType
+    )
 }

@@ -26,7 +26,8 @@ extension AppDelegate {
             type: HomeChartUseCase.self,
             DefaultHomeChartPriceUseCase(
                 oAuthRepository: oAuthRepository,
-                chartPriceRepository: chartPriceRepository
+                chartPriceRepository: chartPriceRepository,
+                realTimePriceRepository: realTimePriceRepository
             )
         )
     }
@@ -43,6 +44,10 @@ extension AppDelegate {
     
     var checkBalanceRepository: KISCheckBalanceRepository {
         DefaultKISCheckBalanceRepository(networkService: networkService)
+    }
+    
+    var realTimePriceRepository: KISRealTimePriceRepository {
+        DefualtKISRealTimePriceRepository(wsService: webSocketService)
     }
 }
 

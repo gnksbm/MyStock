@@ -45,7 +45,11 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
             onNext: { repository, response in
                 repository.chartResponse.onNext(response)
             },
-            onError: { print($0.localizedDescription) }
+            onError: {
+                print(
+                "\(String(describing: self)): \($0.localizedDescription)"
+                )
+            }
         )
         .disposed(by: disposeBag)
     }

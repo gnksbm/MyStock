@@ -9,8 +9,20 @@
 import Foundation
 
 public struct KISRealTimePriceRequest {
-    let approvalKey: String
-    let ticker: String
-    let investType: InvestType
-    let marketType: MarketType
+    public let approvalKey: String
+    public let ticker: String
+    public let investType: InvestType
+    public let marketType: MarketType
+    
+    public init(
+        approvalKey: String,
+        ticker: String,
+        investType: InvestType,
+        marketType: MarketType
+    ) {
+        self.approvalKey = approvalKey
+        self.ticker = ticker
+        self.investType = investType
+        self.marketType = marketType
+    }
 }

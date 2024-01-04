@@ -24,73 +24,102 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         self.networkService = networkService
     }
     
+    private func handleToken(
+        token: KISOAuthToken,
+        request: KISOAuthRequest
+    ) {
+        guard let data = token.expireDate.encode() else { return }
+        let tokenType = request.oAuthType.rawValue
+        let userDefault = UserDefaults.standard
+        userDefault.setValue(
+            token.token,
+            forKey: "\(tokenType)Token"
+        )
+        userDefault.setValue(
+            data,
+            forKey: "\(tokenType)Date"
+        )
+    }
+    
     public func requestOAuth(request: KISOAuthRequest) {
         if checkUserDefault(request: request) {
             return
         }
+        let endPoint = KISOAuthEndPoint(
+            investType: request.investType,
+            oAuthType: request.oAuthType
+        )
         networkService.request(
-            endPoint: KISOAuthEndPoint(
-                investType: request.investType,
-                oAuthType: request.oAuthType
-            )
+            endPoint: endPoint
         )
         .withUnretained(self)
         .subscribe(
             onNext: { repository, data in
-                do {
-                    let response = try data.decode(
-                        type: KISAccessOAuthDTO.self
-                    ).toDomain
-                    switch request.oAuthType {
-                    case .access:
-                        repository.accessToken.onNext(response)
-                    case .webSocket:
-                        repository.wsToken.onNext(
-                            .init(
-                                token: response.token,
-                                expireDate: Date.now
+                switch request.oAuthType {
+                case .access:
+                    do {
+                        let accessToken = try data.decode(
+                            type: KISAccessOAuthDTO.self
+                        ).toDomain
+                        repository.handleToken(
+                            token: accessToken,
+                            request: request
+                        )
+                        repository.accessToken.onNext(accessToken)
+                    } catch {
+                        repository.accessToken.onError(error)
+                    }
+                case .webSocket:
+                    do {
+                        let approvalKey = try data.decode(
+                            type: KISWebSocketOAuthDTO.self
+                        ).approvalKey
+                        let oAuthToken = KISOAuthToken(
+                            token: approvalKey,
+                            expireDate: Date(
+                                timeInterval: 86400,
+                                since: .now
                             )
                         )
+                        repository.handleToken(
+                            token: oAuthToken,
+                            request: request
+                        )
+                        repository.wsToken.onNext(oAuthToken)
+                    } catch {
+                        repository.wsToken.onError(error)
                     }
-                    let expireDate = response.expireDate
-                    guard let data = expireDate.encode()
-                    else { return }
-                    let tokenType = request.oAuthType.rawValue
-                    let userDefault = UserDefaults.standard
-                    userDefault.setValue(
-                        response.token,
-                        forKey: "\(tokenType)Token"
-                    )
-                    userDefault.setValue(
-                        data,
-                        forKey: "\(tokenType)Date"
-                    )
-                    print("FetchToken: \(expireDate.distance(to: .now))")
-                } catch {
-                    repository.accessToken.onError(error)
                 }
             },
-            onError: { print($0.localizedDescription) }
+            onError: {
+                print(
+                "\(String(describing: self)): \($0.localizedDescription)"
+                )
+            }
         )
         .disposed(by: disposeBag)
     }
     
     private func checkUserDefault(request: KISOAuthRequest) -> Bool {
-        let tokenType = request.oAuthType.rawValue
-        let userDefault = UserDefaults.standard
-        if let token = userDefault.string(forKey: "\(tokenType)Token"),
-           let data = userDefault.data(forKey: "\(tokenType)Date"),
-           let date = try? data.decode(type: Date.self),
-           date.distance(to: .now) < 0 {
-            switch request.oAuthType {
-            case .access:
-                accessToken.onNext(.init(token: token, expireDate: date))
-            case .webSocket:
-                wsToken.onNext(.init(token: token, expireDate: date))
+        if request.oAuthType == .access {
+            let tokenType = request.oAuthType.rawValue
+            let userDefault = UserDefaults.standard
+            if let token = userDefault.string(forKey: "\(tokenType)Token"),
+               let data = userDefault.data(forKey: "\(tokenType)Date"),
+               let date = try? data.decode(type: Date.self),
+               date.distance(to: .now) < 0 {
+                switch request.oAuthType {
+                case .access:
+                    accessToken.onNext(.init(token: token, expireDate: date))
+                case .webSocket:
+                    wsToken.onNext(.init(token: token, expireDate: date))
+                }
+                print("\(tokenType) UserDefaultToken: \(date.distance(to: .now))")
+                return true
             }
-            print("\(tokenType) UserDefaultToken: \(date.distance(to: .now))")
-            return true
+            return false
+        } else {
+            return false
         }
-        return false
     }
 }

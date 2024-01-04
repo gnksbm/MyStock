@@ -14,12 +14,14 @@ public extension Array<Package> {
 
 public extension Array<Package>.ThirdPartyRemote {
     enum SPM: CaseIterable {
-        case rxSwift
+        case rxSwift, cryptoSwift
         
         public var url: String {
             switch self {
             case .rxSwift:
                 return "https://github.com/ReactiveX/RxSwift"
+            case .cryptoSwift:
+                return "https://github.com/krzyzanowskim/CryptoSwift"
             }
         }
         
@@ -27,6 +29,8 @@ public extension Array<Package>.ThirdPartyRemote {
             switch self {
             case .rxSwift:
                 return "6.0.0"
+            case .cryptoSwift:
+                return "1.8.0"
             }
         }
     }
