@@ -35,7 +35,16 @@ public final class CandleChartCV: UICollectionView {
     }
     
     public func updateCandles(_ candles: [Candle]) {
+        var difference = false
+        if self.candles != candles,
+           !self.candles.isEmpty {
+            difference = true
+        }
         self.candles = candles
+        if difference {
+            reloadItems(at: [.init(row: candles.count-1, section: 0)])
+            return
+        }
         reloadData()
     }
 }

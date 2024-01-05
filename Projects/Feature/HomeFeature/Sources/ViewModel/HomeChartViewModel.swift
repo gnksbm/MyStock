@@ -22,7 +22,7 @@ final class HomeChartViewModel: ViewModel {
     
     init(ticker: String) {
         self.ticker = ticker
-        useCase.requestRealTimePrice(ticker: "DNASAAPL", marketType: .overseas)
+        useCase.requestRealTimePrice(ticker: ticker, marketType: .domestic)
     }
     
     func transform(input: Input) -> Output {
@@ -48,16 +48,37 @@ final class HomeChartViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        useCase.chartInfo
-            .subscribe(
-                onNext: {
-                    output.candleList.onNext($0)
+        Observable.combineLatest(
+            useCase.chartInfo,
+            useCase.realTimePrice
+        )
+        .subscribe(
+            onNext: { candles, realTimePrice in
+                if let last = candles.last,
+                   !realTimePrice.isEmpty {
+                    var newCandles = candles
+                    guard let closePrice = Double(realTimePrice)
+                    else { return }
+                    let newCandle = Candle(
+                        date: last.date.toString(dateFormat: "yyyyMMdd"),
+                        startPrice: last.startPrice,
+                        lowestPrice: last.lowestPrice,
+                        highestPrice: last.highestPrice,
+                        closePrice: closePrice
+                    )
+                    newCandles.removeLast()
+                    newCandles.append(newCandle)
+                    output.candleList.onNext(newCandles)
+                    return
                 }
-            )
-            .disposed(by: disposeBag)
+                output.candleList.onNext(candles)
+            }
+        )
+        .disposed(by: disposeBag)
         
         return output
     }
+    
 }
 
 extension HomeChartViewModel {

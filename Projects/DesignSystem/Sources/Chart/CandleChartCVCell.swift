@@ -40,5 +40,6 @@ public final class CandleChartCVCell: UICollectionViewCell {
         }
         candleTailView.frame = shape.getFrame(.tail)
         candleBodyView.frame = shape.getFrame(.body)
+        print(candleBodyView.frame)
     }
 }

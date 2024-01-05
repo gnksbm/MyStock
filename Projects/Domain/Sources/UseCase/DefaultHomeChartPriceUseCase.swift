@@ -14,6 +14,7 @@ import RxSwift
 
 public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
     public var chartInfo = PublishSubject<[Candle]>()
+    public var realTimePrice = BehaviorSubject<String>(value: "")
     
     private let oAuthRepository: KISOAuthRepository
     private let chartPriceRepository: KISChartPriceRepository
@@ -96,5 +97,14 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
                 investType: .reality
             )
         )
+        
+        realTimePriceRepository.price
+            .withUnretained(self)
+            .subscribe(
+                onNext: { useCase, price in
+                    useCase.realTimePrice.onNext(price)
+                }
+            )
+            .disposed(by: disposeBag)
     }
 }

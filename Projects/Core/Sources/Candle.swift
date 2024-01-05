@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Candle {
+public struct Candle: Equatable {
     public let date: Date
     public let startPrice: Double
     public let lowestPrice: Double

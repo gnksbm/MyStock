@@ -14,6 +14,7 @@ import RxSwift
 
 public protocol HomeChartUseCase {
     var chartInfo: PublishSubject<[Candle]> { get }
+    var realTimePrice: BehaviorSubject<String> { get }
     
     func fetchChart(
         period: PeriodType,

@@ -12,6 +12,7 @@ import Core
 import RxSwift
 
 public protocol KISRealTimePriceRepository {
+    var price: PublishSubject<String> { get }
     func requestData(
         request: KISRealTimePriceRequest
     )

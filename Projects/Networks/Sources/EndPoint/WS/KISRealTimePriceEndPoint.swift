@@ -44,7 +44,7 @@ public struct KISRealTimePriceEndPoint: WSEndPoint {
         case .overseas:
             return "HDFSCNT0"
         case .domestic:
-            return "H0STASP0"
+            return "H0STCNT0"
         }
     }
     
