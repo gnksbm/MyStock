@@ -18,6 +18,18 @@ import RxCocoa
 final class HomeChartViewController: BaseViewController {
     private var viewModel: HomeChartViewModel
     
+    let searchBtn: UIButton = {
+        var config = UIButton.Configuration.plain()
+        let image = UIImage(systemName: "magnifyingglass")
+        let imgConfig = UIImage.SymbolConfiguration(
+            font: .boldSystemFont(ofSize: 20)
+        )
+        config.image = image
+        config.preferredSymbolConfigurationForImage = imgConfig
+        let button = UIButton(configuration: config)
+        return button
+    }()
+    
     let candleChartCV = CandleChartCV(
         frame: .zero, collectionViewLayout: .init()
     )
@@ -37,7 +49,6 @@ final class HomeChartViewController: BaseViewController {
     }
     
     private func configureUI() {
-        
         [candleChartCV].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
