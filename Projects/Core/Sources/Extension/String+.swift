@@ -46,4 +46,12 @@ public extension String {
         else { fatalError("실패") }
         return kisSecret
     }
+    
+    static var seibroKey: Self {
+        guard let seibroKey = Bundle.main.object(
+            forInfoDictionaryKey: "SEIBRO_APP_KEY"
+        ) as? String
+        else { fatalError("실패") }
+        return seibroKey
+    }
 }

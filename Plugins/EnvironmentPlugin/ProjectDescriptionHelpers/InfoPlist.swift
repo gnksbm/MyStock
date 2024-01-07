@@ -30,6 +30,7 @@ public extension [String: InfoPlist.Value] {
     static let secrets: Self = [
         "KIS_APP_KEY": "$(KIS_APP_KEY)",
         "KIS_APP_SECRET": "$(KIS_APP_SECRET)",
+        "SEIBRO_APP_KEY": "$(SEIBRO_APP_KEY)",
     ]
     static let additionalInfoPlist: Self = [
         "ITSAppUsesNonExemptEncryption": "NO",
