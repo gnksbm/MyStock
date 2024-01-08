@@ -8,37 +8,37 @@
 
 import Foundation
 
-struct KDRSearchTickerEndPoint: HTTPSEndPoint {
+public struct KDRSearchTickerEndPoint: HTTPEndPoint {
     let marketKind: MarketKind
     
-    var host: String {
+    public var host: String {
         "api.seibro.or.kr"
     }
     
-    var port: String {
+    public var port: String {
         ""
     }
     
-    var path: String {
+    public var path: String {
         "/openapi/service/StockSvc/getKDRSecnInfo"
     }
     
-    var query: [String : String] {
+    public var query: [String : String] {
         [
             "ServiceKey": .seibroKey,
             "caltotMartTpcd": marketKind.rawValue
         ]
     }
     
-    var header: [String : String] {
+    public var header: [String : String] {
         [:]
     }
     
-    var body: [String : String] {
+    public var body: [String : String] {
         [:]
     }
     
-    var method: HTTPMethod {
+    public var method: HTTPMethod {
         .get
     }
     
@@ -47,7 +47,7 @@ struct KDRSearchTickerEndPoint: HTTPSEndPoint {
     }
 }
 
-extension KDRSearchTickerEndPoint {
+public extension KDRSearchTickerEndPoint {
     enum MarketKind: String {
         case kospi = "11"
         case kosdaq = "12"
