@@ -31,7 +31,6 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         )
         appFlowCoordinator?.start()
         window?.makeKeyAndVisible()
-        print(KDRSearchTickerEndPoint(marketKind: .kospi).toURLRequest)
     }
 
     func sceneDidDisconnect(_ scene: UIScene) {

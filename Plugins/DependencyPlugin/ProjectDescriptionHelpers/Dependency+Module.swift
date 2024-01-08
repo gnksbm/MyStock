@@ -9,6 +9,7 @@ import ProjectDescription
 
 public extension TargetDependency {
     static let app: Self = .module(name: "App")
+    static let mainFeature: Self = .module(name: "MainFeature")
     static let core: Self = .module(name: "Core")
     static let data: Self = .module(name: "Data")
     static let domain: Self = .module(name: "Domain")

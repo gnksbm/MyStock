@@ -7,7 +7,8 @@ let project = Project.makeProject(
     moduleType: .app,
     hasResource: true,
     dependencies: [
+        .mainFeature,
         .data,
         .domain,
-    ] + .Feature.allCases.map { $0.dependency }
+    ]
 )
