@@ -27,7 +27,9 @@ public final class HomeViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in
-                    viewModel.useCase.checkAccount(accountNumber: "80847287")
+                    viewModel.useCase.checkAccount(
+                        accountNumber: .accountNumber
+                    )
                 }
             )
             .disposed(by: disposeBag)

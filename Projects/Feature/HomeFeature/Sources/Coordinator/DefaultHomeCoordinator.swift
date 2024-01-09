@@ -25,7 +25,7 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
         )
         navigationController.setViewControllers(
             [homeViewController],
-            animated: true
+            animated: false
         )
     }
 }

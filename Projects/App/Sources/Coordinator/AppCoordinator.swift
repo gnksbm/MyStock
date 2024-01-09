@@ -9,7 +9,7 @@
 import UIKit
 
 import FeatureDependency
-import HomeFeature
+import MainFeature
 
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
@@ -20,10 +20,10 @@ final class AppCoordinator: Coordinator {
     }
     
     func start() {
-        let homeCoordinator = DefaultHomeCoordinator(
+        let tabBarCoordinator = TabBarCoordinator(
             navigationController: navigationController
         )
-        childCoordinators.append(homeCoordinator)
-        homeCoordinator.start()
+        childCoordinators.append(tabBarCoordinator)
+        tabBarCoordinator.start()
     }
 }

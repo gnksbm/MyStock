@@ -31,6 +31,14 @@ public extension String {
         return date
     }
     
+    static var accountNumber: Self {
+        guard let accountNumber = Bundle.main.object(
+            forInfoDictionaryKey: "ACCOUNT_NUMBER"
+        ) as? String
+        else { fatalError("실패") }
+        return accountNumber
+    }
+    
     static var kisKey: Self {
         guard let kisKey = Bundle.main.object(
             forInfoDictionaryKey: "KIS_APP_KEY"
