@@ -24,6 +24,7 @@ private let template = Template(
         .file(path: projectPath(with: "Sources/ViewModel/\(nameAttribute)ViewModel.swift"), templatePath: "viewModel.stencil"),
         .file(path: projectPath(with: "Sources/ViewController/\(nameAttribute)ViewController.swift"), templatePath: "viewContoller.stencil"),
         .file(path: projectPath(with: "Sources/Coordinator/\(nameAttribute)Coordinator.swift"), templatePath: "coordinator.stencil"),
+        .file(path: projectPath(with: "Sources/Coordinator/Dafault\(nameAttribute)Coordinator.swift"), templatePath: "defaultCoordinator.stencil"),
         // MARK: UnitTests
         .file(path: projectPath(with: "Tests/\(nameAttribute)FeatureTests.swift"), templatePath: "tests.stencil"),
     ]

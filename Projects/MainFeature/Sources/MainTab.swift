@@ -9,7 +9,7 @@
 import UIKit
 
 enum MainTab: Int, CaseIterable {
-    case home, favorite, setting
+    case home, favorites, setting
     
     var tabItem: UITabBarItem {
         switch self {
@@ -19,7 +19,7 @@ enum MainTab: Int, CaseIterable {
                 image: .init(systemName: "house"),
                 tag: rawValue
             )
-        case .favorite:
+        case .favorites:
             return .init(
                 title: "즐겨찾기",
                 image: .init(systemName: "star"),

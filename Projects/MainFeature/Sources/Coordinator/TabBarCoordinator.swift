@@ -59,7 +59,7 @@ public final class TabBarCoordinator: Coordinator {
             coordinator = DefaultHomeCoordinator(
                 navigationController: navigationController
             )
-        case .favorite:
+        case .favorites:
             coordinator = DefaultHomeCoordinator(
                 navigationController: navigationController
             )
