@@ -10,6 +10,8 @@ import UIKit
 
 import FeatureDependency
 import HomeFeature
+import FavoritesFeature
+import SettingsFeature
 
 public final class TabBarCoordinator: Coordinator {
     public var childCoordinators: [FeatureDependency.Coordinator] = []
@@ -60,11 +62,11 @@ public final class TabBarCoordinator: Coordinator {
                 navigationController: navigationController
             )
         case .favorites:
-            coordinator = DefaultHomeCoordinator(
+            coordinator = DefaultFavoritesCoordinator(
                 navigationController: navigationController
             )
         case .setting:
-            coordinator = DefaultHomeCoordinator(
+            coordinator = DefaultSettingsCoordinator(
                 navigationController: navigationController
             )
         }

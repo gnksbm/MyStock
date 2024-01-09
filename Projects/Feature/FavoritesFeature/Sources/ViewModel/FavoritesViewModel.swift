@@ -5,7 +5,7 @@ import FeatureDependency
 
 import RxSwift
 
-public final class {{ name }}ViewModel: ViewModel {
+public final class FavoritesViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     
     public init() {
@@ -17,7 +17,7 @@ public final class {{ name }}ViewModel: ViewModel {
     }
 }
 
-extension {{ name }}ViewModel {
+extension FavoritesViewModel {
     public struct Input {
     }
     
