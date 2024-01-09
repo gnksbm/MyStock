@@ -45,6 +45,10 @@ public final class HomeViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
+        input.searchBtnTapEvent.subscribe(
+            onNext: { print("Tap") }
+        )
+        
         useCase.balanceInfo
             .bind(to: output.balanceList)
             .disposed(by: disposeBag)
@@ -56,6 +60,7 @@ extension HomeViewModel {
     public struct Input {
         let viewWillAppear: Observable<Void>
         let stockCellTapEvent: Observable<Int>
+        let searchBtnTapEvent: Observable<Void>
     }
     
     public struct Output {
