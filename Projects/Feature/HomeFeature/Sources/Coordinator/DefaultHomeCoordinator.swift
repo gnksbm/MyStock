@@ -33,7 +33,10 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
 public extension DefaultHomeCoordinator {
     func push(with response: KISCheckBalanceResponse) {
         let homeChartVC = HomeChartViewController(
-            viewModel: .init(ticker: response.ticker)
+            viewModel: .init(
+                title: response.name,
+                ticker: response.ticker
+            )
         )
         navigationController.pushViewController(homeChartVC, animated: true)
     }

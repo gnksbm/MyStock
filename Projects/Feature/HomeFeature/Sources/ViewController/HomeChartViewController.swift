@@ -84,6 +84,11 @@ final class HomeChartViewController: BaseViewController {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
                 onNext: { viewController, candles in
+                    if let price = candles.last?.closePrice {
+                        let price = String(Int(price))
+                        let title = "\(viewController.viewModel.title) \(price)"
+                        viewController.title = title
+                    }
                     viewController.candleChartCV.setCollectionViewLayout(
                         viewController.updateLayout(itemCount: candles.count.f),
                         animated: true

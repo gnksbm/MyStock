@@ -17,10 +17,15 @@ import RxRelay
 
 final class HomeChartViewModel: ViewModel {
     @Injected(HomeChartUseCase.self) private var useCase: HomeChartUseCase
+    let title: String
     private let ticker: String
     private let disposeBag = DisposeBag()
     
-    init(ticker: String) {
+    init(
+        title: String,
+        ticker: String
+    ) {
+        self.title = title
         self.ticker = ticker
         useCase.requestRealTimePrice(ticker: ticker, marketType: .domestic)
     }
