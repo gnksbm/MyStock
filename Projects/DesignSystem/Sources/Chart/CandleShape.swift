@@ -68,8 +68,8 @@ extension CandleShape {
     
     private var closePoint: CGFloat {
         let price = highestPrice - candle.closePrice
-        print(highestPrice)
-        print(candle.closePrice)
+//        print(highestPrice)
+//        print(candle.closePrice)
         return priceToPoint(price: price)
     }
     

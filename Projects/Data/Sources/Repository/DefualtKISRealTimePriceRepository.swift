@@ -32,12 +32,6 @@ public final class DefualtKISRealTimePriceRepository
             investType: request.investType,
             marketType: request.marketType
         )
-//        let endPoint = KISRealTimePriceEndPoint(
-//            approvalKey: request.approvalKey,
-//            ticker: "DNASAAPL",
-//            investType: request.investType,
-//            marketType: .overseas
-//        )
         
         wsService.open(endPoint: endPoint)
         guard let data = endPoint.requestJson else {
@@ -50,6 +44,7 @@ public final class DefualtKISRealTimePriceRepository
             .withUnretained(self)
             .subscribe(
             onNext: { repository, message in
+                print(message)
                 let str = message.0
                 let data = message.1
                 if let str {
@@ -78,5 +73,9 @@ public final class DefualtKISRealTimePriceRepository
             }
         )
         .disposed(by: disposeBag)
+    }
+    
+    public func disconnectSocket() {
+        wsService.close()
     }
 }

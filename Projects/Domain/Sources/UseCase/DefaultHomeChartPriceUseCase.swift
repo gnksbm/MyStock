@@ -70,7 +70,7 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
         )
     }
     
-    public func requestRealTimePrice(
+    public func connectRealTimePrice(
         ticker: String,
         marketType: MarketType
     ) {
@@ -78,15 +78,14 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
             .withUnretained(self)
             .subscribe(
                 onNext: { useCase, token in
-                    useCase.realTimePriceRepository
-                        .requestData(
-                            request: .init(
-                                approvalKey: token.token,
-                                ticker: ticker,
-                                investType: .reality,
-                                marketType: marketType
-                            )
+                    useCase.realTimePriceRepository.requestData(
+                        request: .init(
+                            approvalKey: token.token,
+                            ticker: ticker,
+                            investType: .reality,
+                            marketType: marketType
                         )
+                    )
                 }
             )
             .disposed(by: disposeBag)
@@ -106,5 +105,9 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
                 }
             )
             .disposed(by: disposeBag)
+    }
+    
+    public func disconnectRealTimePrice() {
+        realTimePriceRepository.disconnectSocket()
     }
 }

@@ -39,7 +39,8 @@ public final class CandleChartCVCell: UICollectionViewCell {
             $0.backgroundColor = shape.candleColor
         }
         candleTailView.frame = shape.getFrame(.tail)
+        candleTailView.layoutIfNeeded()
         candleBodyView.frame = shape.getFrame(.body)
-        print(candleBodyView.frame)
+        candleBodyView.layoutIfNeeded()
     }
 }

@@ -27,7 +27,6 @@ final class HomeChartViewModel: ViewModel {
     ) {
         self.title = title
         self.ticker = ticker
-        useCase.requestRealTimePrice(ticker: ticker, marketType: .domestic)
     }
     
     func transform(input: Input) -> Output {
@@ -48,6 +47,27 @@ final class HomeChartViewModel: ViewModel {
                             since: date
                         ).toString(dateFormat: "yyyyMMdd"),
                         endDate: date.toString(dateFormat: "yyyyMMdd")
+                    )
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        input.viewWillDisappear
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, _ in
+                    viewModel.useCase.disconnectRealTimePrice()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        useCase.chartInfo
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, _ in
+                    viewModel.useCase.connectRealTimePrice(
+                        ticker: viewModel.ticker,
+                        marketType: .domestic
                     )
                 }
             )
@@ -89,6 +109,7 @@ final class HomeChartViewModel: ViewModel {
 extension HomeChartViewModel {
     struct Input {
         let viewWillAppear: Observable<Void>
+        let viewWillDisappear: Observable<Void>
     }
     
     struct Output {

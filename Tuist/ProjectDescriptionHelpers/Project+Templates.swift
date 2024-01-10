@@ -82,7 +82,7 @@ extension Project {
             entitlements: entitlements,
             scripts: [.swiftLint],
             dependencies: dependencies,
-            settings: .debug
+            settings: .appDebug
         )
         return target
     }

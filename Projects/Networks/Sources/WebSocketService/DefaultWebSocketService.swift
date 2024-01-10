@@ -121,6 +121,7 @@ extension DefaultWebSocketService: URLSessionWebSocketDelegate {
         didCloseWith closeCode: URLSessionWebSocketTask.CloseCode,
         reason: Data?
     ) {
+        print("close")
         didCloesWith()
     }
 }

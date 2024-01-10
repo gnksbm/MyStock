@@ -8,7 +8,24 @@
 import ProjectDescription
 
 public extension Settings {
-    static let debug: Self = .settings(
+    static let appDebug: Self = .settings(
+        base: .allLoadSetting.setVersion()
+            .setCodeSignManual()
+            .setProvisioning(),
+        configurations: [
+            .debug(
+                name: .debug,
+                xcconfig: .relativeToRoot("XCConfig/Debug.xcconfig")
+            ),
+            .release(
+                name: .release,
+                xcconfig: .relativeToRoot("XCConfig/Release.xcconfig")
+            ),
+        ],
+        defaultSettings: .recommended
+    )
+    
+    static let frameworkDebug: Self = .settings(
         base: .baseSetting.setVersion()
             .setCodeSignManual()
             .setProvisioning(),
@@ -24,6 +41,7 @@ public extension Settings {
         ],
         defaultSettings: .recommended
     )
+    
     static let test: Self = .settings(
         base: .baseSetting.setVersion()
             .enableTestabilty(),
@@ -45,6 +63,13 @@ public extension Settings {
 
 public extension SettingsDictionary {
     static let baseSetting: Self = [
+        "OTHER_LDFLAGS" : [
+            "$(inherited)",
+            "-ObjC"
+        ]
+    ]
+    
+    static let allLoadSetting: Self = [
         "OTHER_LDFLAGS" : [
             "$(inherited) -all_load",
             "-Xlinker -interposable"

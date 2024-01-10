@@ -114,7 +114,7 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
                 case .webSocket:
                     wsToken.onNext(.init(token: token, expireDate: date))
                 }
-                print("\(tokenType) UserDefaultToken: \(date.distance(to: .now))")
+                print("\(tokenType) UserDefaultToken")
                 return true
             }
             return false

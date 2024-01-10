@@ -43,6 +43,11 @@ final class HomeChartViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        print(#function)
+    }
+    
     override func viewDidLoad() {
         configureUI()
         bind()
@@ -75,6 +80,9 @@ final class HomeChartViewController: BaseViewController {
             input: .init(
                 viewWillAppear: self.rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
+                ).map { _ in },
+                viewWillDisappear: self.rx.methodInvoked(
+                    #selector(UIViewController.viewWillDisappear)
                 ).map { _ in }
             )
         )
@@ -84,7 +92,9 @@ final class HomeChartViewController: BaseViewController {
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
                 onNext: { viewController, candles in
-                    if let price = candles.last?.closePrice {
+                    if let price = candles.sorted(
+                        by: { $0.date < $1.date }
+                    ).last?.closePrice {
                         let price = String(Int(price))
                         let title = "\(viewController.viewModel.title) \(price)"
                         viewController.title = title

@@ -23,8 +23,10 @@ public protocol HomeChartUseCase {
         endDate: String
     )
     
-    func requestRealTimePrice(
+    func connectRealTimePrice(
         ticker: String,
         marketType: MarketType
     )
+    
+    func disconnectRealTimePrice()
 }
