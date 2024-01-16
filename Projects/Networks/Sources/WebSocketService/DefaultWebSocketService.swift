@@ -11,7 +11,12 @@ import Foundation
 import RxSwift
 
 public final class DefaultWebSocketService: NSObject, WebSocketService {
-    private var webSocketTask: URLSessionWebSocketTask?
+    private var webSocketTask: URLSessionWebSocketTask? {
+        didSet {
+            oldValue?.cancel(with: .goingAway, reason: nil)
+        }
+    }
+    
     private var timer: Timer?
     private var disposeBag = DisposeBag()
     
@@ -22,7 +27,7 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
     public override init() { }
     
     deinit {
-        print("deinit")
+        print(String(describing: self), "deinit")
     }
     
     private func receive() {

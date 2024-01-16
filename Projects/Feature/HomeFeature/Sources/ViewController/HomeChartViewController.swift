@@ -43,11 +43,6 @@ final class HomeChartViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        print(#function)
-    }
-    
     override func viewDidLoad() {
         configureUI()
         bind()
