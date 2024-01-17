@@ -40,4 +40,12 @@ public extension DefaultHomeCoordinator {
         )
         navigationController.pushViewController(homeChartVC, animated: true)
     }
+    
+    func pushToSearch() {
+        let searchStocksVC = SearchStocksViewController(
+            viewModel: .init(
+            )
+        )
+        navigationController.pushViewController(searchStocksVC, animated: true)
+    }
 }

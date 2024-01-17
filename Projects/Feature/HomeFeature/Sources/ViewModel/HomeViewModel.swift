@@ -45,9 +45,14 @@ public final class HomeViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        input.searchBtnTapEvent.subscribe(
-            onNext: { print("Tap") }
-        )
+        input.searchBtnTapEvent
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, _ in
+                    viewModel.coordinator.pushToSearch()
+                }
+            )
+            .disposed(by: disposeBag)
         
         useCase.balanceInfo
             .bind(to: output.balanceList)

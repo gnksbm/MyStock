@@ -5,4 +5,5 @@ import FeatureDependency
 
 public protocol HomeCoordinator: Coordinator {
     func push(with response: KISCheckBalanceResponse)
+    func pushToSearch()
 }

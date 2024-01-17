@@ -20,12 +20,13 @@ struct KISRealTimePriceDTO: Codable {
     let askpRsqn9, askpRsqn10, bidpRsqn1, bidpRsqn2: String
     let bidpRsqn3, bidpRsqn4, bidpRsqn5, bidpRsqn6: String
     let bidpRsqn7, bidpRsqn8, bidpRsqn9, bidpRsqn10: String
-    let totalAskpRsqn, totalBidpRsqn, ovtmTotalAskpRsqn, ovtmTotalBidpRsqn: String
+    let totalAskpRsqn, totalBidpRsqn, ovtmTotalAskpRsqn: String
+    let ovtmTotalBidpRsqn: String
     let antcCnpr, antcCnqn, antcVol, antcCntgVrss: String
     let antcCntgVrssSign: String
     let antcCntgPrdyCtrt, acmlVol, totalAskpRsqnIcdc, totalBidpRsqnIcdc: String
     let ovtmTotalAskpIcdc, ovtmTotalBidpIcdc: String
-
+    
     enum CodingKeys: String, CodingKey {
         case mkscShrnIscd = "MKSC_SHRN_ISCD"
         case bsopHour = "BSOP_HOUR"
@@ -111,17 +112,6 @@ struct KISRealTimePriceDTO: Codable {
             self = result
         }
         return nil
-    }
-}
-
-extension KISRealTimePriceDTO {
-    func make() {
-        let a = Mirror(reflecting: KISRealTimePriceDTO.self)
-        var dic = [String: Any]()
-        a.children.forEach { label, value in
-            guard let label else { return }
-            dic[label]
-        }
     }
 }
 //
