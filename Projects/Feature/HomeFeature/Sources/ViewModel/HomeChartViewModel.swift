@@ -43,7 +43,7 @@ final class HomeChartViewModel: ViewModel {
                         period: .day,
                         ticker: viewModel.ticker,
                         startDate: Date(
-                            timeInterval: 86400 * -30,
+                            timeInterval: 86400 * -100,
                             since: date
                         ).toString(dateFormat: "yyyyMMdd"),
                         endDate: date.toString(dateFormat: "yyyyMMdd")
@@ -79,9 +79,10 @@ final class HomeChartViewModel: ViewModel {
         )
         .subscribe(
             onNext: { candles, realTimePrice in
-                if let last = candles.last,
+                var sortedCandles = candles.sorted(by: { $0.date < $1.date })
+                if let last = sortedCandles.last,
                    !realTimePrice.isEmpty {
-                    var newCandles = candles
+                    var newCandles = sortedCandles
                     guard let closePrice = Double(realTimePrice)
                     else { return }
                     let newCandle = Candle(

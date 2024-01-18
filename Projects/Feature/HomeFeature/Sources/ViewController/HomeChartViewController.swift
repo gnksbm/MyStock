@@ -30,9 +30,7 @@ final class HomeChartViewController: BaseViewController {
         return button
     }()
     
-    let candleChartCV = CandleChartCV(
-        frame: .zero, collectionViewLayout: .init()
-    )
+    let candleChartCV = CandleChartCV()
     
     init(viewModel: HomeChartViewModel) {
         self.viewModel = viewModel
@@ -94,10 +92,6 @@ final class HomeChartViewController: BaseViewController {
                         let title = "\(viewController.viewModel.title) \(price)"
                         viewController.title = title
                     }
-                    viewController.candleChartCV.setCollectionViewLayout(
-                        viewController.updateLayout(itemCount: candles.count.f),
-                        animated: true
-                    )
                     viewController.candleChartCV.updateCandles(candles)
                 }
             )

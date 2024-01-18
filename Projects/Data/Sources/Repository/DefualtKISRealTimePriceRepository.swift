@@ -44,7 +44,6 @@ public final class DefualtKISRealTimePriceRepository
             .withUnretained(self)
             .subscribe(
             onNext: { repository, message in
-                print(message)
                 let str = message.0
                 let data = message.1
                 if let str {
