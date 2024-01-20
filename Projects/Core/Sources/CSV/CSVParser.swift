@@ -1,5 +1,5 @@
 //
-//  File.swift
+//  CSVParser.swift
 //  Core
 //
 //  Created by gnksbm on 1/17/24.
@@ -12,7 +12,7 @@ public final class CSVParser {
     public static func fetchData(asset: CSVAsset) {
         guard let url = asset.url
         else { return }
-        
+        print(url.absoluteString)
         do {
             let data = try Data(contentsOf: url)
             print(data)
@@ -29,9 +29,10 @@ public final class CSVParser {
     }
     
     public enum CSVAsset {
-        case kospi, kosdaq
+        case kospi, kosdaq, nasdaq
         
         var url: URL? {
+            
             switch self {
             case .kospi:
                 guard let urlStr = Bundle.main.path(
@@ -44,6 +45,12 @@ public final class CSVParser {
                     forResource: "kosdaq_20240117", ofType: "csv"
                 )
                 else { fatalError("kosdaq_20240117 Not Found") }
+                return URL(string: urlStr)
+            case .nasdaq:
+                guard let urlStr = Bundle.main.path(
+                    forResource: "nasdaq_20240118", ofType: "csv"
+                )
+                else { fatalError("nasdaq_20240118 Not Found") }
                 return URL(string: urlStr)
             }
         }

@@ -25,3 +25,6 @@ regenerate:
 	rm -rf **/*.xcodeproj
 	rm -rf *.xcworkspace
 	tuist generate
+
+cleancache:
+	rm -rf ~/Library/Developer/Xcode/DerivedData/*

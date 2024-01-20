@@ -1,5 +1,5 @@
 //
-//  XCConfig.swift
+//  Settings.swift
 //  Environment
 //
 //  Created by gnksbm on 2023/11/19.
@@ -74,6 +74,10 @@ public extension SettingsDictionary {
             "$(inherited) -all_load",
             "-Xlinker -interposable"
         ]
+    ]
+    
+    static let deploymentTarget: Self = [
+        "IPHONEOS_DEPLOYMENT_TARGET" : "iOS 16.0"
     ]
     
     func enableTestabilty() -> SettingsDictionary {

@@ -8,7 +8,7 @@
 import ProjectDescription
 
 public enum ModuleType {
-    case app, framework, feature
+    case app, framework, staticFramework, feature
     
     var product: Product {
         switch self {
@@ -16,8 +16,10 @@ public enum ModuleType {
             return .app
         case .framework:
             return .framework
+        case .staticFramework:
+            return .staticFramework
         case .feature:
-            return .app
+            return .staticFramework
         }
     }
 }

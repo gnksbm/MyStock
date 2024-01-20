@@ -79,7 +79,7 @@ final class HomeChartViewModel: ViewModel {
         )
         .subscribe(
             onNext: { candles, realTimePrice in
-                var sortedCandles = candles.sorted(by: { $0.date < $1.date })
+                let sortedCandles = candles.sorted(by: { $0.date < $1.date })
                 if let last = sortedCandles.last,
                    !realTimePrice.isEmpty {
                     var newCandles = sortedCandles

@@ -1,7 +1,7 @@
-git_url("git@github.com:Pepsi-Club/YamYamPick-Match.git")
+git_url("https://github.com/gnksbm/GeonSeobKim_Match")
 
 storage_mode("git")
 
-type("appstore")
+type("development")
 
-app_identifier("com.Pepsi-Club.YamYamPick")
+app_identifier("com.GeonSeobKim.KISStock")

@@ -10,8 +10,8 @@ import ProjectDescription
 
 public extension String {
     static let appName: Self = "KISStock"
-    static let displayName: Self = "한투API"
-    static let organizationName = "Pepsi-Club"
+    static let displayName: Self = "Stock"
+    static let organizationName = "GeonSeobKim"
     /// 앱스토어에 게시할 때마다 증가해줘야 하는 버전
     static let marketingVersion: Self = "1"
     /// 개발자가 내부적으로 확인하기 위한 용도 (날짜를 사용하기도 함 - 2023.12.8.1 )
@@ -22,7 +22,7 @@ public extension String {
 
 
 public extension String {
-    static let bundleID: Self = "com.\(organizationName).YamYamPick"
+    static let bundleID: Self = "com.\(organizationName).\(appName)"
     static let targetVersion: Self = "16.0"
 }
 
