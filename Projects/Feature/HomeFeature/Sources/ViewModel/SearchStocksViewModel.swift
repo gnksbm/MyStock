@@ -9,13 +9,38 @@
 import Foundation
 
 import FeatureDependency
+import Core
 import Domain
 
 import RxSwift
 
 final class SearchStocksViewModel: ViewModel {
+    @Injected(SearchStocksUseCase.self) private var useCase: SearchStocksUseCase
+    
+    private let disposeBag = DisposeBag()
+    
     func transform(input: Input) -> Output {
-        let output = Output()
+        let output = Output(
+            searchResult: .init()
+        )
+        
+        input.searchTerm
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, searchTerm in
+                    viewModel.useCase.searchStocks(searchTerm: searchTerm)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        useCase.searchResult
+            .subscribe(
+                onNext: {
+                    output.searchResult.onNext($0)
+                }
+            )
+            .disposed(by: disposeBag)
+        
         return output
     }
 }
@@ -24,5 +49,7 @@ extension SearchStocksViewModel {
     struct Input { 
         let searchTerm: Observable<String>
     }
-    struct Output { }
+    struct Output { 
+        let searchResult: PublishSubject<[KISSearchStocksResponse]>
+    }
 }

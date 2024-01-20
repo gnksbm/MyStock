@@ -97,6 +97,7 @@ public final class HomeViewController: BaseViewController {
         )
         
         output.balanceList
+            .observe(on: MainScheduler.asyncInstance)
             .bind(
                 to: collectionView.rx.items(
                     cellIdentifier: HomeStockCVCell.identifier,

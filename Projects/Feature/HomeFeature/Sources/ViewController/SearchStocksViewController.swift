@@ -10,6 +10,9 @@ import UIKit
 
 import FeatureDependency
 
+import RxSwift
+import RxCocoa
+
 final class SearchStocksViewController: BaseViewController {
     private let viewModel: SearchStocksViewModel
     
@@ -19,8 +22,12 @@ final class SearchStocksViewController: BaseViewController {
         return textField
     }()
     
-    private let resultTableView: UITableView = {
+    private let searchStocksTableView: UITableView = {
         let tableView = UITableView()
+        tableView.register(
+            SearchStocksTVCell.self,
+            forCellReuseIdentifier: SearchStocksTVCell.identifier
+        )
         return tableView
     }()
     
@@ -48,10 +55,21 @@ final class SearchStocksViewController: BaseViewController {
                     .asObservable()
             )
         )
+        output.searchResult
+            .bind(
+                to: searchStocksTableView.rx.items(
+                    cellIdentifier: SearchStocksTVCell.identifier,
+                    cellType: SearchStocksTVCell.self
+                ),
+                curriedArgument: { _, response, cell in
+                    cell.prepare(response: response)
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() { 
-        [searchTextField, resultTableView].forEach {
+        [searchTextField, searchStocksTableView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -69,16 +87,16 @@ final class SearchStocksViewController: BaseViewController {
                 constant: -10
             ),
             
-            resultTableView.topAnchor.constraint(
+            searchStocksTableView.topAnchor.constraint(
                 equalTo: searchTextField.bottomAnchor
             ),
-            resultTableView.leadingAnchor.constraint(
+            searchStocksTableView.leadingAnchor.constraint(
                 equalTo: safeArea.leadingAnchor
             ),
-            resultTableView.trailingAnchor.constraint(
+            searchStocksTableView.trailingAnchor.constraint(
                 equalTo: safeArea.trailingAnchor
             ),
-            resultTableView.bottomAnchor.constraint(
+            searchStocksTableView.bottomAnchor.constraint(
                 equalTo: safeArea.bottomAnchor
             ),
         ])

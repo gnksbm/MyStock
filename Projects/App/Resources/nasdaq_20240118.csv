@@ -83,7 +83,7 @@ ACOR,Acorda Therapeutics Inc. Common Stock,$16.625,-0.165,-0.983%,20649879.00,Un
 ACP,abrdn Income Credit Strategies Fund Common Shares,$6.79,-0.11,-1.594%,0.00,United States,2011,592246,Finance,Investment Managers
 ACP^A,abrdn Income Credit Strategies Fund 5.250% Series A Perpetual Preferred Stock,$22.06,-0.07,-0.316%,,United States,,2504,,
 ACR,ACRES Commercial Realty Corp. Common Stock,$9.78,0.12,1.242%,82691181.00,United States,,51175,Real Estate,Real Estate Investment Trusts
-ACR^C,ACRES Commercial Realty Corp. 8.625% Fixed-to-Floating Series C Cumulative Redeemable Preferred Stock ,$23.6654,-0.0663,-0.279%,,United States,,14530,,
+ACR^C,ACRES Commercial Realty Corp. 8.625% Fixed-to-Floating Series C Cumulative Redeemable Preferred Stock,$23.6654,-0.0663,-0.279%,,United States,,14530,,
 ACR^D,ACRES Commercial Realty Corp. 7.875% Series D Cumulative Redeemable Preferred Stock,$21.79,0.00,0.00%,,United States,,3443,,
 ACRE,Ares Commercial Real Estate Corporation Common Stock,$9.87,-0.13,-1.30%,534367307.00,United States,2012,640873,Real Estate,Real Estate Investment Trusts
 ACRS,Aclaris Therapeutics Inc. Common Stock,$1.18,0.02,1.724%,83586709.00,United States,2015,2343137,Health Care,Biotechnology: Pharmaceutical Preparations
@@ -1170,7 +1170,7 @@ CACC,Credit Acceptance Corporation Common Stock,$516.26,-4.99,-0.957%,6487662343
 CACI,CACI International Inc. Class A Common Stock,$330.03,-0.21,-0.064%,7352418571.00,United States,,79378,Technology,EDP Services
 CACO,Caravelle International Group Ordinary Shares,$0.456,-0.004,-0.87%,24065208.00,Singapore,,27715,Consumer Discretionary,Marine Transportation
 CADE,Cadence Bank Common Stock,$27.77,0.09,0.325%,5071385031.00,United States,,1650721,Finance,Major Banks
-CADE^A,Cadence Bank 5.50% Series A ,$20.20,0.30,1.508%,,United States,,5267,,
+CADE^A,Cadence Bank 5.50% Series A,$20.20,0.30,1.508%,,United States,,5267,,
 CADL,Candel Therapeutics Inc. Common Stock,$1.25,0.01,0.806%,36149763.00,United States,2021,45811,Health Care,Biotechnology: Pharmaceutical Preparations
 CAE,CAE Inc. Ordinary Shares,$20.49,-0.28,-1.348%,6521363733.00,Canada,,281325,,
 CAF,Morgan Stanley China A Share Fund Inc. Common Stock,$12.17,-0.10,-0.815%,0.00,United States,2006,53925,Finance,Investment Managers
@@ -1683,7 +1683,7 @@ CSLRW,Complete Solaria Inc. Warrants,$0.022,-0.0001,-0.452%,949885.00,United Sta
 CSPI,CSP Inc. Common Stock,$21.55,0.30,1.412%,101879198.00,United States,1982,5027,Technology,EDP Services
 CSQ,Calamos Strategic Total Return Common Stock,$14.93,-0.10,-0.665%,2372192196.00,United States,2004,156697,Finance,Finance Companies
 CSR,D/B/A Centerspace Common Stock,$55.26,-0.01,-0.018%,831803858.00,United States,,84516,Real Estate,Real Estate Investment Trusts
-CSR^C,D/B/A Centerspace 6.625% Series C ,$24.34,0.1243,0.513%,,United States,,3911,,
+CSR^C,D/B/A Centerspace 6.625% Series C,$24.34,0.1243,0.513%,,United States,,3911,,
 CSSE,Chicken Soup for the Soul Entertainment Inc. Class A Common Stock,$0.1944,-0.0139,-6.673%,6262754.00,United States,2017,92000,Consumer Discretionary,Movies/Entertainment
 CSSEL,Chicken Soup for the Soul Entertainment Inc. Warrant,$0.008,0.0018,29.032%,257727.00,United States,,2336425,Consumer Discretionary,Movies/Entertainment
 CSSEN,Chicken Soup for the Soul Entertainment Inc. 9.50% Notes due 2025,$9.70,-4.28,-30.615%,312493386.00,United States,,41386,Consumer Discretionary,Movies/Entertainment
@@ -1827,9 +1827,9 @@ DBGIW,Digital Brands Group Inc. Warrant,$7.09,0.00,0.00%,6082220.00,United State
 DBI,Designer Brands Inc. Class A Common Stock,$8.24,-0.18,-2.138%,468503377.00,United States,,1114008,Consumer Discretionary,Clothing/Shoe/Accessory Stores
 DBL,DoubleLine Opportunistic Credit Fund Common Shares of Beneficial Interest,$15.18,-0.10,-0.654%,0.00,United States,2012,52834,,
 DBRG,DigitalBridge Group Inc.,$17.69,-0.19,-1.063%,2890739157.00,United States,2014,1742349,Real Estate,Real Estate Investment Trusts
-DBRG^H,DigitalBridge Group Inc. 7.125% Series H ,$23.07,-0.38,-1.62%,,United States,,19287,,
-DBRG^I,DigitalBridge Group Inc. 7.15% Series I ,$23.25,-0.35,-1.483%,,United States,,24754,,
-DBRG^J,DigitalBridge Group Inc. 7.125% Series J ,$23.18,-0.35,-1.487%,,United States,,18489,,
+DBRG^H,DigitalBridge Group Inc. 7.125% Series H,$23.07,-0.38,-1.62%,,United States,,19287,,
+DBRG^I,DigitalBridge Group Inc. 7.15% Series I,$23.25,-0.35,-1.483%,,United States,,24754,,
+DBRG^J,DigitalBridge Group Inc. 7.125% Series J,$23.18,-0.35,-1.487%,,United States,,18489,,
 DBVT,DBV Technologies S.A. American Depositary Shares,$0.86,-0.0114,-1.308%,165616311.00,France,2014,13882,Health Care,Biotechnology: Biological Products (No Diagnostic Substances)
 DBX,Dropbox Inc. Class A Common Stock,$31.03,-0.30,-0.958%,10728882531.00,United States,2018,3385457,Technology,Computer Software: Prepackaged Software
 DC,Dakota Gold Corp. Common Stock,$2.08,0.05,2.463%,180419766.00,United States,2022,159335,Basic Materials,Precious Metals
@@ -4510,7 +4510,7 @@ NMZ,Nuveen Municipal High Income Opportunity Fund Common Stock $0.01 par value p
 NN,NextNav Inc. Common Stock,$3.85,-0.03,-0.773%,424023057.00,United States,,432474,Industrials,Industrial Machinery/Components
 NNAG,99 Acquisition Group Inc. Class A Common Stock,$10.2301,0.0101,0.099%,0.00,United States,2023,82315,,
 NNAGR,99 Acquisition Group Inc. Right,$0.1501,0.0001,0.067%,0.00,United States,2023,20633,,
-NNAGU,99 Acquisition Group Inc. Unit ,$10.3801,0.0001,0.001%,0.00,United States,2023,403,,
+NNAGU,99 Acquisition Group Inc. Unit,$10.3801,0.0001,0.001%,0.00,United States,2023,403,,
 NNBR,NN Inc. Common Stock,$3.82,-0.19,-4.738%,180887734.00,United States,1994,128303,Industrials,Industrial Machinery/Components
 NNDM,Nano Dimension Ltd. American Depositary Shares,$2.11,-0.03,-1.402%,545591450.00,Israel,,1189927,Technology,Electrical Products
 NNI,Nelnet Inc. Common Stock,$82.94,-0.03,-0.036%,3095618886.00,United States,2003,79192,Finance,Finance: Consumer Services
@@ -5805,7 +5805,7 @@ SHBI,Shore Bancshares Inc Common Stock,$12.87,0.17,1.339%,426585095.00,United St
 SHC,Sotera Health Company Common Stock,$14.69,-0.53,-3.482%,4151726302.00,United States,2020,702130,Health Care,Medical Specialities
 SHCO,Soho House & Co Inc. Class A Common Stock,$6.34,-0.26,-3.939%,1236408439.00,,2021,64095,Consumer Discretionary,Hotels/Resorts
 SHCR,Sharecare Inc. Class A Common Stock,$0.9687,-0.0018,-0.185%,341392997.00,United States,2021,577122,Technology,Computer Software: Prepackaged Software
-SHEL,Shell PLC American Depositary Shares (each representing two (2) Ordinary Shares) ,$61.04,-0.72,-1.166%,198949137326.00,Netherlands,2022,5755790,Energy,Oil & Gas Production
+SHEL,Shell PLC American Depositary Shares (each representing two (2) Ordinary Shares),$61.04,-0.72,-1.166%,198949137326.00,Netherlands,2022,5755790,Energy,Oil & Gas Production
 SHEN,Shenandoah Telecommunications Co Common Stock,$19.62,-0.46,-2.291%,986188823.00,United States,,100876,Telecommunications,Telecommunications Equipment
 SHFS,SHF Holdings Inc. Class A Common Stock,$1.38,0.01,0.73%,64298777.00,United States,2021,37270,Finance,Finance: Consumer Services
 SHFSW,SHF Holdings Inc. Warrants,$0.07,-0.0069,-8.973%,3261532.00,United States,2021,9497,Finance,Finance: Consumer Services
@@ -5897,7 +5897,7 @@ SLNAW,Selina Hospitality PLC Warrant,$0.0078,0.0039,100.00%,0.00,United Kingdom,
 SLND,Southland Holdings Inc. Common Stock,$4.97,-0.07,-1.389%,238023160.00,United States,,30518,Industrials,Military/Government/Technical
 SLNG,Stabilis Solutions Inc. Common Stock,$4.19,-0.01,-0.238%,77822508.00,United States,,2294,Utilities,Oil/Gas Transmission
 SLNH,Soluna Holdings Inc. Common Stock,$3.27,-0.14,-4.106%,5264007.00,United States,,36773,Technology,EDP Services
-SLNHP,Soluna Holdings Inc 9.0% Series A Cumulative Perpetual Preferred Stock ,$3.05,-0.06,-1.929%,4909853.00,United States,,5871,Technology,EDP Services
+SLNHP,Soluna Holdings Inc 9.0% Series A Cumulative Perpetual Preferred Stock,$3.05,-0.06,-1.929%,4909853.00,United States,,5871,Technology,EDP Services
 SLNO,Soleno Therapeutics Inc. Common Stock,$44.92,-0.04,-0.089%,1370030892.00,United States,2014,219462,Health Care,Biotechnology: Electromedical & Electrotherapeutic Apparatus
 SLP,Simulations Plus Inc. Common Stock,$37.67,-0.58,-1.516%,752159791.00,United States,,85531,Technology,EDP Services
 SLQT,SelectQuote Inc. Common Stock,$1.16,0.01,0.87%,194570390.00,United States,2020,456076,Finance,Specialty Insurers
@@ -6342,7 +6342,7 @@ TIGO,Millicom International Cellular S.A. Common Stock,$17.69,-0.35,-1.94%,30444
 TIGR,UP Fintech Holding Ltd American Depositary Share representing fifteen Class A Ordinary Shares,$3.66,0.06,1.667%,603207909.00,China,2019,965483,Finance,Investment Bankers/Brokers/Service
 TIL,Instil Bio Inc. Common Stock,$9.015,1.575,21.169%,58633154.00,United States,2021,308571,Health Care,Biotechnology: Pharmaceutical Preparations
 TILE,Interface Inc. Common Stock,$11.67,-0.04,-0.342%,678108398.00,United States,,255949,Consumer Discretionary,Home Furnishings
-TIMB,TIM S.A. American Depositary Shares (Each representing 5 Common Shares) ,$17.72,0.24,1.373%,8579331148.00,Brazil,2020,564813,Telecommunications,Telecommunications Equipment
+TIMB,TIM S.A. American Depositary Shares (Each representing 5 Common Shares),$17.72,0.24,1.373%,8579331148.00,Brazil,2020,564813,Telecommunications,Telecommunications Equipment
 TIPT,Tiptree Inc. Common Stock,$19.05,0.00,0.00%,700083080.00,United States,,165456,Finance,Property-Casualty Insurers
 TIRX,TIAN RUIXIANG Holdings Ltd Class A Ordinary Shares,$0.56,-0.0196,-3.382%,1691200.00,China,2021,20425,Finance,Specialty Insurers
 TISI,Team Inc. Common Stock,$6.50,0.05,0.775%,28394743.00,United States,,5138,Consumer Discretionary,Other Consumer Services
@@ -6482,7 +6482,7 @@ TSN,Tyson Foods Inc. Common Stock,$54.31,-0.32,-0.586%,19293075113.00,United Sta
 TSP,TuSimple Holdings Inc. Class A Common Stock,$0.3791,-0.3273,-46.334%,87151558.00,United States,2021,17337121,Industrials,Construction/Ag Equipment/Trucks
 TSQ,Townsquare Media Inc. Class A Common Stock,$10.50,0.00,0.00%,172802070.00,United States,2014,29093,Consumer Discretionary,Broadcasting
 TSRI,TSR Inc. Common Stock,$8.72,-0.09,-1.022%,18693169.00,United States,,412,Technology,EDP Services
-TSVT,2seventy bio Inc. Common Stock ,$3.40,-0.10,-2.857%,172123660.00,United States,,656938,Health Care,Biotechnology: Pharmaceutical Preparations
+TSVT,2seventy bio Inc. Common Stock,$3.40,-0.10,-2.857%,172123660.00,United States,,656938,Health Care,Biotechnology: Pharmaceutical Preparations
 TT,Trane Technologies plc,$244.43,-1.09,-0.444%,55621754088.00,Ireland,,804696,Industrials,Auto Parts:O.E.M.
 TTC,Toro Company (The) Common Stock,$90.57,0.52,0.577%,9407887290.00,United States,,703717,Consumer Discretionary,Tools/Hardware
 TTD,The Trade Desk Inc. Class A Common Stock,$64.50,0.74,1.161%,31624157339.00,United States,2016,6107077,Technology,Computer Software: Programming Data Processing

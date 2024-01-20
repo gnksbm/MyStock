@@ -30,10 +30,20 @@ extension AppDelegate {
                 realTimePriceRepository: realTimePriceRepository
             )
         )
+        DIContainer.register(
+            type: SearchStocksUseCase.self,
+            DefaultSearchStocksUseCase(
+                repository: searchStocksRepository
+            )
+        )
     }
 }
 
 extension AppDelegate {
+    var searchStocksRepository: SearchStocksRepository {
+        DefaultSearchStocksRepository()
+    }
+    
     var chartPriceRepository: KISChartPriceRepository {
         DefaultKISChartPriceRepository(networkService: networkService)
     }
