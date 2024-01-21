@@ -55,7 +55,7 @@ public final class DefualtKISRealTimePriceRepository
                            ) {
                             let iv = response.body.output.iv
                             let key = response.body.output.key
-                            AES256.configAES(iv: iv, key: key)
+                            AES256Manager.configAES(iv: iv, key: key)
                         }
                     } else {
                         guard let price = str

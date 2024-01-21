@@ -106,7 +106,6 @@ struct KISRealTimePriceDTO: Codable {
               let any = try? JSONSerialization.jsonObject(with: data)
         else { return nil }
         if JSONSerialization.isValidJSONObject(any) {
-            print(any)
             guard let result = try? data.decode(type: KISRealTimePriceDTO.self)
             else { return nil }
             self = result

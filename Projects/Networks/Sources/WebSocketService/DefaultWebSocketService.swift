@@ -18,11 +18,8 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
     }
     
     private var timer: Timer?
-    private var disposeBag = DisposeBag()
     
     public let receivedMessage = PublishSubject<(String?, Data?)>()
-    public let didOpenWith = { }
-    public let didCloesWith = { }
     
     public override init() { }
     
@@ -43,7 +40,7 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
                     self?.receivedMessage.onError(WebSocketError.unknownMessage)
                 }
             case .failure(let error):
-                self?.receivedMessage.onError(error)
+                self?.receivedMessage.onError(WebSocketError.sendError(error))
             }
             self?.receive()
         }
@@ -117,7 +114,6 @@ extension DefaultWebSocketService: URLSessionWebSocketDelegate {
         didOpenWithProtocol protocol: String?
     ) {
         print("open")
-        didOpenWith()
     }
     
     public func urlSession(
@@ -127,6 +123,5 @@ extension DefaultWebSocketService: URLSessionWebSocketDelegate {
         reason: Data?
     ) {
         print("close")
-        didCloesWith()
     }
 }

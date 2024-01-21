@@ -43,9 +43,10 @@ public extension DefaultHomeCoordinator {
     }
     
     func startSearchStocksFlow() {
-        let defaultSearchStocksCoordinator = DefaultSearchStocksCoordinator(
+        let searchStocksCoordinator = DefaultSearchStocksCoordinator(
             navigationController: navigationController
         )
-        defaultSearchStocksCoordinator.start()
+        childCoordinators.append(searchStocksCoordinator)
+        searchStocksCoordinator.start()
     }
 }

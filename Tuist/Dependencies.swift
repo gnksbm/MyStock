@@ -35,16 +35,8 @@ let dependencies = Dependencies(
                 url: $0.url,
                 requirement: .upToNextMajor(from: $0.upToNextMajor)
             )
-        }
-//        ,
-//        productTypes: thirdParty
+        },
+        productTypes: thirdParty
     ),
     platforms: [.iOS]
 )
-//SwiftPackageManagerDependencies(
-//    <#T##packages: [Package]##[Package]#>,
-//    productTypes: <#T##[String : Product]#>,
-//    baseSettings: <#T##Settings#>,
-//    targetSettings: <#T##[String : SettingsDictionary]#>,
-//    projectOptions: <#T##[String : Project.Options]#>
-//)

@@ -1,5 +1,5 @@
 //
-//  AES256.swift
+//  AES256Manager.swift
 //  Core
 //
 //  Created by gnksbm on 2024/01/04.
@@ -9,7 +9,7 @@
 import Foundation
 import CryptoSwift
 
-public class AES256 {
+public class AES256Manager {
     private static var key = ""
     private static var iv = ""
     private static var aes: AES {

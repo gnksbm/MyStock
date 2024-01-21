@@ -62,7 +62,6 @@ public extension [Candle] {
     
     var lowestPrice: Double {
         guard let first = first?.lowestPrice else {
-            print("nil")
             return 0
         }
         var lowestPrice = first
