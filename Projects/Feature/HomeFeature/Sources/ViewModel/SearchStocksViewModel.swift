@@ -13,15 +13,21 @@ import Core
 import Domain
 
 import RxSwift
+import RxRelay
 
 final class SearchStocksViewModel: ViewModel {
     @Injected(SearchStocksUseCase.self) private var useCase: SearchStocksUseCase
     
     private let disposeBag = DisposeBag()
+    private let coordinator: SearchStocksCoordinator
+    
+    init(coordinator: SearchStocksCoordinator) {
+        self.coordinator = coordinator
+    }
     
     func transform(input: Input) -> Output {
         let output = Output(
-            searchResult: .init()
+            searchResult: .init(value: [])
         )
         
         input.searchTerm
@@ -33,10 +39,20 @@ final class SearchStocksViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
+        input.stockCellTapEvent
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, index in
+                    let response = output.searchResult.value[index]
+                    viewModel.coordinator.pushToChartVC(with: response)
+                }
+            )
+            .disposed(by: disposeBag)
+        
         useCase.searchResult
             .subscribe(
                 onNext: {
-                    output.searchResult.onNext($0)
+                    output.searchResult.accept($0)
                 }
             )
             .disposed(by: disposeBag)
@@ -48,8 +64,9 @@ final class SearchStocksViewModel: ViewModel {
 extension SearchStocksViewModel {
     struct Input { 
         let searchTerm: Observable<String>
+        let stockCellTapEvent: Observable<Int>
     }
     struct Output { 
-        let searchResult: PublishSubject<[KISSearchStocksResponse]>
+        let searchResult: BehaviorRelay<[SearchStocksResponse]>
     }
 }

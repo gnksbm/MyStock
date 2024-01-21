@@ -30,6 +30,7 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
         networkService.request(
             endPoint: KISChartPriceEndPoint(
                 investType: request.investType,
+                marketType: request.marketType,
                 period: request.period,
                 ticker: request.ticker,
                 startDate: request.startDate,
@@ -38,7 +39,12 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
             )
         )
         .compactMap {
-            try? $0.decode(type: KISChartPriceDTO.self).toDomain
+            switch request.marketType {
+            case .overseas:
+                try? $0.decode(type: KISOverseasChartPriceDTO.self).toDomain
+            case .domestic:
+                try? $0.decode(type: KISDomesticChartPriceDTO.self).toDomain
+            }
         }
         .withUnretained(self)
         .subscribe(

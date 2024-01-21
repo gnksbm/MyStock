@@ -46,7 +46,7 @@ final class SearchStocksTVCell: UITableViewCell {
         contentView.layer.borderColor = UIColor.black.cgColor
     }
     
-    func prepare(response: KISSearchStocksResponse) {
+    func prepare(response: SearchStocksResponse) {
         tickerLabel.text = response.ticker
         nameLabel.text = response.name
     }

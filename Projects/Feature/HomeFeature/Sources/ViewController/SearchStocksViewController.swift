@@ -52,7 +52,10 @@ final class SearchStocksViewController: BaseViewController {
                 searchTerm: searchTextField.rx
                     .text
                     .orEmpty
-                    .asObservable()
+                    .asObservable(),
+                stockCellTapEvent: searchStocksTableView.rx
+                    .itemSelected
+                    .map({ $0.row })
             )
         )
         output.searchResult

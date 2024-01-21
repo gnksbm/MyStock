@@ -11,7 +11,7 @@ import Foundation
 import RxSwift
 
 public protocol SearchStocksUseCase {
-    var searchResult: PublishSubject<[KISSearchStocksResponse]> { get }
+    var searchResult: PublishSubject<[SearchStocksResponse]> { get }
     
     func searchStocks(searchTerm: String)
 }

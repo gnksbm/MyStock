@@ -31,21 +31,21 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
 }
 
 public extension DefaultHomeCoordinator {
-    func push(with response: KISCheckBalanceResponse) {
+    func pushToChartVC(with response: KISCheckBalanceResponse) {
         let homeChartVC = HomeChartViewController(
             viewModel: .init(
                 title: response.name,
-                ticker: response.ticker
+                ticker: response.ticker,
+                marketType: .domestic
             )
         )
         navigationController.pushViewController(homeChartVC, animated: true)
     }
     
-    func pushToSearch() {
-        let searchStocksVC = SearchStocksViewController(
-            viewModel: .init(
-            )
+    func startSearchStocksFlow() {
+        let defaultSearchStocksCoordinator = DefaultSearchStocksCoordinator(
+            navigationController: navigationController
         )
-        navigationController.pushViewController(searchStocksVC, animated: true)
+        defaultSearchStocksCoordinator.start()
     }
 }

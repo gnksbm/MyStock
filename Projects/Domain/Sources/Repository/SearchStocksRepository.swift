@@ -13,5 +13,5 @@ import RxSwift
 public protocol SearchStocksRepository {
     func searchStocks(
         searchTerm: String
-    ) -> Observable<[KISSearchStocksResponse]>
+    ) -> Observable<[SearchStocksResponse]>
 }

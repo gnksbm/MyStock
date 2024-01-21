@@ -10,6 +10,7 @@ import Foundation
 
 public struct KISChartPriceRequest {
     public let investType: InvestType
+    public let marketType: MarketType
     public let period: PeriodType
     public let ticker: String
     public let startDate: String // "20231231"
@@ -18,6 +19,7 @@ public struct KISChartPriceRequest {
     
     public init(
         investType: InvestType,
+        marketType: MarketType,
         period: PeriodType,
         ticker: String,
         startDate: String,
@@ -25,6 +27,7 @@ public struct KISChartPriceRequest {
         authorization: String
     ) {
         self.investType = investType
+        self.marketType = marketType
         self.period = period
         self.ticker = ticker
         self.startDate = startDate

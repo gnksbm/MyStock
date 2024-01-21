@@ -14,7 +14,7 @@ import Domain
 import RxSwift
 
 public final class DefaultSearchStocksRepository: SearchStocksRepository {
-    private var stocks = [KISSearchStocksResponse]()
+    private var stocks = [SearchStocksResponse]()
     
     public init() {
         fetchTickers()
@@ -22,7 +22,7 @@ public final class DefaultSearchStocksRepository: SearchStocksRepository {
     
     public func searchStocks(
         searchTerm: String
-    ) -> Observable<[KISSearchStocksResponse]> {
+    ) -> Observable<[SearchStocksResponse]> {
         Observable.create { observer in
             observer.onNext(
                 self.stocks.filter {
@@ -46,10 +46,10 @@ public final class DefaultSearchStocksRepository: SearchStocksRepository {
         }
     }
     
-    private func fetchKospi() throws -> [KISSearchStocksResponse] {
+    private func fetchKospi() throws -> [SearchStocksResponse] {
         do {
             let kospiArr = try CSVManager.getTickerList(asset: .kospi)
-            let resultTickers: [KISSearchStocksResponse] = kospiArr.map {
+            let resultTickers: [SearchStocksResponse] = kospiArr.map {
                 let ticker = $0[0].dropFirst(3).dropLast(3)
                 let name = $0[3]
                 return .init(
@@ -61,10 +61,10 @@ public final class DefaultSearchStocksRepository: SearchStocksRepository {
         }
     }
     
-    private func fetchKosdaq() throws -> [KISSearchStocksResponse] {
+    private func fetchKosdaq() throws -> [SearchStocksResponse] {
         do {
             let kosdaqArr = try CSVManager.getTickerList(asset: .kosdaq)
-            let resultTickers: [KISSearchStocksResponse] = kosdaqArr.map {
+            let resultTickers: [SearchStocksResponse] = kosdaqArr.map {
                 let ticker = $0[0].dropFirst(3).dropLast(3)
                 let name = $0[3]
                 return .init(
@@ -76,10 +76,10 @@ public final class DefaultSearchStocksRepository: SearchStocksRepository {
         }
     }
     
-    private func fetchNasdaq() throws -> [KISSearchStocksResponse] {
+    private func fetchNasdaq() throws -> [SearchStocksResponse] {
         do {
             let nasdaqArr = try CSVManager.getTickerList(asset: .nasdaq)
-            let resultTickers: [KISSearchStocksResponse] = nasdaqArr.map {
+            let resultTickers: [SearchStocksResponse] = nasdaqArr.map {
                 let ticker = $0[0]
                 let name = $0[1]
                 return .init(

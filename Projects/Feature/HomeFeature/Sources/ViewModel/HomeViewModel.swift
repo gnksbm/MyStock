@@ -5,7 +5,7 @@ import Domain
 import FeatureDependency
 
 import RxSwift
-import RxCocoa
+import RxRelay
 
 public final class HomeViewModel: ViewModel {
     @Injected(HomeUseCase.self) private var useCase: HomeUseCase
@@ -38,7 +38,7 @@ public final class HomeViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, row in
-                    viewModel.coordinator.push(
+                    viewModel.coordinator.pushToChartVC(
                         with: output.balanceList.value[row]
                     )
                 }
@@ -49,7 +49,7 @@ public final class HomeViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in
-                    viewModel.coordinator.pushToSearch()
+                    viewModel.coordinator.startSearchStocksFlow()
                 }
             )
             .disposed(by: disposeBag)

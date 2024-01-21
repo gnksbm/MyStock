@@ -13,7 +13,7 @@ import RxSwift
 public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
     private let repository: SearchStocksRepository
     private let disposeBag = DisposeBag()
-    public let searchResult = PublishSubject<[KISSearchStocksResponse]>()
+    public let searchResult = PublishSubject<[SearchStocksResponse]>()
     
     public init(repository: SearchStocksRepository) {
         self.repository = repository

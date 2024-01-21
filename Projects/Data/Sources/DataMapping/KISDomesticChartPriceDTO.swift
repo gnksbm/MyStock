@@ -1,5 +1,5 @@
 //
-//  KISChartPriceDTO.swift
+//  KISDomesticChartPriceDTO.swift
 //  Data
 //
 //  Created by gnksbm on 2023/12/31.
@@ -11,7 +11,7 @@ import Foundation
 import Core
 import Domain
 
-struct KISChartPriceDTO: Codable {
+struct KISDomesticChartPriceDTO: Codable {
     let output1: Output1
     let output2: [Output2]
     let rtCD, msgCD, msg1: String
@@ -24,7 +24,7 @@ struct KISChartPriceDTO: Codable {
     }
 }
 
-extension KISChartPriceDTO {
+extension KISDomesticChartPriceDTO {
     var toDomain: [Candle] {
         output2.compactMap {
             Candle(

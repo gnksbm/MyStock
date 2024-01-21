@@ -18,6 +18,7 @@ public protocol HomeChartUseCase {
     
     func fetchChart(
         period: PeriodType,
+        marketType: MarketType,
         ticker: String,
         startDate: String,
         endDate: String

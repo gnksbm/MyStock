@@ -1,5 +1,5 @@
 //
-//  KISSearchStocksResponse.swift
+//  SearchStocksResponse.swift
 //  Domain
 //
 //  Created by gnksbm on 1/20/24.
@@ -8,10 +8,10 @@
 
 import Foundation
 
-public struct KISSearchStocksResponse {
+public struct SearchStocksResponse {
     public let ticker: String
     public let name: String
-    let marketType: MarketType
+    public let marketType: MarketType
     
     public init(
         ticker: String,

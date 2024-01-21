@@ -33,6 +33,7 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
     
     public func fetchChart(
         period: PeriodType,
+        marketType: MarketType,
         ticker: String,
         startDate: String,
         endDate: String
@@ -44,6 +45,7 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
                     useCase.chartPriceRepository.requestChartData(
                         request: .init(
                             investType: .reality,
+                            marketType: marketType,
                             period: period,
                             ticker: ticker,
                             startDate: startDate,

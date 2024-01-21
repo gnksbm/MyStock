@@ -19,14 +19,17 @@ final class HomeChartViewModel: ViewModel {
     @Injected(HomeChartUseCase.self) private var useCase: HomeChartUseCase
     let title: String
     private let ticker: String
+    private let marketType: MarketType
     private let disposeBag = DisposeBag()
     
     init(
         title: String,
-        ticker: String
+        ticker: String,
+        marketType: MarketType
     ) {
         self.title = title
         self.ticker = ticker
+        self.marketType = marketType
     }
     
     func transform(input: Input) -> Output {
@@ -41,6 +44,7 @@ final class HomeChartViewModel: ViewModel {
                     let date = Date()
                     viewModel.useCase.fetchChart(
                         period: .day,
+                        marketType: viewModel.marketType,
                         ticker: viewModel.ticker,
                         startDate: Date(
                             timeInterval: 86400 * -100,
@@ -67,7 +71,7 @@ final class HomeChartViewModel: ViewModel {
                 onNext: { viewModel, _ in
                     viewModel.useCase.connectRealTimePrice(
                         ticker: viewModel.ticker,
-                        marketType: .domestic
+                        marketType: viewModel.marketType
                     )
                 }
             )
