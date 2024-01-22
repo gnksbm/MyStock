@@ -29,10 +29,10 @@ extension KISDomesticChartPriceDTO {
         output2.compactMap {
             Candle(
                 date: $0.stckBsopDate,
-                startPrice: $0.stckOprc,
-                lowestPrice: $0.stckLwpr,
-                highestPrice: $0.stckHgpr,
-                closePrice: $0.stckClpr
+                open: $0.stckOprc,
+                low: $0.stckLwpr,
+                high: $0.stckHgpr,
+                close: $0.stckClpr
             )
         }
     }

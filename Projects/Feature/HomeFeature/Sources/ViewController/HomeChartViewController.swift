@@ -87,7 +87,7 @@ final class HomeChartViewController: BaseViewController {
                 onNext: { viewController, candles in
                     if let price = candles.sorted(
                         by: { $0.date < $1.date }
-                    ).last?.closePrice {
+                    ).last?.close {
                         let price = String(Int(price))
                         let title = "\(viewController.viewModel.title) \(price)"
                         viewController.title = title

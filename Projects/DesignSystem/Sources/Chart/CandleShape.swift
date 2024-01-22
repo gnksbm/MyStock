@@ -62,19 +62,19 @@ extension CandleShape {
 
 extension CandleShape {
     private var startPoint: CGFloat {
-        let price = highestPrice - candle.startPrice
+        let price = highestPrice - candle.open
         return priceToPoint(price: price)
     }
     
     private var closePoint: CGFloat {
-        let price = highestPrice - candle.closePrice
+        let price = highestPrice - candle.close
         return priceToPoint(price: price)
     }
     
     private var candleType: CandleType {
-        if candle.closePrice > candle.startPrice {
+        if candle.close > candle.open {
             return .white
-        } else if candle.closePrice == candle.startPrice {
+        } else if candle.close == candle.open {
             return .dodge
         } else {
             return .black
@@ -106,12 +106,12 @@ extension CandleShape {
 
 extension CandleShape {
     private var tailHeight: CGFloat {
-        let price = candle.highestPrice - candle.lowestPrice
+        let price = candle.high - candle.low
         return priceToPoint(price: price)
     }
     
     private var tailY: CGFloat {
-        let price = highestPrice - candle.highestPrice
+        let price = highestPrice - candle.high
         return priceToPoint(price: price)
     }
 }

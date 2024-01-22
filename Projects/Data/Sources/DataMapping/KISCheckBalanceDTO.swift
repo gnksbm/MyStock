@@ -98,7 +98,8 @@ extension KISCheckBalanceDTO {
         let totLoanAmt, sctsEvluAmt, totEvluAmt, nassAmt: String
         let fncgGldAutoRdptYn, pchsAmtSmtlAmt: String
         let evluAmtSmtlAmt, evluPflsSmtlAmt: String
-        let totStlnSlngChgs, bfdyTotAsstEvluAmt, asstIcdcAmt, asstIcdcErngRt: String
+        let totStlnSlngChgs, bfdyTotAsstEvluAmt, asstIcdcAmt: String
+        let asstIcdcErngRt: String
         
         enum CodingKeys: String, CodingKey {
             case dncaTotAmt = "dnca_tot_amt"

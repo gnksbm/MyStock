@@ -91,10 +91,10 @@ final class HomeChartViewModel: ViewModel {
                     else { return }
                     let newCandle = Candle(
                         date: last.date.toString(dateFormat: "yyyyMMdd"),
-                        startPrice: last.startPrice,
-                        lowestPrice: last.lowestPrice,
-                        highestPrice: last.highestPrice,
-                        closePrice: closePrice
+                        open: last.open,
+                        low: last.low,
+                        high: last.high,
+                        close: closePrice
                     )
                     newCandles.removeLast()
                     newCandles.append(newCandle)

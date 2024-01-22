@@ -20,10 +20,10 @@ extension KISOverseasChartPriceDTO {
         output2.compactMap {
             Candle(
                 date: $0.stckBsopDate,
-                startPrice: $0.ovrsNmixOprc,
-                lowestPrice: $0.ovrsNmixLwpr,
-                highestPrice: $0.ovrsNmixHgpr,
-                closePrice: $0.ovrsNmixPrpr
+                open: $0.ovrsNmixOprc,
+                low: $0.ovrsNmixLwpr,
+                high: $0.ovrsNmixHgpr,
+                close: $0.ovrsNmixPrpr
             )
         }
     }
