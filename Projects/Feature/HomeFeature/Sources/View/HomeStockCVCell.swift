@@ -37,7 +37,10 @@ final class HomeStockCVCell: UICollectionViewCell {
         super.prepareForReuse()
         titleLabel.text = ""
         priceLabel.text = ""
-        contentView.layer.borderColor = UIColor.black.cgColor
+        let foregroundColor = DesignSystemAsset.chartForeground.color
+        contentView.layer.borderColor = foregroundColor.cgColor
+        titleLabel.textColor = foregroundColor
+        priceLabel.textColor = foregroundColor
     }
     
     func prepare(item: KISCheckBalanceResponse) {
@@ -45,13 +48,15 @@ final class HomeStockCVCell: UICollectionViewCell {
         priceLabel.text = item.price
         guard let rate = Double(item.fluctuationRate) else { return }
         var color: UIColor
+        let foregroundColor = DesignSystemAsset.chartForeground.color
         if rate == 0 {
-            color = .black
+            color = foregroundColor
         } else if rate > 0 {
             color = DesignSystemAsset.profit.color
         } else {
             color = DesignSystemAsset.loss.color
         }
+        titleLabel.textColor = color
         priceLabel.textColor = color
         contentView.layer.borderColor = color.cgColor
     }

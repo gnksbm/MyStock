@@ -12,6 +12,7 @@ import RxSwift
 
 public protocol KISCheckBalanceRepository {
     var fetchResult: PublishSubject<[KISCheckBalanceResponse]> { get }
+    var collateralRatio: PublishSubject<Double> { get }
     
     func requestBalance(
         request: KISCheckBalanceRequest,

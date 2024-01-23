@@ -12,5 +12,7 @@ import RxSwift
 
 public protocol HomeUseCase {
     var balanceInfo: PublishSubject<[KISCheckBalanceResponse]> { get }
+    var collateralRatio: PublishSubject<Double> { get }
+    
     func checkAccount(accountNumber: String)
 }

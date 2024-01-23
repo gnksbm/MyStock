@@ -7,7 +7,8 @@
 //
 
 import Foundation
-
+// Request = RequestDTO
+// Response = Model
 public struct SearchStocksResponse {
     public let ticker: String
     public let name: String

@@ -11,8 +11,14 @@ import DesignSystem
 
 extension AppDelegate {
     func setupAppearance() {
-        UINavigationBar.appearance().backgroundColor = .systemBackground
-        UITabBar.appearance().tintColor = DesignSystemAsset.accentColor.color
+        let backgroundColor = DesignSystemAsset.chartBackground.color
+        let foregroundColor = DesignSystemAsset.chartForeground.color
+        let accentColor = DesignSystemAsset.accentColor.color
+        UINavigationBar.appearance().backgroundColor = backgroundColor
+        UINavigationBar.appearance().tintColor = foregroundColor
+        UITabBar.appearance().backgroundColor = backgroundColor
+        UITabBar.appearance().unselectedItemTintColor = foregroundColor
+        UITabBar.appearance().tintColor = accentColor
         UITabBar.appearance().isTranslucent = true
     }
 }

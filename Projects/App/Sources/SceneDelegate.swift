@@ -11,6 +11,7 @@ import UIKit
 import Networks
 import Domain
 import Data
+import DesignSystem
 
 import RxSwift
 
@@ -24,7 +25,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         
         let navigationController = UINavigationController()
         navigationController.isNavigationBarHidden = true
-        navigationController.view.backgroundColor = .systemBackground
+        let backgroundColor = DesignSystemAsset.chartBackground.color
+        navigationController.view.backgroundColor = backgroundColor
 
         window?.rootViewController = navigationController
         appFlowCoordinator = AppCoordinator(

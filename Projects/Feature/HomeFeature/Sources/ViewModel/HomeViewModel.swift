@@ -20,7 +20,8 @@ public final class HomeViewModel: ViewModel {
     
     public func transform(input: Input) -> Output {
         let output = Output(
-            balanceList: .init(value: [])
+            balanceList: .init(value: []),
+            collateralRatio: .init()
         )
         
         input.viewWillAppear
@@ -57,6 +58,10 @@ public final class HomeViewModel: ViewModel {
         useCase.balanceInfo
             .bind(to: output.balanceList)
             .disposed(by: disposeBag)
+        
+        useCase.collateralRatio
+            .bind(to: output.collateralRatio)
+            .disposed(by: disposeBag)
         return output
     }
 }
@@ -70,5 +75,6 @@ extension HomeViewModel {
     
     public struct Output {
         let balanceList: BehaviorRelay<[KISCheckBalanceResponse]>
+        let collateralRatio: PublishSubject<Double>
     }
 }

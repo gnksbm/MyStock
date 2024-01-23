@@ -16,6 +16,7 @@ public final class DefaultHomeUseCase: HomeUseCase {
     private let disposeBag = DisposeBag()
     
     public let balanceInfo = PublishSubject<[KISCheckBalanceResponse]>()
+    public let collateralRatio = PublishSubject<Double>()
     
     public init(
         oAuthRepository: KISOAuthRepository,
@@ -49,6 +50,15 @@ public final class DefaultHomeUseCase: HomeUseCase {
             .subscribe(
                 onNext: { useCase, result in
                     useCase.balanceInfo.onNext(result.combineSameTiker)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        checkBalanceRepository.collateralRatio
+            .withUnretained(self)
+            .subscribe(
+                onNext: { useCase, result in
+                    useCase.collateralRatio.onNext(result)
                 }
             )
             .disposed(by: disposeBag)

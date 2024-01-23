@@ -8,6 +8,8 @@
 
 import UIKit
 
+import DesignSystem
+
 import RxSwift
 
 open class BaseViewController: UIViewController {
@@ -22,6 +24,6 @@ open class BaseViewController: UIViewController {
     }
     
     open override func viewDidLoad() {
-        view.backgroundColor = .white
+        view.backgroundColor = DesignSystemAsset.chartBackground.color
     }
 }

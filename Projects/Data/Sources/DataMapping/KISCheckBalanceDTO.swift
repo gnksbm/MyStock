@@ -50,6 +50,18 @@ extension KISCheckBalanceDTO {
         }
     }
     
+    public var collateralRatio: Double {
+        let totalAmount = output2
+            .compactMap({ Int($0.totEvluAmt) })
+            .reduce(0, { $0 + $1 })
+            .f
+        let loanAmount = output1
+            .compactMap({ Int($0.loanAmt) })
+            .reduce(0, { $0 + $1 })
+            .f
+        return totalAmount / loanAmount * 100.f
+    }
+    
     // MARK: - Output1
     struct Output1: Codable {
         let pdno, prdtName, tradDvsnName, bfdyBuyQty: String

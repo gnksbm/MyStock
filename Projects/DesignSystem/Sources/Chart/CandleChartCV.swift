@@ -21,7 +21,7 @@ public final class CandleChartCV: UICollectionView {
         configure()
     }
     
-    private var minCellSize: CGFloat = 20
+    private var minCellSize: CGFloat = 3
     
     private var itemCount: CGFloat {
         CGFloat.screenWidth / candles.count.f < minCellSize ?
@@ -102,6 +102,12 @@ public final class CandleChartCV: UICollectionView {
             section.orthogonalScrollingBehavior = .continuous
             return section
         }
+    }
+}
+
+extension CandleChartCV: UICollectionViewDelegate {
+    public func scrollViewDidZoom(_ scrollView: UIScrollView) {
+        print(scrollView.zoomScale)
     }
 }
 

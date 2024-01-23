@@ -17,6 +17,7 @@ public final class HomeViewController: BaseViewController {
             frame: .zero,
             collectionViewLayout: layout
         )
+        collectionView.backgroundColor = DesignSystemAsset.chartBackground.color
         collectionView.register(
             HomeStockCVCell.self,
             forCellWithReuseIdentifier: HomeStockCVCell.identifier
@@ -105,6 +106,16 @@ public final class HomeViewController: BaseViewController {
                 ),
                 curriedArgument: { _, item, cell in
                     cell.prepare(item: item)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        output.collateralRatio
+            .withUnretained(self)
+            .observe(on: MainScheduler.asyncInstance)
+            .subscribe(
+                onNext: { viewController, ratio in
+                    viewController.title = String(Int(ratio))
                 }
             )
             .disposed(by: disposeBag)

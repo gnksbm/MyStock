@@ -19,6 +19,7 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
     private let disposeBag = DisposeBag()
     
     public var fetchResult = PublishSubject<[KISCheckBalanceResponse]>()
+    public var collateralRatio = PublishSubject<Double>()
     
     public func requestBalance(
         request: KISCheckBalanceRequest,
@@ -37,6 +38,7 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
                 do {
                     let dto = try data.decode(type: KISCheckBalanceDTO.self)
                     repository.fetchResult.onNext(dto.toDomain)
+                    repository.collateralRatio.onNext(dto.collateralRatio)
                 } catch {
                     repository.fetchResult.onError(error)
                 }
