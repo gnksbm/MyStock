@@ -9,6 +9,7 @@
 import UIKit
 
 import FeatureDependency
+import DesignSystem
 
 import RxSwift
 import RxCocoa
@@ -28,6 +29,8 @@ final class SearchStocksViewController: BaseViewController {
             SearchStocksTVCell.self,
             forCellReuseIdentifier: SearchStocksTVCell.identifier
         )
+        tableView.backgroundColor = DesignSystemAsset.chartBackground.color
+        tableView.separatorColor = DesignSystemAsset.chartForeground.color
         return tableView
     }()
     

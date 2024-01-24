@@ -9,6 +9,7 @@
 import UIKit
 
 import Domain
+import DesignSystem
 
 final class SearchStocksTVCell: UITableViewCell {
     private let tickerLabel: UILabel = {
@@ -32,13 +33,6 @@ final class SearchStocksTVCell: UITableViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
-    override func layoutSubviews() {
-        super.layoutSubviews()
-        contentView.frame = contentView.frame.inset(
-            by: .init(top: 5, left: 5, bottom: 5, right: 5)
-        )
-    }
-    
     override func prepareForReuse() {
         super.prepareForReuse()
         tickerLabel.text = ""
@@ -52,8 +46,9 @@ final class SearchStocksTVCell: UITableViewCell {
     }
     
     private func configureUI() {
-        contentView.layer.cornerRadius = 10
-        contentView.layer.borderWidth = 1
+        let foregroundColor = DesignSystemAsset.chartForeground.color
+        contentView.layer.borderColor = foregroundColor.cgColor
+        contentView.backgroundColor = DesignSystemAsset.chartBackground.color
         
         [tickerLabel, nameLabel].forEach {
             contentView.addSubview($0)

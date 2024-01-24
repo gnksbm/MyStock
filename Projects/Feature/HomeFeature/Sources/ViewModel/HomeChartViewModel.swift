@@ -32,6 +32,10 @@ final class HomeChartViewModel: ViewModel {
         self.marketType = marketType
     }
     
+    deinit {
+        print(String(describing: self), #function)
+    }
+    
     func transform(input: Input) -> Output {
         let output = Output(
             candleList: .init()
