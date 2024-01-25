@@ -23,16 +23,7 @@ final class SearchStocksViewController: BaseViewController {
         return textField
     }()
     
-    private let searchStocksTableView: UITableView = {
-        let tableView = UITableView()
-        tableView.register(
-            SearchStocksTVCell.self,
-            forCellReuseIdentifier: SearchStocksTVCell.identifier
-        )
-        tableView.backgroundColor = DesignSystemAsset.chartBackground.color
-        tableView.separatorColor = DesignSystemAsset.chartForeground.color
-        return tableView
-    }()
+    private let searchStocksTableView = StockInfoTableView()
     
     init(viewModel: SearchStocksViewModel) {
         self.viewModel = viewModel
@@ -64,11 +55,14 @@ final class SearchStocksViewController: BaseViewController {
         output.searchResult
             .bind(
                 to: searchStocksTableView.rx.items(
-                    cellIdentifier: SearchStocksTVCell.identifier,
-                    cellType: SearchStocksTVCell.self
+                    cellIdentifier: StockInfoTVCell.identifier,
+                    cellType: StockInfoTVCell.self
                 ),
                 curriedArgument: { _, response, cell in
-                    cell.prepare(response: response)
+                    cell.prepare(
+                        ticker: response.ticker,
+                        name: response.name
+                    )
                 }
             )
             .disposed(by: disposeBag)

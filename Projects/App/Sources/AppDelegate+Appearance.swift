@@ -17,8 +17,8 @@ extension AppDelegate {
         UINavigationBar.appearance().backgroundColor = backgroundColor
         UINavigationBar.appearance().tintColor = foregroundColor
         UITabBar.appearance().backgroundColor = backgroundColor
-        UITabBar.appearance().unselectedItemTintColor = foregroundColor
-        UITabBar.appearance().tintColor = accentColor
+        UITabBar.appearance().unselectedItemTintColor = accentColor
+        UITabBar.appearance().tintColor = foregroundColor
         UITabBar.appearance().isTranslucent = true
     }
 }

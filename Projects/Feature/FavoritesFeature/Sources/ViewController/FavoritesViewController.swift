@@ -1,9 +1,14 @@
 import UIKit
 
+import Core
+import DesignSystem
+
 import RxSwift
 
 public final class FavoritesViewController: UIViewController {
     private let viewModel: FavoritesViewModel
+    
+    private let favoritesTableView = StockInfoTableView()
     
     public init(viewModel: FavoritesViewModel) {
         self.viewModel = viewModel
@@ -16,6 +21,31 @@ public final class FavoritesViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
+        configureUI()
+    }
+    
+    private func configureUI() {
+        [favoritesTableView].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        NSLayoutConstraint.activate([
+            favoritesTableView.topAnchor.constraint(
+                equalTo: safeArea.topAnchor
+            ),
+            favoritesTableView.leadingAnchor.constraint(
+                equalTo: safeArea.leadingAnchor
+            ),
+            favoritesTableView.trailingAnchor.constraint(
+                equalTo: safeArea.trailingAnchor
+            ),
+            favoritesTableView.bottomAnchor.constraint(
+                equalTo: safeArea.bottomAnchor
+            ),
+        ])
     }
 }
 
