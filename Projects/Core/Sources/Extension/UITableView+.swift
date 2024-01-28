@@ -14,6 +14,6 @@ public extension UITableView {
     }
     
     func register(_ viewType: UITableViewHeaderFooterView.Type) {
-        register(viewType, forCellReuseIdentifier: viewType.identifier)
+        register(viewType, forHeaderFooterViewReuseIdentifier: viewType.identifier)
     }
 }

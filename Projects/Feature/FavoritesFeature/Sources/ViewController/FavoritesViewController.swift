@@ -8,6 +8,9 @@ import RxSwift
 public final class FavoritesViewController: UIViewController {
     private let viewModel: FavoritesViewModel
     
+    private let addBtnTapEvent = PublishSubject<Void>()
+    private let disposeBag = DisposeBag()
+    
     private let favoritesTableView = StockInfoTableView()
     
     public init(viewModel: FavoritesViewModel) {
@@ -22,6 +25,7 @@ public final class FavoritesViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        setDelegate()
     }
     
     private func configureUI() {
@@ -47,18 +51,28 @@ public final class FavoritesViewController: UIViewController {
             ),
         ])
     }
-}
-
-#if DEBUG
-import SwiftUI
-import FeatureDependency
-struct FavoritesViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UIKitPreview(
-            FavoritesViewController(
-                viewModel: FavoritesViewModel()
-            )
-        )
+    
+    func setDelegate() {
+        favoritesTableView.register(FavoritesFooterView.self)
+        favoritesTableView.delegate = self
     }
 }
-#endif
+
+extension FavoritesViewController: UITableViewDelegate {
+    public func tableView(
+        _ tableView: UITableView,
+        viewForFooterInSection section: Int
+    ) -> UIView? {
+        let footer = tableView.dequeueReusableHeaderFooterView(
+            withIdentifier: FavoritesFooterView.identifier
+        ) as? FavoritesFooterView
+        footer?.addBtnTapEvent
+            .bind(to: addBtnTapEvent)
+            .disposed(by: disposeBag)
+        return footer
+    }
+    
+    public func numberOfSections(in tableView: UITableView) -> Int {
+        1
+    }
+}
