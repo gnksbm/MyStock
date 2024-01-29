@@ -8,9 +8,21 @@
 
 import UIKit
 
-public protocol Coordinator {
-    var childCoordinators: [Coordinator] { get }
-    var navigationController: UINavigationController { get }
+public protocol Coordinator: AnyObject {
+    var parent: Coordinator? { get set }
+    var childs: [Coordinator] { get set }
+    var navigationController: UINavigationController { get set }
     
     func start()
+    func finish()
+}
+
+public extension Coordinator {
+    func addChildCoordinator(_ child: Coordinator) {
+        childs.append(child)
+    }
+    
+    func childDidFinish(_ child: Coordinator) {
+        childs = childs.filter { $0 !== child }
+    }
 }

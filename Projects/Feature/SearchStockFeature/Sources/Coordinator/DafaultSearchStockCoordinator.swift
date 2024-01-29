@@ -12,7 +12,8 @@ import Domain
 import FeatureDependency
 
 public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
-    public var childCoordinators: [Coordinator] = []
+    public var parent: Coordinator?
+    public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     public var coordinatorProvider: CoordinatorProvider
     
@@ -33,6 +34,10 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
             animated: true
         )
     }
+    
+    public func finish() {
+        
+    }
 }
 
 public extension DefaultSearchStockCoordinator {
@@ -43,7 +48,7 @@ public extension DefaultSearchStockCoordinator {
             marketType: response.marketType,
             navigationController: navigationController
         )
-        childCoordinators.append(chartCoordinator)
+        addChildCoordinator(chartCoordinator)
         chartCoordinator.start()
     }
 }

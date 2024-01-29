@@ -4,7 +4,8 @@ import Domain
 import FeatureDependency
 
 public final class DefaultChartCoordinator: ChartCoordinator {
-    public var childCoordinators: [Coordinator] = []
+    public var parent: Coordinator?
+    public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     public let title: String
     public let ticker: String
@@ -34,5 +35,9 @@ public final class DefaultChartCoordinator: ChartCoordinator {
             chartViewController,
             animated: false
         )
+    }
+    
+    public func finish() {
+        
     }
 }

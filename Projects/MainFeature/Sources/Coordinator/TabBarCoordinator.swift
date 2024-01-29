@@ -14,7 +14,8 @@ import FavoritesFeature
 import SettingsFeature
 
 public final class TabBarCoordinator: Coordinator {
-    public var childCoordinators: [FeatureDependency.Coordinator] = []
+    public var parent: Coordinator?
+    public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     public var coordinatorProvider: CoordinatorProvider
     
@@ -28,6 +29,10 @@ public final class TabBarCoordinator: Coordinator {
     
     public func start() {
         setupTabBarController()
+    }
+    
+    public func finish() {
+        
     }
     
     private func setupTabBarController() {
@@ -76,7 +81,7 @@ public final class TabBarCoordinator: Coordinator {
                 navigationController: navigationController
             )
         }
-        childCoordinators.append(coordinator)
+        addChildCoordinator(coordinator)
         coordinator.start()
     }
 }

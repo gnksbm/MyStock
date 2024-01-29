@@ -3,7 +3,8 @@ import UIKit
 import FeatureDependency
 
 public final class DefaultFavoritesCoordinator {
-    public var childCoordinators: [Coordinator] = []
+    public var parent: Coordinator?
+    public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     
     public init(navigationController: UINavigationController) {
@@ -18,6 +19,10 @@ public final class DefaultFavoritesCoordinator {
             [favoritesViewController],
             animated: false
         )
+    }
+    
+    public func finish() {
+        
     }
 }
 

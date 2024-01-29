@@ -12,7 +12,8 @@ import Domain
 import FeatureDependency
 
 public final class DefaultHomeCoordinator: HomeCoordinator {
-    public var childCoordinators: [Coordinator] = []
+    public var parent: Coordinator?
+    public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     public var coordinatorProvider: CoordinatorProvider
 
@@ -33,6 +34,10 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
             animated: false
         )
     }
+    
+    public func finish() {
+        
+    }
 }
 
 public extension DefaultHomeCoordinator {
@@ -43,7 +48,7 @@ public extension DefaultHomeCoordinator {
             marketType: .domestic,
             navigationController: navigationController
         )
-        childCoordinators.append(chartCoordinator)
+        addChildCoordinator(chartCoordinator)
         chartCoordinator.start()
     }
     
@@ -52,7 +57,7 @@ public extension DefaultHomeCoordinator {
             .makeSearchStockCoordinator(
                 navigationController: navigationController
             )
-        childCoordinators.append(searchStockCoordinator)
+        addChildCoordinator(searchStockCoordinator)
         searchStockCoordinator.start()
     }
 }
