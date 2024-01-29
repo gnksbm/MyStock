@@ -2,7 +2,7 @@ import UIKit
 
 import FeatureDependency
 
-public final class DefaultFavoritesCoordinator {
+public final class DefaultChartCoordinator: ChartCoordinator {
     public var childCoordinators: [Coordinator] = []
     public var navigationController: UINavigationController
     
@@ -11,18 +11,12 @@ public final class DefaultFavoritesCoordinator {
     }
     
     public func start() {
-        let favoritesViewController = FavoritesViewController(
-            viewModel: FavoritesViewModel()
+        let chartViewController = ChartViewController(
+            viewModel: ChartViewModel()
         )
         navigationController.setViewControllers(
-            [favoritesViewController],
+            [chartViewController],
             animated: false
         )
-    }
-}
-
-extension DefaultFavoritesCoordinator: FavoritesCoordinator {
-    public func startSearchFlow() {
-        
     }
 }

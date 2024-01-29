@@ -14,9 +14,14 @@ import FeatureDependency
 public final class DefaultHomeCoordinator: HomeCoordinator {
     public var childCoordinators: [Coordinator] = []
     public var navigationController: UINavigationController
+    public var coordinatorProvider: CoordinatorProvider
 
-    public init(navigationController: UINavigationController) {
+    public init(
+        navigationController: UINavigationController,
+        coordinatorProvider: CoordinatorProvider
+    ) {
         self.navigationController = navigationController
+        self.coordinatorProvider = coordinatorProvider
     }
     
     public func start() {
@@ -43,10 +48,11 @@ public extension DefaultHomeCoordinator {
     }
     
     func startSearchStocksFlow() {
-        let searchStocksCoordinator = DefaultSearchStocksCoordinator(
-            navigationController: navigationController
-        )
-        childCoordinators.append(searchStocksCoordinator)
-        searchStocksCoordinator.start()
+        let searchStockCoordinator = coordinatorProvider
+            .makeSearchStockCoordinator(
+                navigationController: navigationController
+            )
+        childCoordinators.append(searchStockCoordinator)
+        searchStockCoordinator.start()
     }
 }

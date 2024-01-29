@@ -14,14 +14,20 @@ import MainFeature
 final class AppCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
     var navigationController: UINavigationController
+    var coordinatorProvider: CoordinatorProvider
     
-    init(navigationController: UINavigationController) {
+    public init(
+        navigationController: UINavigationController,
+        coordinatorProvider: CoordinatorProvider
+    ) {
         self.navigationController = navigationController
+        self.coordinatorProvider = coordinatorProvider
     }
     
     func start() {
         let tabBarCoordinator = TabBarCoordinator(
-            navigationController: navigationController
+            navigationController: navigationController,
+            coordinatorProvider: coordinatorProvider
         )
         childCoordinators.append(tabBarCoordinator)
         tabBarCoordinator.start()

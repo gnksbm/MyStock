@@ -156,21 +156,3 @@ extension HomeViewController {
         }
     }
 }
-
-#if DEBUG
-import SwiftUI
-import FeatureDependency
-struct HomeViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UIKitPreview(
-            HomeViewController(
-                viewModel: HomeViewModel(
-                    coordinator: DefaultHomeCoordinator(
-                        navigationController: .init()
-                    )
-                )
-            )
-        )
-    }
-}
-#endif

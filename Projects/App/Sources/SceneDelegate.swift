@@ -30,7 +30,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         window?.rootViewController = navigationController
         appFlowCoordinator = AppCoordinator(
-            navigationController: navigationController
+            navigationController: navigationController, 
+            coordinatorProvider: DefaultCoordinatorProvider()
         )
         appFlowCoordinator?.start()
         window?.makeKeyAndVisible()
