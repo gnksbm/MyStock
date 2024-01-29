@@ -4,6 +4,6 @@ import Domain
 import FeatureDependency
 
 public protocol HomeCoordinator: Coordinator {
-    func pushToChartVC(with response: KISCheckBalanceResponse)
+    func startChartFlow(with response: KISCheckBalanceResponse)
     func startSearchStocksFlow()
 }

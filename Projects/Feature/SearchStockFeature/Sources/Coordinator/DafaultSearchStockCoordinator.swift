@@ -38,17 +38,12 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
 public extension DefaultSearchStockCoordinator {
     func pushToChartVC(with response: SearchStocksResponse) {
         let chartCoordinator = coordinatorProvider.makeChartCoordinator(
+            title: response.name,
+            ticker: response.ticker,
+            marketType: response.marketType,
             navigationController: navigationController
         )
         childCoordinators.append(chartCoordinator)
         chartCoordinator.start()
-//        let homeChartVC = HomeChartViewController(
-//            viewModel: .init(
-//                title: response.name,
-//                ticker: response.ticker,
-//                marketType: response.marketType
-//            )
-//        )
-//        navigationController.pushViewController(homeChartVC, animated: true)
     }
 }

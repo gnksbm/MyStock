@@ -39,7 +39,7 @@ public final class HomeViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, row in
-                    viewModel.coordinator.pushToChartVC(
+                    viewModel.coordinator.startChartFlow(
                         with: output.balanceList.value[row]
                     )
                 }

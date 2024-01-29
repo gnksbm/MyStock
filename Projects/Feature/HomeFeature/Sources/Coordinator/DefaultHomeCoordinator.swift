@@ -36,15 +36,15 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
 }
 
 public extension DefaultHomeCoordinator {
-    func pushToChartVC(with response: KISCheckBalanceResponse) {
-        let homeChartVC = HomeChartViewController(
-            viewModel: .init(
-                title: response.name,
-                ticker: response.ticker,
-                marketType: .domestic
-            )
+    func startChartFlow(with response: KISCheckBalanceResponse) {
+        let chartCoordinator = coordinatorProvider.makeChartCoordinator(
+            title: response.name,
+            ticker: response.ticker,
+            marketType: .domestic,
+            navigationController: navigationController
         )
-        navigationController.pushViewController(homeChartVC, animated: true)
+        childCoordinators.append(chartCoordinator)
+        chartCoordinator.start()
     }
     
     func startSearchStocksFlow() {

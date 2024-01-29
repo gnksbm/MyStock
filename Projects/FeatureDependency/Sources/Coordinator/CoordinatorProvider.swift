@@ -8,11 +8,17 @@
 
 import UIKit
 
+import Domain
+
 public protocol CoordinatorProvider {
     func makeSearchStockCoordinator(
         navigationController: UINavigationController
     ) -> SearchStockCoordinator
+    
     func makeChartCoordinator(
+        title: String,
+        ticker: String,
+        marketType: MarketType,
         navigationController: UINavigationController
     ) -> ChartCoordinator
 }

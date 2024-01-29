@@ -8,9 +8,10 @@
 
 import UIKit
 
-import SearchStockFeature
 import ChartFeature
+import Domain
 import FeatureDependency
+import SearchStockFeature
 
 final class DefaultCoordinatorProvider: CoordinatorProvider {
     func makeSearchStockCoordinator(
@@ -23,9 +24,15 @@ final class DefaultCoordinatorProvider: CoordinatorProvider {
     }
     
     func makeChartCoordinator(
+        title: String,
+        ticker: String,
+        marketType: MarketType,
         navigationController: UINavigationController
     ) -> ChartCoordinator {
         DefaultChartCoordinator(
+            title: title,
+            ticker: ticker,
+            marketType: marketType,
             navigationController: navigationController
         )
     }
