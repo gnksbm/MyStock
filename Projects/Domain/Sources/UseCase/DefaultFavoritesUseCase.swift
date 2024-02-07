@@ -27,7 +27,7 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
         self.searchStocksRepository = searchStocksRepository
     }
     
-    private func fetchFavorites() {
+    public func fetchFavorites() {
         let favoritesTicker = favoritesStockRepository.favoritesTicker.value
         Observable.combineLatest(
             favoritesTicker
