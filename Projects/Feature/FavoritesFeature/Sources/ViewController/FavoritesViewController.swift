@@ -9,7 +9,7 @@ import RxSwift
 public final class FavoritesViewController: UIViewController {
     private let viewModel: FavoritesViewModel
     
-    private let addBtnTapEvent = PublishSubject<Void>()
+    private let stockCellTapEvent = PublishSubject<SearchStocksResponse>()
     private let disposeBag = DisposeBag()
     
     private var dataSource: FavoritesDataSource!
@@ -77,7 +77,11 @@ public final class FavoritesViewController: UIViewController {
     private func bind() {
         let output = viewModel.transform(
             input: .init(
-                addBtnTapEvent: addBtn.rx.tap.asObservable()
+                viewWillAppearEvent: rx.methodInvoked(
+                    #selector(UIViewController.viewWillAppear)
+                ).map { _ in },
+                addBtnTapEvent: addBtn.rx.tap.asObservable(),
+                stockCellTapEvent: stockCellTapEvent.asObservable()
             )
         )
         
@@ -94,16 +98,23 @@ public final class FavoritesViewController: UIViewController {
     private func configureDataSource() {
         dataSource = .init(
             tableView: favoritesTableView
-        ) { tableView, indexPath, item in
+        ) { [weak self] tableView, indexPath, item in
             guard let cell = tableView.dequeueReusableCell(
                 withIdentifier: StockInfoTVCell.identifier,
                 for: indexPath
-            ) as? StockInfoTVCell
+            ) as? StockInfoTVCell,
+                  let self
             else { return .init() }
             cell.updateUI(
                 ticker: item.ticker,
                 name: item.name
             )
+            let tapGesture = UITapGestureRecognizer()
+            cell.contentView.addGestureRecognizer(tapGesture)
+            tapGesture.rx.event
+                .map { _ in item }
+                .bind(to: self.stockCellTapEvent)
+                .disposed(by: self.disposeBag)
             return cell
         }
         snapshot = .init()
@@ -134,7 +145,7 @@ extension FavoritesViewController {
     final class FavoritesDataSource: FavoritesDiffableDataSource {
         override func tableView(
             _ tableView: UITableView,
-            titleForFooterInSection section: Int
+            titleForHeaderInSection section: Int
         ) -> String? {
             MarketType.allCases[section].toString
         }

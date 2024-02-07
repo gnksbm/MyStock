@@ -26,11 +26,31 @@ public final class FavoritesViewModel: ViewModel {
             favoritesStocks: .init()
         )
         
+        input.viewWillAppearEvent
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, _ in
+                    viewModel.useCase.fetchFavorites()
+                }
+            )
+            .disposed(by: disposeBag)
+        
         input.addBtnTapEvent
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in
                     viewModel.coordinator.startSearchFlow()
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        input.stockCellTapEvent
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewModel, response in
+                    viewModel.coordinator.startChartFlow(
+                        with: response
+                    )
                 }
             )
             .disposed(by: disposeBag)
@@ -45,7 +65,9 @@ public final class FavoritesViewModel: ViewModel {
 
 extension FavoritesViewModel {
     public struct Input {
+        let viewWillAppearEvent: Observable<Void>
         let addBtnTapEvent: Observable<Void>
+        let stockCellTapEvent: Observable<SearchStocksResponse>
     }
     
     public struct Output {
