@@ -14,7 +14,6 @@ import RxSwift
 import RxCocoa
 
 final class FavoritesFooterView: UITableViewHeaderFooterView {
-    let addBtnTapEvent = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
     private let addBtn: UIButton = {
@@ -40,7 +39,6 @@ final class FavoritesFooterView: UITableViewHeaderFooterView {
     override init(reuseIdentifier: String?) {
         super.init(reuseIdentifier: reuseIdentifier)
         configureUI()
-        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -67,11 +65,5 @@ final class FavoritesFooterView: UITableViewHeaderFooterView {
                 equalTo: contentView.bottomAnchor
             ),
         ])
-    }
-    
-    private func bind() {
-        addBtn.rx.tap
-            .bind(to: addBtnTapEvent)
-            .disposed(by: disposeBag)
     }
 }

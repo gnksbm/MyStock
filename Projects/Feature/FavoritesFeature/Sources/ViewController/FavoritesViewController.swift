@@ -66,7 +66,10 @@ extension FavoritesViewController: UITableViewDelegate {
         let footer = tableView.dequeueReusableHeaderFooterView(
             withIdentifier: FavoritesFooterView.identifier
         ) as? FavoritesFooterView
-        footer?.addBtnTapEvent
+        let tapGesture = UITapGestureRecognizer()
+        footer?.contentView.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .map { _ in }
             .bind(to: addBtnTapEvent)
             .disposed(by: disposeBag)
         return footer
