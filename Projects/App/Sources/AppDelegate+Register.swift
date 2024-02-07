@@ -15,6 +15,22 @@ import Networks
 
 extension AppDelegate {
     func registerDependencies() {
+        let networkService = DefaultNetworkService()
+        let webSocketService = DefaultWebSocketService()
+        let favoritesStockRepository = DefaultFavoritesStockRepository()
+        let searchStocksRepository = DefaultSearchStocksRepository()
+        let chartPriceRepository = DefaultKISChartPriceRepository(
+            networkService: networkService
+        )
+        let oAuthRepository = DefaultKISOAuthRepository(
+            networkService: networkService
+        )
+        let checkBalanceRepository = DefaultKISCheckBalanceRepository(
+            networkService: networkService
+        )
+        let realTimePriceRepository = DefualtKISRealTimePriceRepository(
+            wsService: webSocketService
+        )
         DIContainer.register(
             type: HomeUseCase.self,
             DefaultHomeUseCase(
@@ -33,7 +49,8 @@ extension AppDelegate {
         DIContainer.register(
             type: SearchStocksUseCase.self,
             DefaultSearchStocksUseCase(
-                repository: searchStocksRepository
+                searchStocksRepository: searchStocksRepository,
+                favoritesStockRepository: favoritesStockRepository
             )
         )
         DIContainer.register(
@@ -43,41 +60,5 @@ extension AppDelegate {
                 searchStocksRepository: searchStocksRepository
             )
         )
-    }
-}
-
-extension AppDelegate {
-    var favoritesStockRepository: FavoritesStockRepository {
-        DefaultFavoritesStockRepository()
-    }
-    
-    var searchStocksRepository: SearchStocksRepository {
-        DefaultSearchStocksRepository()
-    }
-    
-    var chartPriceRepository: KISChartPriceRepository {
-        DefaultKISChartPriceRepository(networkService: networkService)
-    }
-    
-    var oAuthRepository: KISOAuthRepository {
-        DefaultKISOAuthRepository(networkService: networkService)
-    }
-    
-    var checkBalanceRepository: KISCheckBalanceRepository {
-        DefaultKISCheckBalanceRepository(networkService: networkService)
-    }
-    
-    var realTimePriceRepository: KISRealTimePriceRepository {
-        DefualtKISRealTimePriceRepository(wsService: webSocketService)
-    }
-}
-
-extension AppDelegate {
-    var networkService: NetworkService {
-        DefaultNetworkService()
-    }
-    
-    var webSocketService: WebSocketService {
-        DefaultWebSocketService()
     }
 }
