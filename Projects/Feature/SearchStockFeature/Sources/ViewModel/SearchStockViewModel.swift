@@ -16,12 +16,17 @@ import RxSwift
 import RxRelay
 
 final class SearchStockViewModel: ViewModel {
+    private let searchResult: SearchResult
+    private let coordinator: SearchStockCoordinator
     @Injected(SearchStocksUseCase.self) private var useCase: SearchStocksUseCase
     
     private let disposeBag = DisposeBag()
-    private let coordinator: SearchStockCoordinator
     
-    init(coordinator: SearchStockCoordinator) {
+    init(
+        searchResult: SearchResult,
+        coordinator: SearchStockCoordinator
+    ) {
+        self.searchResult = searchResult
         self.coordinator = coordinator
     }
     
@@ -44,7 +49,13 @@ final class SearchStockViewModel: ViewModel {
             .subscribe(
                 onNext: { viewModel, index in
                     let response = output.searchResult.value[index]
-                    viewModel.coordinator.pushToChartVC(with: response)
+                    switch viewModel.searchResult {
+                    case .chart:
+                        viewModel.coordinator.pushToChartVC(with: response)
+                    case .stockInfo:
+                        viewModel.useCase.addFavorites(ticker: response.ticker)
+                        viewModel.coordinator.updateFavoritesFinished()
+                    }
                 }
             )
             .disposed(by: disposeBag)

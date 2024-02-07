@@ -25,15 +25,12 @@ public final class DefaultFavoritesCoordinator {
             animated: false
         )
     }
-    
-    public func finish() {
-        
-    }
 }
 
 extension DefaultFavoritesCoordinator: FavoritesCoordinator {
     public func startSearchFlow() {
         let searchCoordinator = coordinatorProvider.makeSearchStockCoordinator(
+            searchResult: .stockInfo, 
             navigationController: navigationController
         )
         startChildCoordinator(searchCoordinator)

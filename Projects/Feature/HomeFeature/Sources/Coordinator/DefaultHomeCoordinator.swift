@@ -54,6 +54,7 @@ public extension DefaultHomeCoordinator {
     func startSearchStocksFlow() {
         let searchStockCoordinator = coordinatorProvider
             .makeSearchStockCoordinator(
+                searchResult: .chart, 
                 navigationController: navigationController
             )
         startChildCoordinator(searchStockCoordinator)

@@ -12,4 +12,6 @@ import RxRelay
 
 public protocol FavoritesStockRepository {
     var favoritesTicker: BehaviorRelay<[String]> { get }
+    
+    func addFavorites(ticker: String)
 }

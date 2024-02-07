@@ -12,31 +12,34 @@ import Domain
 import FeatureDependency
 
 public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
+    public var searchResult: SearchResult
+    
     public var parent: Coordinator?
     public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
     public var coordinatorProvider: CoordinatorProvider
     
     public init(
+        searchResult: SearchResult,
         navigationController: UINavigationController,
         coordinatorProvider: CoordinatorProvider
     ) {
+        self.searchResult = searchResult
         self.navigationController = navigationController
         self.coordinatorProvider = coordinatorProvider
     }
     
     public func start() {
         let searchStocksViewController = SearchStockViewController(
-            viewModel: SearchStockViewModel(coordinator: self)
+            viewModel: SearchStockViewModel(
+                searchResult: searchResult,
+                coordinator: self
+            )
         )
         navigationController.pushViewController(
             searchStocksViewController,
             animated: true
         )
-    }
-    
-    public func finish() {
-        
     }
 }
 
@@ -49,5 +52,10 @@ public extension DefaultSearchStockCoordinator {
             navigationController: navigationController
         )
         startChildCoordinator(chartCoordinator)
+    }
+    
+    func updateFavoritesFinished() {
+        navigationController.popViewController(animated: true)
+        parent?.childDidFinish(self)
     }
 }
