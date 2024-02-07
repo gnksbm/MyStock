@@ -31,7 +31,7 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
         self.realTimePriceRepository = realTimePriceRepository
     }
     
-    public func fetchChart(
+    public func fetchRealtimeChart(
         period: PeriodType,
         marketType: MarketType,
         ticker: String,
@@ -64,18 +64,6 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
             }
             .disposed(by: disposeBag)
         
-        oAuthRepository.requestOAuth(
-            request: .init(
-                oAuthType: .access,
-                investType: .reality
-            )
-        )
-    }
-    
-    public func connectRealTimePrice(
-        ticker: String,
-        marketType: MarketType
-    ) {
         oAuthRepository.wsToken
             .withUnretained(self)
             .subscribe(
@@ -92,13 +80,6 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
             )
             .disposed(by: disposeBag)
         
-        oAuthRepository.requestOAuth(
-            request: .init(
-                oAuthType: .webSocket,
-                investType: .reality
-            )
-        )
-        
         realTimePriceRepository.price
             .withUnretained(self)
             .subscribe(
@@ -107,6 +88,20 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
                 }
             )
             .disposed(by: disposeBag)
+        
+        oAuthRepository.requestOAuth(
+            request: .init(
+                oAuthType: .access,
+                investType: .reality
+            )
+        )
+        
+        oAuthRepository.requestOAuth(
+            request: .init(
+                oAuthType: .webSocket,
+                investType: .reality
+            )
+        )
     }
     
     public func disconnectRealTimePrice() {

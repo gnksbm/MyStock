@@ -9,7 +9,7 @@ import RxCocoa
 final class ChartViewController: BaseViewController {
     private var viewModel: ChartViewModel
     
-    let searchBtn: UIButton = {
+    private let searchBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         let image = UIImage(systemName: "magnifyingglass")
         let imgConfig = UIImage.SymbolConfiguration(
@@ -21,7 +21,7 @@ final class ChartViewController: BaseViewController {
         return button
     }()
     
-    let candleChartCV = CandleChartCV()
+    private let candleChartCV = CandleChartCV()
     
     init(viewModel: ChartViewModel) {
         self.viewModel = viewModel
@@ -30,6 +30,10 @@ final class ChartViewController: BaseViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    deinit {
+        candleChartCV.updateCandles([])
     }
     
     override func viewDidLoad() {

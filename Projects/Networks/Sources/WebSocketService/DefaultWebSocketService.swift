@@ -23,12 +23,9 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
     
     public override init() { }
     
-    deinit {
-        print(String(describing: self), "deinit")
-    }
-    
     private func receive() {
         webSocketTask?.receive { [weak self] result in
+            guard self?.webSocketTask != nil else { return }
             switch result {
             case .success(let message):
                 switch message {
@@ -64,21 +61,21 @@ public final class DefaultWebSocketService: NSObject, WebSocketService {
     }
     
     public func close() {
-        self.webSocketTask = nil
-        self.timer?.invalidate()
+        webSocketTask = nil
+        timer?.invalidate()
     }
     
     public func send(_ str: String) {
         let message = URLSessionWebSocketTask.Message.string(str)
-        webSocketTask?.send(message) { [weak self] error in
-            if let error {
-                self?.receivedMessage.onError(error)
-            }
-        }
+        send(message: message)
     }
     
     public func send(_ data: Data) {
         let message = URLSessionWebSocketTask.Message.data(data)
+        send(message: message)
+    }
+    
+    private func send(message: URLSessionWebSocketTask.Message) {
         webSocketTask?.send(message) { [weak self] error in
             if let error {
                 self?.receivedMessage.onError(error)

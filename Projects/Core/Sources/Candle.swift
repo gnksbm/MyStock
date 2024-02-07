@@ -8,7 +8,7 @@
 
 import Foundation
 
-public struct Candle: Equatable {
+public struct Candle: Hashable {
     public let date: Date
     public let open: Double
     public let high: Double

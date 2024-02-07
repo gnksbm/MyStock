@@ -8,24 +8,28 @@ import RxSwift
 import RxRelay
 
 final class ChartViewModel: ViewModel {
+    private let coordinator: Coordinator
     @Injected(HomeChartUseCase.self) private var useCase: HomeChartUseCase
     let title: String
     private let ticker: String
     private let marketType: MarketType
+    
     private let disposeBag = DisposeBag()
     
     init(
         title: String,
         ticker: String,
-        marketType: MarketType
+        marketType: MarketType,
+        coordinator: Coordinator
     ) {
         self.title = title
         self.ticker = ticker
         self.marketType = marketType
+        self.coordinator = coordinator
     }
     
     deinit {
-        print(String(describing: self), #function)
+        coordinator.finish()
     }
     
     func transform(input: Input) -> Output {
@@ -38,7 +42,7 @@ final class ChartViewModel: ViewModel {
             .subscribe(
                 onNext: { viewModel, _ in
                     let date = Date()
-                    viewModel.useCase.fetchChart(
+                    viewModel.useCase.fetchRealtimeChart(
                         period: .day,
                         marketType: viewModel.marketType,
                         ticker: viewModel.ticker,
@@ -57,18 +61,6 @@ final class ChartViewModel: ViewModel {
             .subscribe(
                 onNext: { viewModel, _ in
                     viewModel.useCase.disconnectRealTimePrice()
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        useCase.chartInfo
-            .withUnretained(self)
-            .subscribe(
-                onNext: { viewModel, _ in
-                    viewModel.useCase.connectRealTimePrice(
-                        ticker: viewModel.ticker,
-                        marketType: viewModel.marketType
-                    )
                 }
             )
             .disposed(by: disposeBag)

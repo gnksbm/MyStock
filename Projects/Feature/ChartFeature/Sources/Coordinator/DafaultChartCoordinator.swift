@@ -28,16 +28,13 @@ public final class DefaultChartCoordinator: ChartCoordinator {
             viewModel: ChartViewModel(
                 title: title,
                 ticker: ticker,
-                marketType: marketType
+                marketType: marketType,
+                coordinator: self
             )
         )
         navigationController.pushViewController(
             chartViewController,
             animated: false
         )
-    }
-    
-    public func finish() {
-        
     }
 }

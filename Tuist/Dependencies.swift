@@ -38,6 +38,8 @@ let dependencies = Dependencies(
         },
         productTypes: [
             "RxCocoa": .framework,
+            "RxCocoaRuntime": .framework,
+            "CryptoSwift": .framework,
         ]
     ),
     platforms: [.iOS]

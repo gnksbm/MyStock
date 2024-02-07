@@ -16,17 +16,12 @@ public protocol HomeChartUseCase {
     var chartInfo: PublishSubject<[Candle]> { get }
     var realTimePrice: BehaviorSubject<String> { get }
     
-    func fetchChart(
+    func fetchRealtimeChart(
         period: PeriodType,
         marketType: MarketType,
         ticker: String,
         startDate: String,
         endDate: String
-    )
-    
-    func connectRealTimePrice(
-        ticker: String,
-        marketType: MarketType
     )
     
     func disconnectRealTimePrice()
