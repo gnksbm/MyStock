@@ -30,8 +30,7 @@ final class AppCoordinator: Coordinator {
             navigationController: navigationController,
             coordinatorProvider: coordinatorProvider
         )
-        addChildCoordinator(tabBarCoordinator)
-        tabBarCoordinator.start()
+        startChildCoordinator(tabBarCoordinator)
     }
     
     func finish() {

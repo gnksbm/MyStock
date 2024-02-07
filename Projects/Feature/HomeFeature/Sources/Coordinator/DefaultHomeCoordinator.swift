@@ -48,8 +48,7 @@ public extension DefaultHomeCoordinator {
             marketType: .domestic,
             navigationController: navigationController
         )
-        addChildCoordinator(chartCoordinator)
-        chartCoordinator.start()
+        startChildCoordinator(chartCoordinator)
     }
     
     func startSearchStocksFlow() {
@@ -57,7 +56,6 @@ public extension DefaultHomeCoordinator {
             .makeSearchStockCoordinator(
                 navigationController: navigationController
             )
-        addChildCoordinator(searchStockCoordinator)
-        searchStockCoordinator.start()
+        startChildCoordinator(searchStockCoordinator)
     }
 }

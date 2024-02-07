@@ -48,7 +48,6 @@ public extension DefaultSearchStockCoordinator {
             marketType: response.marketType,
             navigationController: navigationController
         )
-        addChildCoordinator(chartCoordinator)
-        chartCoordinator.start()
+        startChildCoordinator(chartCoordinator)
     }
 }
