@@ -24,8 +24,9 @@ public final class FavoritesViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        configureUI()
         setDelegate()
+        configureUI()
+        bind()
     }
     
     private func configureUI() {
@@ -50,6 +51,14 @@ public final class FavoritesViewController: UIViewController {
                 equalTo: safeArea.bottomAnchor
             ),
         ])
+    }
+    
+    private func bind() {
+        let output = viewModel.transform(
+            input: .init(
+                addBtnTapEvent: addBtnTapEvent
+            )
+        )
     }
     
     func setDelegate() {
