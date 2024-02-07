@@ -37,7 +37,7 @@ public final class StockInfoTVCell: UITableViewCell {
         contentView.layer.borderColor = UIColor.black.cgColor
     }
     
-    public func prepare(ticker: String, name: String) {
+    public func updateUI(ticker: String, name: String) {
         tickerLabel.text = ticker
         nameLabel.text = name
     }

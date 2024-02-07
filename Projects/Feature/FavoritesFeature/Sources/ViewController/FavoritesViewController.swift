@@ -1,6 +1,7 @@
 import UIKit
 
 import Core
+import Domain
 import DesignSystem
 
 import RxSwift
@@ -11,7 +12,26 @@ public final class FavoritesViewController: UIViewController {
     private let addBtnTapEvent = PublishSubject<Void>()
     private let disposeBag = DisposeBag()
     
-    private let favoritesTableView = StockInfoTableView()
+    private var dataSource: FavoritesDataSource!
+    private var snapshot: FavoritesSnapshot!
+    
+    private let addBtn: UIButton = {
+        var config = UIButton.Configuration.plain()
+        let font = UIFont.boldSystemFont(ofSize: 20)
+        let image = UIImage(systemName: "plus")
+        let imgConfig = UIImage.SymbolConfiguration(
+            font: font
+        )
+        config.image = image
+        config.preferredSymbolConfigurationForImage = imgConfig
+        let button = UIButton(configuration: config)
+        return button
+    }()
+    
+    private lazy var favoritesTableView: StockInfoTableView = {
+        let tableView = StockInfoTableView()
+        return tableView
+    }()
     
     public init(viewModel: FavoritesViewModel) {
         self.viewModel = viewModel
@@ -24,9 +44,10 @@ public final class FavoritesViewController: UIViewController {
     
     public override func viewDidLoad() {
         super.viewDidLoad()
-        setDelegate()
         configureUI()
         bind()
+        configureDataSource()
+        configureNavigation()
     }
     
     private func configureUI() {
@@ -56,35 +77,71 @@ public final class FavoritesViewController: UIViewController {
     private func bind() {
         let output = viewModel.transform(
             input: .init(
-                addBtnTapEvent: addBtnTapEvent
+                addBtnTapEvent: addBtn.rx.tap.asObservable()
             )
         )
+        
+        output.favoritesStocks
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewController, responses in
+                    viewController.updateSnapshot(responses: responses)
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
-    func setDelegate() {
-        favoritesTableView.register(FavoritesFooterView.self)
-        favoritesTableView.delegate = self
+    private func configureDataSource() {
+        dataSource = .init(
+            tableView: favoritesTableView
+        ) { tableView, indexPath, item in
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: StockInfoTVCell.identifier,
+                for: indexPath
+            ) as? StockInfoTVCell
+            else { return .init() }
+            cell.updateUI(
+                ticker: item.ticker,
+                name: item.name
+            )
+            return cell
+        }
+        snapshot = .init()
+        snapshot.appendSections(MarketType.allCases.map { $0.toString })
+        dataSource.apply(snapshot)
+    }
+    
+    private func updateSnapshot(responses: [SearchStocksResponse]) {
+        snapshot = .init()
+        snapshot.appendSections(MarketType.allCases.map { $0.toString })
+        MarketType.allCases.forEach { marketType in
+            snapshot.appendItems(
+                responses.filter { response in
+                    response.marketType == marketType
+                },
+                toSection: marketType.toString
+            )
+        }
+        dataSource.apply(snapshot)
+    }
+    
+    private func configureNavigation() {
+        navigationItem.rightBarButtonItem = .init(customView: addBtn)
     }
 }
 
-extension FavoritesViewController: UITableViewDelegate {
-    public func tableView(
-        _ tableView: UITableView,
-        viewForFooterInSection section: Int
-    ) -> UIView? {
-        let footer = tableView.dequeueReusableHeaderFooterView(
-            withIdentifier: FavoritesFooterView.identifier
-        ) as? FavoritesFooterView
-        let tapGesture = UITapGestureRecognizer()
-        footer?.contentView.addGestureRecognizer(tapGesture)
-        tapGesture.rx.event
-            .map { _ in }
-            .bind(to: addBtnTapEvent)
-            .disposed(by: disposeBag)
-        return footer
+extension FavoritesViewController {
+    final class FavoritesDataSource: FavoritesDiffableDataSource {
+        override func tableView(
+            _ tableView: UITableView,
+            titleForFooterInSection section: Int
+        ) -> String? {
+            MarketType.allCases[section].toString
+        }
     }
     
-    public func numberOfSections(in tableView: UITableView) -> Int {
-        1
-    }
+    typealias FavoritesDiffableDataSource
+    = UITableViewDiffableDataSource<String, SearchStocksResponse>
+    typealias FavoritesSnapshot
+    = NSDiffableDataSourceSnapshot<String, SearchStocksResponse>
 }

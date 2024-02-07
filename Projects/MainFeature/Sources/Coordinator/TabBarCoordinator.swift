@@ -73,9 +73,10 @@ public final class TabBarCoordinator: Coordinator {
                 coordinatorProvider: coordinatorProvider
             )
         case .favorites:
-            coordinator = coordinatorProvider.makeSearchStockCoordinator(
-                navigationController: navigationController
-            ) 
+            coordinator = DefaultFavoritesCoordinator(
+                navigationController: navigationController,
+                coordinatorProvider: coordinatorProvider
+            )
         case .setting:
             coordinator = DefaultSettingsCoordinator(
                 navigationController: navigationController

@@ -8,8 +8,17 @@
 
 import Foundation
 
-public enum MarketType {
+public enum MarketType: Int, CaseIterable {
     case overseas, domestic
+    
+    public var toString: String {
+        switch self {
+        case .overseas:
+            "해외 주식"
+        case .domestic:
+            "국내 주식"
+        }
+    }
     
     public var chartPricePath: String {
         let path1 = "/uapi/"

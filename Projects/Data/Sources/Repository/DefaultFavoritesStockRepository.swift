@@ -15,15 +15,23 @@ import RxRelay
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
     public let favoritesTicker = BehaviorRelay<[String]>(value: [])
     
+    private let favoritesKey = "Favorites"
+    
     public init() {
         fetchFavorites()
     }
     
     private func fetchFavorites() {
         guard let savedFavorites = UserDefaults.standard.stringArray(
-            forKey: "Favorites"
+            forKey: favoritesKey
         )
         else { return }
         favoritesTicker.accept(savedFavorites)
+    }
+    
+    public func addFavorites(ticker: String) {
+        let updatedFavorites = favoritesTicker.value + [ticker]
+        UserDefaults.standard.setValue(updatedFavorites, forKey: favoritesKey)
+        favoritesTicker.accept(updatedFavorites)
     }
 }

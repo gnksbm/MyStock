@@ -10,10 +10,16 @@ import UIKit
 
 public extension UITableView {
     func register(_ cellType: UITableViewCell.Type) {
-        register(cellType, forCellReuseIdentifier: cellType.identifier)
+        register(
+            cellType, 
+            forCellReuseIdentifier: cellType.identifier
+        )
     }
     
     func register(_ viewType: UITableViewHeaderFooterView.Type) {
-        register(viewType, forHeaderFooterViewReuseIdentifier: viewType.identifier)
+        register(
+            viewType, 
+            forHeaderFooterViewReuseIdentifier: viewType.identifier
+        )
     }
 }

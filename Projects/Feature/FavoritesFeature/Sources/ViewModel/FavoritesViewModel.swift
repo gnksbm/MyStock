@@ -1,12 +1,15 @@
 import Foundation
 
+import Core
 import Domain
 import FeatureDependency
 
 import RxSwift
+import RxCocoa
 
 public final class FavoritesViewModel: ViewModel {
     private let coordinator: FavoritesCoordinator
+    @Injected(FavoritesUseCase.self) var useCase: FavoritesUseCase
     
     private let disposeBag = DisposeBag()
     
@@ -14,8 +17,14 @@ public final class FavoritesViewModel: ViewModel {
         self.coordinator = coordinator
     }
     
+    deinit {
+        coordinator.finish()
+    }
+    
     public func transform(input: Input) -> Output {
-        let output = Output()
+        let output = Output(
+            favoritesStocks: .init()
+        )
         
         input.addBtnTapEvent
             .withUnretained(self)
@@ -25,6 +34,11 @@ public final class FavoritesViewModel: ViewModel {
                 }
             )
             .disposed(by: disposeBag)
+        
+        useCase.favoritesStocks
+            .bind(to: output.favoritesStocks)
+            .disposed(by: disposeBag)
+        
         return output
     }
 }
@@ -35,5 +49,6 @@ extension FavoritesViewModel {
     }
     
     public struct Output {
+        let favoritesStocks: PublishSubject<[SearchStocksResponse]>
     }
 }

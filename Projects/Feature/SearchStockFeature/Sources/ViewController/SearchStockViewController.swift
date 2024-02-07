@@ -59,7 +59,7 @@ final class SearchStockViewController: BaseViewController {
                     cellType: StockInfoTVCell.self
                 ),
                 curriedArgument: { _, response, cell in
-                    cell.prepare(
+                    cell.updateUI(
                         ticker: response.ticker,
                         name: response.name
                     )
