@@ -36,7 +36,9 @@ let dependencies = Dependencies(
                 requirement: .upToNextMajor(from: $0.upToNextMajor)
             )
         },
-        productTypes: thirdParty
+        productTypes: [
+            "RxCocoa": .framework,
+        ]
     ),
     platforms: [.iOS]
 )
