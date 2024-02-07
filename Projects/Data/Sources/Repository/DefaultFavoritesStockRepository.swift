@@ -26,11 +26,11 @@ public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
             forKey: favoritesKey
         )
         else { return }
-        favoritesTicker.accept(savedFavorites)
+        favoritesTicker.accept(Array(Set(savedFavorites)))
     }
     
     public func addFavorites(ticker: String) {
-        let updatedFavorites = favoritesTicker.value + [ticker]
+        let updatedFavorites = Array(Set(favoritesTicker.value + [ticker]))
         UserDefaults.standard.setValue(updatedFavorites, forKey: favoritesKey)
         favoritesTicker.accept(updatedFavorites)
     }
