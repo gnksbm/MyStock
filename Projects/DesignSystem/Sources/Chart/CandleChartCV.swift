@@ -13,20 +13,20 @@ import Core
 public final class CandleChartCV: UICollectionView {
     private var candles: [Candle] = []
     
-    public init() {
-        super.init(
-            frame: .zero,
-            collectionViewLayout: .init()
-        )
-        configure()
-    }
-    
     private var minCellSize: CGFloat = 3
     
     private var itemCount: CGFloat {
         CGFloat.screenWidth / candles.count.f < minCellSize ?
         CGFloat.screenWidth / minCellSize :
         candles.count.f
+    }
+    
+    public init() {
+        super.init(
+            frame: .zero,
+            collectionViewLayout: .init()
+        )
+        configure()
     }
     
     required init?(coder: NSCoder) {
@@ -43,21 +43,21 @@ public final class CandleChartCV: UICollectionView {
         )
     }
     
-    private func checkStatus(candles: [Candle]) -> CandleStatus {
+    private func checkStatus(with: [Candle]) -> CandleStatus {
         var status = CandleStatus.empty
-        if self.candles.isEmpty, !candles.isEmpty {
+        if candles.isEmpty, !with.isEmpty {
             status = .firstFetch
-        } else if self.candles != candles {
+        } else if candles != with {
             status = .notDiff
-        } else if self.candles == candles {
+        } else if candles == with {
             status = .diff
         }
         return status
     }
     
-    public func updateCandles(_ candles: [Candle]) {
-        let status = checkStatus(candles: candles)
-        self.candles = candles
+    public func updateCandles(_ with: [Candle]) {
+        let status = checkStatus(with: with)
+        candles = with
         switch status {
         case .empty:
             break
@@ -68,15 +68,13 @@ public final class CandleChartCV: UICollectionView {
             )
             reloadData()
             scrollToItem(
-                at: IndexPath(row: candles.count-1, section: 0),
+                at: IndexPath(row: with.count-1, section: 0),
                 at: .centeredHorizontally,
                 animated: false
             )
         case .diff:
             UIView.performWithoutAnimation {
-                //                let offset = contentOffset
-                reloadItems(at: [.init(row: candles.count-1, section: 0)])
-                //                setContentOffset(offset, animated: false)
+                reloadItems(at: [.init(row: with.count-1, section: 0)])
             }
         case .notDiff:
             break
@@ -84,10 +82,12 @@ public final class CandleChartCV: UICollectionView {
     }
     
     func updateLayout() -> UICollectionViewCompositionalLayout {
-        .init { _, _ in
+        .init { [weak self] _, _ in
             let item = NSCollectionLayoutItem(
                 layoutSize: .init(
-                    widthDimension: .fractionalWidth(1 / self.itemCount),
+                    widthDimension: .fractionalWidth(
+                        1 / (self?.itemCount ?? 1)
+                    ),
                     heightDimension: .fractionalHeight(1)
                 )
             )
@@ -130,8 +130,8 @@ extension CandleChartCV: UICollectionViewDataSource {
         let highestPrice = candles.highestPrice
         let lowestPrice = candles.lowestPrice
         let shape = CandleShape(
-            viewHeight: self.bounds.height,
-            viewWidth: self.bounds.width,
+            viewHeight: bounds.height,
+            viewWidth: bounds.width,
             highestPrice: highestPrice,
             lowestPrice: lowestPrice,
             totalCandleCount: itemCount,
