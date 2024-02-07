@@ -34,10 +34,6 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
             animated: false
         )
     }
-    
-    public func finish() {
-        
-    }
 }
 
 public extension DefaultHomeCoordinator {

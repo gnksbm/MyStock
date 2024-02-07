@@ -32,8 +32,4 @@ final class AppCoordinator: Coordinator {
         )
         startChildCoordinator(tabBarCoordinator)
     }
-    
-    func finish() {
-        
-    }
 }

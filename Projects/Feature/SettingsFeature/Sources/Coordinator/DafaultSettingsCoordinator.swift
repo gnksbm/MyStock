@@ -20,8 +20,4 @@ public final class DefaultSettingsCoordinator: SettingsCoordinator {
             animated: false
         )
     }
-    
-    public func finish() {
-        
-    }
 }

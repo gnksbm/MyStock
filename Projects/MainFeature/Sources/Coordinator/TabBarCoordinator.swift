@@ -31,10 +31,6 @@ public final class TabBarCoordinator: Coordinator {
         setupTabBarController()
     }
     
-    public func finish() {
-        
-    }
-    
     private func setupTabBarController() {
         let tabBarController = TabBarViewController()
         
