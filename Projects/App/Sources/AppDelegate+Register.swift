@@ -36,10 +36,21 @@ extension AppDelegate {
                 repository: searchStocksRepository
             )
         )
+        DIContainer.register(
+            type: FavoritesUseCase.self,
+            DefaultFavoritesUseCase(
+                favoritesStockRepository: favoritesStockRepository,
+                searchStocksRepository: searchStocksRepository
+            )
+        )
     }
 }
 
 extension AppDelegate {
+    var favoritesStockRepository: FavoritesStockRepository {
+        DefaultFavoritesStockRepository()
+    }
+    
     var searchStocksRepository: SearchStocksRepository {
         DefaultSearchStocksRepository()
     }

@@ -9,7 +9,7 @@
 import Foundation
 // Request = RequestDTO
 // Response = Model
-public struct SearchStocksResponse {
+public struct SearchStocksResponse: Hashable {
     public let ticker: String
     public let name: String
     public let marketType: MarketType
