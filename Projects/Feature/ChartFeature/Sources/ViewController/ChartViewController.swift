@@ -9,6 +9,9 @@ import RxCocoa
 final class ChartViewController: BaseViewController {
     private var viewModel: ChartViewModel
     
+    private var dataSource
+    : UICollectionViewDiffableDataSource<Int, CandleShape>!
+    
     private let searchBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         let image = UIImage(systemName: "magnifyingglass")
@@ -21,7 +24,14 @@ final class ChartViewController: BaseViewController {
         return button
     }()
     
-    private let candleChartCV = CandleChartCV()
+    private lazy var candleChartCV: UICollectionView = {
+        let collectionView = UICollectionView(
+            frame: .zero,
+            collectionViewLayout: .init()
+        )
+        collectionView.backgroundColor = DesignSystemAsset.chartBackground.color
+        return collectionView
+    }()
     
     init(viewModel: ChartViewModel) {
         self.viewModel = viewModel
@@ -32,13 +42,10 @@ final class ChartViewController: BaseViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
-    deinit {
-        candleChartCV.updateCandles([])
-    }
-    
     override func viewDidLoad() {
         configureUI()
         bind()
+        configureDataSource()
     }
     
     private func configureUI() {
@@ -87,21 +94,69 @@ final class ChartViewController: BaseViewController {
                         let title = "\(viewController.viewModel.title) \(price)"
                         viewController.title = title
                     }
-                    viewController.candleChartCV.updateCandles(candles)
+                    viewController.updateSnapshot(candles)
                 }
             )
             .disposed(by: disposeBag)
+    }
+    
+    private func configureDataSource() {
+        let registration = makeRegistration()
+        dataSource = UICollectionViewDiffableDataSource<Int, CandleShape>(
+            collectionView: candleChartCV
+        ) { collectionView, indexPath, item in
+            collectionView.dequeueConfiguredReusableCell(
+                using: registration,
+                for: indexPath,
+                item: item
+            )
+        }
+    }
+    
+    private func updateSnapshot(_ candles: [Candle]) {
+        var snapshot = NSDiffableDataSourceSnapshot<Int, CandleShape>()
+        let shapes = candles.map { candle in
+            CandleShape(
+                viewHeight: candleChartCV.bounds.height,
+                viewWidth: candleChartCV.bounds.width,
+                highestPrice: candles.highestPrice,
+                lowestPrice: candles.lowestPrice,
+                totalCandleCount: candles.count.f,
+                candle: candle
+            )
+        }
+        snapshot.appendSections([0])
+        snapshot.appendItems(shapes, toSection: 0)
+        candleChartCV.setCollectionViewLayout(
+            updateLayout(itemCount: candles.count.f),
+            animated: false
+        )
+        dataSource.apply(
+            snapshot,
+            animatingDifferences: false
+        )
+    }
+    
+    private func makeRegistration(
+    ) -> UICollectionView.CellRegistration<CandleChartCVCell, CandleShape> {
+        .init { cell, _, shape in
+            cell.drawCandle(shape: shape)
+        }
     }
 }
 
 extension ChartViewController {
     func updateLayout(
-        itemCount: CGFloat
+        itemCount: CGFloat,
+        minCellSize: CGFloat = 3
     ) -> UICollectionViewCompositionalLayout {
-        .init { _, _ in
+        let cellCount = CGFloat.screenWidth / itemCount < minCellSize ?
+        CGFloat.screenWidth / minCellSize :
+        itemCount
+        return .init { _, _ in
             let item = NSCollectionLayoutItem(
                 layoutSize: .init(
-                    widthDimension: .fractionalWidth(1 / itemCount),
+                    widthDimension: .fractionalWidth(1 / cellCount),
                     heightDimension: .fractionalHeight(1)
                 )
             )

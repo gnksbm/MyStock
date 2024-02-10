@@ -51,7 +51,7 @@ final class SearchStockViewModel: ViewModel {
                     let response = output.searchResult.value[index]
                     switch viewModel.searchResult {
                     case .chart:
-                        viewModel.coordinator.pushToChartVC(with: response)
+                        viewModel.coordinator.startChartFlow(with: response)
                     case .stockInfo:
                         viewModel.useCase.addFavorites(ticker: response.ticker)
                         viewModel.coordinator.updateFavoritesFinished()

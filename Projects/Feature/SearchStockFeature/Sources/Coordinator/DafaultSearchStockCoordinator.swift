@@ -44,7 +44,7 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
 }
 
 public extension DefaultSearchStockCoordinator {
-    func pushToChartVC(with response: SearchStocksResponse) {
+    func startChartFlow(with response: SearchStocksResponse) {
         let chartCoordinator = coordinatorProvider.makeChartCoordinator(
             title: response.name,
             ticker: response.ticker,

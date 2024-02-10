@@ -5,7 +5,7 @@ import Domain
 public protocol SearchStockCoordinator: Coordinator {
     var searchResult: SearchResult { get }
     
-    func pushToChartVC(with response: SearchStocksResponse)
+    func startChartFlow(with response: SearchStocksResponse)
     func updateFavoritesFinished()
 }
 

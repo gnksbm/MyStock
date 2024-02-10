@@ -10,7 +10,7 @@ import SwiftUI
 
 import Core
 
-public struct CandleShape {
+public struct CandleShape: Hashable {
     private let viewHeight: CGFloat
     private let viewWidth: CGFloat
     private let highestPrice: CGFloat
@@ -18,7 +18,7 @@ public struct CandleShape {
     private let totalCandleCount: CGFloat
     private let candle: Candle
     
-    init(
+    public init(
         viewHeight: CGFloat,
         viewWidth: CGFloat,
         highestPrice: CGFloat,
@@ -50,6 +50,10 @@ extension CandleShape {
             width: getWidth(type),
             height: getHeight(type) * heightRatio
         )
+    }
+    
+    func getRatio() {
+        
     }
     
     enum ViewType {

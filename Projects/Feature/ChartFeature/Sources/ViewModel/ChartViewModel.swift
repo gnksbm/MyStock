@@ -10,6 +10,7 @@ import RxRelay
 final class ChartViewModel: ViewModel {
     private let coordinator: Coordinator
     @Injected(HomeChartUseCase.self) private var useCase: HomeChartUseCase
+    
     let title: String
     private let ticker: String
     private let marketType: MarketType
