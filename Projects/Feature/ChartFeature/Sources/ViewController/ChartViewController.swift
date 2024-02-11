@@ -30,6 +30,9 @@ final class ChartViewController: BaseViewController {
             collectionViewLayout: .init()
         )
         collectionView.backgroundColor = DesignSystemAsset.chartBackground.color
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.startAnimating()
+        collectionView.backgroundView = activityIndicatorView
         return collectionView
     }()
     
@@ -95,6 +98,7 @@ final class ChartViewController: BaseViewController {
                         viewController.title = title
                     }
                     viewController.updateSnapshot(candles)
+                    viewController.candleChartCV.backgroundView = nil
                 }
             )
             .disposed(by: disposeBag)

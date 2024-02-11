@@ -22,6 +22,9 @@ public final class HomeViewController: BaseViewController {
             HomeStockCVCell.self,
             forCellWithReuseIdentifier: HomeStockCVCell.identifier
         )
+        let activityIndicatorView = UIActivityIndicatorView(style: .medium)
+        activityIndicatorView.startAnimating()
+        collectionView.backgroundView = activityIndicatorView
         return collectionView
     }()
     
@@ -106,6 +109,17 @@ public final class HomeViewController: BaseViewController {
                 ),
                 curriedArgument: { _, item, cell in
                     cell.prepare(item: item)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        output.balanceList
+            .withUnretained(self)
+            .observe(on: MainScheduler.asyncInstance)
+            .skip(1)
+            .subscribe(
+                onNext: { viewController, _ in
+                    viewController.collectionView.backgroundView = nil
                 }
             )
             .disposed(by: disposeBag)
