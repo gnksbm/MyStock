@@ -19,6 +19,7 @@ public final class SettingsViewModel: ViewModel {
 
 extension SettingsViewModel {
     public struct Input {
+        let apiBtnTapEvent: Observable<Void>
     }
     
     public struct Output {
