@@ -25,11 +25,15 @@ public final class SettingsViewController: UIViewController {
     }()
     
     private lazy var stackView: UIStackView = {
+        let accentColor = DesignSystemAsset.accentColor.color
         let stackView = UIStackView(arrangedSubviews: [editAPIKeyBtn])
         stackView.axis = .vertical
-        stackView.distribution = .equalSpacing
+        stackView.distribution = .fill
         stackView.alignment = .top
-        stackView.addDivider(color: DesignSystemAsset.accentColor.color)
+        stackView.addDivider(color: accentColor)
+        stackView.layer.borderWidth = 1
+        stackView.layer.borderColor = accentColor.cgColor
+        stackView.layer.cornerRadius = 10
         return stackView
     }()
     
@@ -45,6 +49,7 @@ public final class SettingsViewController: UIViewController {
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
+        bind()
     }
     
     private func configureUI() {
@@ -57,16 +62,16 @@ public final class SettingsViewController: UIViewController {
         
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            stackView.leadingAnchor.constraint(equalTo: safeArea.leadingAnchor),
-            stackView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
+            stackView.widthAnchor.constraint(
+                equalTo: safeArea.widthAnchor,
+                multiplier: 0.9
             ),
-            stackView.bottomAnchor.constraint(equalTo: safeArea.bottomAnchor),
+            stackView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
         ])
     }
     
     private func bind() {
-        viewModel.transform(
+        _ = viewModel.transform(
             input: .init(
                 apiBtnTapEvent: editAPIKeyBtn.rx.tap.asObservable()
             )

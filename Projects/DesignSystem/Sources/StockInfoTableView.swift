@@ -25,5 +25,6 @@ public final class StockInfoTableView: UITableView {
         )
         backgroundColor = DesignSystemAsset.chartBackground.color
         separatorColor = DesignSystemAsset.chartForeground.color
+        rowHeight = 50
     }
 }

@@ -13,11 +13,18 @@ public final class DefaultSettingsCoordinator: SettingsCoordinator {
     
     public func start() {
         let settingsViewController = SettingsViewController(
-            viewModel: SettingsViewModel()
+            viewModel: SettingsViewModel(coordinator: self)
         )
         navigationController.setViewControllers(
             [settingsViewController],
             animated: false
+        )
+    }
+    
+    public func pushToAPIView() {
+        navigationController.pushViewController(
+            APISettingsViewController(),
+            animated: true
         )
     }
 }
