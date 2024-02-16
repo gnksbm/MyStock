@@ -20,7 +20,6 @@ public final class SettingsViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in
-                    print("tap")
                     viewModel.coordinator.pushToAPIView()
                 }
             )

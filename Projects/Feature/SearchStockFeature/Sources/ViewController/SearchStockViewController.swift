@@ -38,6 +38,8 @@ final class SearchStockViewController: BaseViewController {
         super.viewDidLoad()
         bind()
         configureUI()
+        configureNavigation()
+        setupEndEditingTapGesture()
     }
     
     private func bind() { 
@@ -49,9 +51,10 @@ final class SearchStockViewController: BaseViewController {
                     .asObservable(),
                 stockCellTapEvent: searchStocksTableView.rx
                     .itemSelected
-                    .map({ $0.row })
+                    .map { $0.row }
             )
         )
+        
         output.searchResult
             .bind(
                 to: searchStocksTableView.rx.items(
@@ -66,6 +69,16 @@ final class SearchStockViewController: BaseViewController {
                 }
             )
             .disposed(by: disposeBag)
+        
+        rx.methodInvoked(#selector(UIViewController.viewDidAppear))
+            .withUnretained(self)
+            .take(1)
+            .subscribe(
+                onNext: { viewController, _ in
+                    viewController.searchTextField.becomeFirstResponder()
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() { 
@@ -77,18 +90,8 @@ final class SearchStockViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            searchTextField.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            searchTextField.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor,
-                constant: 10
-            ),
-            searchTextField.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor,
-                constant: -10
-            ),
-            
             searchStocksTableView.topAnchor.constraint(
-                equalTo: searchTextField.bottomAnchor
+                equalTo: safeArea.topAnchor
             ),
             searchStocksTableView.leadingAnchor.constraint(
                 equalTo: safeArea.leadingAnchor
@@ -100,5 +103,22 @@ final class SearchStockViewController: BaseViewController {
                 equalTo: safeArea.bottomAnchor
             ),
         ])
+    }
+    
+    private func configureNavigation() {
+        navigationItem.titleView = searchTextField
+    }
+    
+    private func setupEndEditingTapGesture() {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .withUnretained(self)
+            .subscribe(
+                onNext: { viewController, _ in
+                    viewController.searchTextField.endEditing(true)
+                }
+            )
+            .disposed(by: disposeBag)
     }
 }
