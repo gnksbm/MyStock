@@ -8,9 +8,11 @@
 
 import Foundation
 
+import Core
+
 public protocol CoreDataService {
-    func fetch<T>(type: T.Type)
-    func save<T>(data: T)
-    func update<T>(data: T)
-    func delete<T>(data: T)
+    func fetch(type: Storable.Type) throws -> [Storable]
+    func save(data: Storable)
+    func update(data: Storable)
+    func delete(data: Storable)
 }
