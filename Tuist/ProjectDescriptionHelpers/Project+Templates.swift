@@ -21,6 +21,7 @@ extension Project {
         entitlementsPath: Path? = nil,
         isTestable: Bool = false,
         hasResource: Bool = false,
+        coreDataModel: CoreDataModel? = nil,
         dependencies: [TargetDependency]
     ) -> Self {
         var targets = [Target]()
@@ -42,6 +43,7 @@ extension Project {
                 name: name,
                 entitlements: entitlements,
                 hasResource: hasResource,
+                coreDataModel: coreDataModel,
                 productType: moduleType.product,
                 dependencies: dependencies
             )
@@ -52,6 +54,7 @@ extension Project {
                 entitlements: entitlements,
                 hasResource: hasResource,
                 isFeature: isFeature,
+                coreDataModel: coreDataModel,
                 productType: moduleType.product,
                 dependencies: dependencies
             )
@@ -122,6 +125,7 @@ extension Project {
         entitlements: Entitlements?,
         hasResource: Bool,
         isFeature: Bool = false,
+        coreDataModel: CoreDataModel?,
         productType: Product,
         dependencies: [TargetDependency]
     ) -> Target {

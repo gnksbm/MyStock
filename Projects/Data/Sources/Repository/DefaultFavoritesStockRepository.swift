@@ -9,15 +9,18 @@
 import Foundation
 
 import Domain
+import CoreDataService
 
 import RxRelay
 
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
+    private let coreDataService: CoreDataService
     public let favoritesTicker = BehaviorRelay<[String]>(value: [])
     
     private let favoritesKey = "Favorites"
     
-    public init() {
+    public init(coreDataService: CoreDataService) {
+        self.coreDataService = coreDataService
         fetchFavorites()
     }
     

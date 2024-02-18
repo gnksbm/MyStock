@@ -8,7 +8,12 @@
 
 import Foundation
 
-public struct KISOAuthToken: Codable {
+import Core
+
+public struct KISOAuthToken: Codable, Storable {
+    public static let coreDataType: EntityRepresentable.Type
+    = KISOAuthTokenEntity.self
+    
     public let token: String
     public let expireDate: Date
     

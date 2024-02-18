@@ -9,6 +9,7 @@
 import Foundation
 
 import Core
+import CoreDataService
 import Data
 import Domain
 import Networks
@@ -17,7 +18,10 @@ extension AppDelegate {
     func registerDependencies() {
         let networkService = DefaultNetworkService()
         let webSocketService = DefaultWebSocketService()
-        let favoritesStockRepository = DefaultFavoritesStockRepository()
+        let coreDataService = DefaultCoreDataService()
+        let favoritesStockRepository = DefaultFavoritesStockRepository(
+            coreDataService: coreDataService
+        )
         let searchStocksRepository = DefaultSearchStocksRepository()
         let chartPriceRepository = DefaultKISChartPriceRepository(
             networkService: networkService
