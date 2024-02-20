@@ -11,8 +11,8 @@ import Foundation
 import Core
 
 public protocol CoreDataService {
-    func fetch(type: any Storable.Type) throws -> [any Storable]
-    func save(data: any Storable)
-    func update(data: any Storable)
-    func delete(data: any Storable)
+    func fetch<T: Storable>(type: T.Type) throws -> [T]
+    func save(data: some Storable)
+    func update(data: some Storable)
+    func delete(data: some Storable)
 }

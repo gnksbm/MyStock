@@ -8,10 +8,10 @@
 
 import Foundation
 
-import RxRelay
+import RxSwift
 
 public protocol FavoritesStockRepository {
-    var favoritesTicker: BehaviorRelay<[String]> { get }
+    var favoritesTicker: BehaviorSubject<[String]> { get }
     
     func addFavorites(ticker: String)
 }

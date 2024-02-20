@@ -11,11 +11,11 @@ import Foundation
 import Domain
 import CoreDataService
 
-import RxRelay
+import RxSwift
 
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
     private let coreDataService: CoreDataService
-    public let favoritesTicker = BehaviorRelay<[String]>(value: [])
+    public let favoritesTicker = BehaviorSubject<[String]>(value: [])
     
     private let favoritesKey = "Favorites"
     
@@ -25,16 +25,18 @@ public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
     }
     
     private func fetchFavorites() {
-        guard let savedFavorites = UserDefaults.standard.stringArray(
-            forKey: favoritesKey
-        )
-        else { return }
-        favoritesTicker.accept(Array(Set(savedFavorites)))
+        do {
+            let savedFavorites = try coreDataService.fetch(
+                type: FavoritesTicker.self
+            )
+            favoritesTicker.onNext(savedFavorites.map { $0.ticker })
+        } catch {
+            favoritesTicker.onError(error)
+        }
     }
     
     public func addFavorites(ticker: String) {
-        let updatedFavorites = Array(Set(favoritesTicker.value + [ticker]))
-        UserDefaults.standard.setValue(updatedFavorites, forKey: favoritesKey)
-        favoritesTicker.accept(updatedFavorites)
+        coreDataService.save(data: FavoritesTicker(ticker: ticker))
+        fetchFavorites()
     }
 }

@@ -28,7 +28,10 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
     }
     
     public func fetchFavorites() {
-        let favoritesTicker = favoritesStockRepository.favoritesTicker.value
+        guard let favoritesTicker = try? favoritesStockRepository
+            .favoritesTicker
+            .value()
+        else { return }
         Observable.combineLatest(
             favoritesTicker
                 .map {

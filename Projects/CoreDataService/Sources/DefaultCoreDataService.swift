@@ -17,8 +17,7 @@ public final class DefaultCoreDataService: CoreDataService {
     private var container: NSPersistentContainer
     
     public init() {
-        // TODO: 파일이름
-        container = NSPersistentContainer(name: "")
+        container = NSPersistentContainer(name: "Model")
         container.loadPersistentStores { _, error in
             if let error {
                 print(error.localizedDescription)
@@ -27,19 +26,19 @@ public final class DefaultCoreDataService: CoreDataService {
         entity = nil
     }
     
-    public func fetch(type: Storable.Type) throws -> [Storable] {
+    public func fetch<T: Storable>(type: T.Type) throws -> [T] {
         checkEntityName(type: type)
         let request = type.coreDataType.fetchRequest()
         do {
             return try self.container.viewContext.fetch(request)
                 .compactMap { $0 as? EntityRepresentable }
-                .map { $0.toEntity }
+                .compactMap { $0.toEntity as? T }
         } catch {
             throw error
         }
     }
     
-    public func save(data: Storable) {
+    public func save(data: some Storable) {
         checkEntityName(type: type(of: data))
         guard let entity else { return }
         let object = NSManagedObject(
@@ -62,7 +61,7 @@ public final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    public func update(data: Storable) {
+    public func update(data: some Storable) {
         checkEntityName(type: type(of: data))
         guard let entity else { return }
         let object = NSManagedObject(
@@ -90,7 +89,7 @@ public final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    public func delete(data: Storable) {
+    public func delete(data: some Storable) {
         checkEntityName(type: type(of: data))
         guard let entity else { return }
         let object = NSManagedObject(

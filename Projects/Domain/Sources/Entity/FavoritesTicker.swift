@@ -15,5 +15,9 @@ public struct FavoritesTicker: Storable {
     public static let coreDataType: EntityRepresentable.Type 
 = FavoritesTickerEntity.self
     
-    let ticker: String
+    public let ticker: String
+    
+    public init(ticker: String) {
+        self.ticker = ticker
+    }
 }
