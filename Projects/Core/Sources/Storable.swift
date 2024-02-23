@@ -8,8 +8,6 @@
 
 import Foundation
 
-import CoreData
-
 public protocol Storable {
     static var coreDataType: EntityRepresentable.Type { get }
 }

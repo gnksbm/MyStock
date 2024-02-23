@@ -12,12 +12,14 @@ public final class StockInfoTVCell: UITableViewCell {
     private let tickerLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = DesignSystemAsset.chartForeground.color
         return label
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = DesignSystemAsset.chartForeground.color
         return label
     }()
     

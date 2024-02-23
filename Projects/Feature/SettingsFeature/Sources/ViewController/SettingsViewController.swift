@@ -20,7 +20,6 @@ public final class SettingsViewController: UIViewController {
         stackView.axis = .vertical
         stackView.distribution = .fillEqually
         stackView.alignment = .fill
-        stackView.addDivider(color: accentColor)
         return stackView
     }()
     

@@ -28,6 +28,7 @@ final class SettingsButton: UIButton {
             ofSize: 20,
             weight: .semibold
         )
+        label.textColor = DesignSystemAsset.chartForeground.color
         return label
     }()
     
