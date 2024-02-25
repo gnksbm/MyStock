@@ -1,5 +1,5 @@
 //
-//  EntityRepresentable.swift
+//  CoreDataModelObject.swift
 //  Core
 //
 //  Created by gnksbm on 2/17/24.
@@ -9,6 +9,6 @@
 import Foundation
 import CoreData
 
-public protocol EntityRepresentable: NSManagedObject {
+public protocol CoreDataModelObject: NSManagedObject {
     var toEntity: Storable { get }
 }

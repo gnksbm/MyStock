@@ -1,5 +1,5 @@
 //
-//  KISOAuthTokenEntity+CoreDataProperties.swift
+//  KISOAuthTokenMO+CoreDataProperties.swift
 //  
 //
 //  Created by gnksbm on 2/18/24.
@@ -9,10 +9,10 @@
 import Foundation
 import CoreData
 
-extension KISOAuthTokenEntity {
+extension KISOAuthTokenMO {
     @nonobjc public class func fetchRequest(
-    ) -> NSFetchRequest<KISOAuthTokenEntity> {
-        return NSFetchRequest<KISOAuthTokenEntity>(
+    ) -> NSFetchRequest<KISOAuthTokenMO> {
+        return NSFetchRequest<KISOAuthTokenMO>(
             entityName: "KISOAuthTokenEntity"
         )
     }

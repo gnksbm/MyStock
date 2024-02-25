@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol Storable {
-    static var coreDataType: EntityRepresentable.Type { get }
+    static var coreDataType: CoreDataModelObject.Type { get }
 }

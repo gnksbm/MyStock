@@ -12,8 +12,8 @@ import Core
 import CoreData
 
 public struct FavoritesTicker: Storable {
-    public static let coreDataType: EntityRepresentable.Type 
-= FavoritesTickerEntity.self
+    public static let coreDataType: CoreDataModelObject.Type 
+= FavoritesTickerMO.self
     
     public let ticker: String
     

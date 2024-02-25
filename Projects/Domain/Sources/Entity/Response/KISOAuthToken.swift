@@ -11,8 +11,8 @@ import Foundation
 import Core
 
 public struct KISOAuthToken: Codable, Storable {
-    public static let coreDataType: EntityRepresentable.Type
-    = KISOAuthTokenEntity.self
+    public static let coreDataType: CoreDataModelObject.Type
+    = KISOAuthTokenMO.self
     
     public let token: String
     public let expireDate: Date

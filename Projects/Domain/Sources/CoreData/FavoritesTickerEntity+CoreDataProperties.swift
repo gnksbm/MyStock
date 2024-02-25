@@ -1,5 +1,5 @@
 //
-//  FavoritesTickerEntity+CoreDataProperties.swift
+//  FavoritesTickerMO+CoreDataProperties.swift
 //  
 //
 //  Created by gnksbm on 2/18/24.
@@ -9,11 +9,11 @@
 import Foundation
 import CoreData
 
-extension FavoritesTickerEntity {
+extension FavoritesTickerMO {
 
     @nonobjc public class func fetchRequest(
-    ) -> NSFetchRequest<FavoritesTickerEntity> {
-        return NSFetchRequest<FavoritesTickerEntity>(
+    ) -> NSFetchRequest<FavoritesTickerMO> {
+        return NSFetchRequest<FavoritesTickerMO>(
             entityName: "FavoritesTickerEntity"
         )
     }

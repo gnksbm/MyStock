@@ -31,14 +31,14 @@ public final class DefaultCoreDataService: CoreDataService {
         let request = type.coreDataType.fetchRequest()
         do {
             return try self.container.viewContext.fetch(request)
-                .compactMap { $0 as? EntityRepresentable }
+                .compactMap { $0 as? CoreDataModelObject }
                 .compactMap { $0.toEntity as? T }
         } catch {
             throw error
         }
     }
     
-    public func save(data: some Storable) {
+    public func save<T: Storable>(data: T) {
         checkEntityName(type: type(of: data))
         guard let entity else { return }
         let object = NSManagedObject(
@@ -57,7 +57,7 @@ public final class DefaultCoreDataService: CoreDataService {
         do {
             try container.viewContext.save()
         } catch {
-            print(error.localizedDescription)
+            container.viewContext.rollback()
         }
     }
     
@@ -84,7 +84,7 @@ public final class DefaultCoreDataService: CoreDataService {
             do {
                 try container.viewContext.save()
             } catch {
-                print(error.localizedDescription)
+                container.viewContext.rollback()
             }
         }
     }
@@ -114,7 +114,7 @@ public final class DefaultCoreDataService: CoreDataService {
     private func checkEntityName(type: Storable.Type) {
         guard let entityNameSubstr = ("\(type)".split(separator: ".").last)
         else { return }
-        let entityName = String(entityNameSubstr) + "Entity"
+        let entityName = String(entityNameSubstr) + "MO"
         guard container.name != entityName,
               entity?.name != entityName
         else { return }
