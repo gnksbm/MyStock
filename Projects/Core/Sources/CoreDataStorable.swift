@@ -1,5 +1,5 @@
 //
-//  Storable.swift
+//  CoreDataStorable.swift
 //  Core
 //
 //  Created by gnksbm on 2/17/24.
@@ -8,6 +8,5 @@
 
 import Foundation
 
-public protocol Storable {
-    static var coreDataType: CoreDataModelObject.Type { get }
+public protocol CoreDataStorable {
 }

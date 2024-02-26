@@ -11,10 +11,7 @@ import Foundation
 import Core
 import CoreData
 
-public struct FavoritesTicker: Storable {
-    public static let coreDataType: CoreDataModelObject.Type 
-= FavoritesTickerMO.self
-    
+public struct FavoritesTicker: CoreDataStorable {
     public let ticker: String
     
     public init(ticker: String) {

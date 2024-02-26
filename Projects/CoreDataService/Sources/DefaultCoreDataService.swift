@@ -13,7 +13,6 @@ import Core
 import CoreData
 
 public final class DefaultCoreDataService: CoreDataService {
-    private var entity: NSEntityDescription?
     private var container: NSPersistentContainer
     
     public init() {
@@ -23,12 +22,12 @@ public final class DefaultCoreDataService: CoreDataService {
                 print(error.localizedDescription)
             }
         }
-        entity = nil
     }
     
-    public func fetch<T: Storable>(type: T.Type) throws -> [T] {
-        checkEntityName(type: type)
-        let request = type.coreDataType.fetchRequest()
+    public func fetch<T: CoreDataStorable>(type: T.Type) throws -> [T] {
+        let request = NSFetchRequest<NSManagedObject>(
+            entityName: "\(type)MO"
+        )
         do {
             return try self.container.viewContext.fetch(request)
                 .compactMap { $0 as? CoreDataModelObject }
@@ -38,12 +37,10 @@ public final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    public func save<T: Storable>(data: T) {
-        checkEntityName(type: type(of: data))
-        guard let entity else { return }
-        let object = NSManagedObject(
-            entity: entity, 
-            insertInto: container.viewContext
+    public func save<T: CoreDataStorable>(data: T) {
+        let object = NSEntityDescription.insertNewObject(
+            forEntityName: "\(type(of: data))MO",
+            into: container.viewContext
         )
         let mirror = Mirror(reflecting: data)
         mirror.children.forEach { key, value in
@@ -61,9 +58,12 @@ public final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    public func update(data: some Storable) {
-        checkEntityName(type: type(of: data))
-        guard let entity else { return }
+    public func update(data: some CoreDataStorable) {
+        guard let entity = NSEntityDescription.entity(
+            forEntityName: "\(type(of: data))MO",
+            in: container.viewContext
+        )
+        else { return }
         let object = NSManagedObject(
             entity: entity,
             insertInto: container.viewContext
@@ -89,9 +89,12 @@ public final class DefaultCoreDataService: CoreDataService {
         }
     }
     
-    public func delete(data: some Storable) {
-        checkEntityName(type: type(of: data))
-        guard let entity else { return }
+    public func delete(data: some CoreDataStorable) {
+        guard let entity = NSEntityDescription.entity(
+            forEntityName: "\(type(of: data))MO",
+            in: container.viewContext
+        )
+        else { return }
         let object = NSManagedObject(
             entity: entity,
             insertInto: container.viewContext
@@ -109,18 +112,5 @@ public final class DefaultCoreDataService: CoreDataService {
             )
         }
         container.viewContext.delete(object)
-    }
-    
-    private func checkEntityName(type: Storable.Type) {
-        guard let entityNameSubstr = ("\(type)".split(separator: ".").last)
-        else { return }
-        let entityName = String(entityNameSubstr) + "MO"
-        guard container.name != entityName,
-              entity?.name != entityName
-        else { return }
-        entity = .entity(
-            forEntityName: entityName,
-            in: container.viewContext
-        )
     }
 }

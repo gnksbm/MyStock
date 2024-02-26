@@ -10,10 +10,7 @@ import Foundation
 
 import Core
 
-public struct KISOAuthToken: Codable, Storable {
-    public static let coreDataType: CoreDataModelObject.Type
-    = KISOAuthTokenMO.self
-    
+public struct KISOAuthToken: Codable, CoreDataStorable {
     public let token: String
     public let expireDate: Date
     
