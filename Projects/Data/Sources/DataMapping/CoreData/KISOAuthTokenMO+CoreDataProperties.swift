@@ -2,7 +2,7 @@
 //  KISOAuthTokenMO+CoreDataProperties.swift
 //  
 //
-//  Created by gnksbm on 2/18/24.
+//  Created by gnksbm on 2/26/24.
 //
 //
 
@@ -12,12 +12,9 @@ import CoreData
 extension KISOAuthTokenMO {
     @nonobjc public class func fetchRequest(
     ) -> NSFetchRequest<KISOAuthTokenMO> {
-        return NSFetchRequest<KISOAuthTokenMO>(
-            entityName: "KISOAuthTokenEntity"
-        )
+        return NSFetchRequest<KISOAuthTokenMO>(entityName: "KISOAuthTokenMO")
     }
 
-    @NSManaged public var token: String?
     @NSManaged public var expireDate: Date?
-
+    @NSManaged public var token: String?
 }

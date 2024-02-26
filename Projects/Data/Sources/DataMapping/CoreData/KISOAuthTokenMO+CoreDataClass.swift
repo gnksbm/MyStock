@@ -2,7 +2,7 @@
 //  KISOAuthTokenMO+CoreDataClass.swift
 //  
 //
-//  Created by gnksbm on 2/18/24.
+//  Created by gnksbm on 2/26/24.
 //
 //
 
@@ -10,11 +10,11 @@ import Foundation
 import CoreData
 
 import Core
+import Domain
 
-@objc(KISOAuthTokenEntity)
+@objc(KISOAuthTokenMO)
 public class KISOAuthTokenMO: NSManagedObject, CoreDataModelObject {
-
-    public var toEntity: Storable {
+    public var toEntity: CoreDataStorable {
         guard let token,
               let expireDate
         else { fatalError("Ticker is non-optional") }
