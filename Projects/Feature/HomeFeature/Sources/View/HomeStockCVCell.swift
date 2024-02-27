@@ -14,13 +14,25 @@ import DesignSystem
 final class HomeStockCVCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
+        label.font = .boldSystemFont(ofSize: 24)
         return label
     }()
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
+        label.font = .boldSystemFont(ofSize: 24)
+        return label
+    }()
+    
+    private let fluctuationRateLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 24)
+        return label
+    }()
+    
+    private let amountLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 24)
         return label
     }()
     
@@ -35,17 +47,24 @@ final class HomeStockCVCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        titleLabel.text = ""
-        priceLabel.text = ""
         let foregroundColor = DesignSystemAsset.chartForeground.color
         contentView.layer.borderColor = foregroundColor.cgColor
-        titleLabel.textColor = foregroundColor
-        priceLabel.textColor = foregroundColor
+        [
+            titleLabel,
+            priceLabel,
+            fluctuationRateLabel,
+            amountLabel,
+        ].forEach {
+            $0.text = ""
+            $0.textColor = foregroundColor
+        }
     }
     
-    func prepare(item: KISCheckBalanceResponse) {
+    func updateUI(item: KISCheckBalanceResponse) {
         titleLabel.text = item.name
         priceLabel.text = item.price
+        amountLabel.text = "\(item.amount)주"
+        fluctuationRateLabel.text = "\(item.fluctuationRate)"
         guard let rate = Double(item.fluctuationRate) else { return }
         var color: UIColor
         let foregroundColor = DesignSystemAsset.chartForeground.color
@@ -56,8 +75,14 @@ final class HomeStockCVCell: UICollectionViewCell {
         } else {
             color = DesignSystemAsset.loss.color
         }
-        titleLabel.textColor = color
-        priceLabel.textColor = color
+        [
+            titleLabel,
+            priceLabel,
+            amountLabel,
+            fluctuationRateLabel,
+        ].forEach {
+            $0.textColor = color
+        }
         contentView.layer.borderColor = color.cgColor
     }
     
@@ -65,26 +90,48 @@ final class HomeStockCVCell: UICollectionViewCell {
         contentView.layer.cornerRadius = 10
         contentView.layer.borderWidth = 1
         
-        [titleLabel, priceLabel].forEach {
+        [
+            titleLabel,
+            priceLabel,
+            amountLabel,
+            fluctuationRateLabel,
+        ].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         NSLayoutConstraint.activate([
-            titleLabel.centerXAnchor.constraint(
-                equalTo: contentView.centerXAnchor
+            titleLabel.topAnchor.constraint(
+                equalTo: contentView.topAnchor,
+                constant: 20
             ),
-            titleLabel.bottomAnchor.constraint(
-                equalTo: contentView.centerYAnchor,
-                constant: -5
+            titleLabel.leadingAnchor.constraint(
+                equalTo: contentView.leadingAnchor,
+                constant: 20
             ),
             
-            priceLabel.centerXAnchor.constraint(
-                equalTo: contentView.centerXAnchor
-            ),
             priceLabel.topAnchor.constraint(
-                equalTo: contentView.centerYAnchor,
-                constant: 5
+                equalTo: titleLabel.topAnchor
+            ),
+            priceLabel.leadingAnchor.constraint(
+                equalTo: titleLabel.trailingAnchor,
+                constant: 20
+            ),
+            
+            fluctuationRateLabel.topAnchor.constraint(
+                equalTo: titleLabel.topAnchor
+            ),
+            fluctuationRateLabel.leadingAnchor.constraint(
+                equalTo: priceLabel.trailingAnchor,
+                constant: 20
+            ),
+            
+            amountLabel.topAnchor.constraint(
+                equalTo: titleLabel.bottomAnchor,
+                constant: 20
+            ),
+            amountLabel.leadingAnchor.constraint(
+                equalTo: titleLabel.leadingAnchor
             ),
         ])
     }

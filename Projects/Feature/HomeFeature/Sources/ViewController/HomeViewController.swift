@@ -108,7 +108,7 @@ public final class HomeViewController: BaseViewController {
                     cellType: HomeStockCVCell.self
                 ),
                 curriedArgument: { _, item, cell in
-                    cell.prepare(item: item)
+                    cell.updateUI(item: item)
                 }
             )
             .disposed(by: disposeBag)
@@ -141,7 +141,7 @@ extension HomeViewController {
         .init { _, _ in
             let item = NSCollectionLayoutItem(
                 layoutSize: .init(
-                    widthDimension: .fractionalWidth(1/2),
+                    widthDimension: .fractionalWidth(1),
                     heightDimension: .fractionalWidth(1/2)
                 )
             )
