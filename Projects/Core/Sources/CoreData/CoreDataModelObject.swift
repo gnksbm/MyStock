@@ -10,5 +10,5 @@ import Foundation
 import CoreData
 
 public protocol CoreDataModelObject: NSManagedObject {
-    var toEntity: CoreDataStorable { get }
+    var toDomain: CoreDataStorable { get }
 }
