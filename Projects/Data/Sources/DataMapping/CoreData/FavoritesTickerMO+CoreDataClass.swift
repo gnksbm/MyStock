@@ -14,7 +14,8 @@ import Domain
 
 @objc(FavoritesTickerMO)
 public class FavoritesTickerMO: NSManagedObject, CoreDataModelObject {
-    public var toEntity: CoreDataStorable {
+    
+    public var toDomain: CoreDataStorable {
         guard let ticker
         else { fatalError("Ticker is non-optional") }
         return FavoritesTicker(

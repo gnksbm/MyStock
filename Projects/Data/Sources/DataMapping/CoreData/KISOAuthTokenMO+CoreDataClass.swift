@@ -14,7 +14,8 @@ import Domain
 
 @objc(KISOAuthTokenMO)
 public class KISOAuthTokenMO: NSManagedObject, CoreDataModelObject {
-    public var toEntity: CoreDataStorable {
+    
+    public var toDomain: CoreDataStorable {
         guard let token,
               let expireDate
         else { fatalError("Ticker is non-optional") }
