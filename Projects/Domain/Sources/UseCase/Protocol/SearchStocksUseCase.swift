@@ -14,5 +14,5 @@ public protocol SearchStocksUseCase {
     var searchResult: PublishSubject<[SearchStocksResponse]> { get }
     
     func searchStocks(searchTerm: String)
-    func addFavorites(ticker: String)
+    func addFavorites(ticker: String) throws
 }

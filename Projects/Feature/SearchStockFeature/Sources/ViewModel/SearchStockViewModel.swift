@@ -53,8 +53,14 @@ final class SearchStockViewModel: ViewModel {
                     case .chart:
                         viewModel.coordinator.startChartFlow(with: response)
                     case .stockInfo:
-                        viewModel.useCase.addFavorites(ticker: response.ticker)
-                        viewModel.coordinator.updateFavoritesFinished()
+                        do {
+                            try viewModel.useCase.addFavorites(
+                                ticker: response.ticker
+                            )
+                            viewModel.coordinator.updateFavoritesFinished()
+                        } catch {
+                            print(error.localizedDescription)
+                        }
                     }
                 }
             )

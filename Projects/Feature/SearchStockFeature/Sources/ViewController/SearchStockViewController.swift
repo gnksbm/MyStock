@@ -36,13 +36,37 @@ final class SearchStockViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        bind()
         configureUI()
+        bind()
         configureNavigation()
-        setupEndEditingTapGesture()
+        setGestureForEndEdit()
     }
     
-    private func bind() { 
+    private func configureUI() {
+        [searchTextField, searchStocksTableView].forEach {
+            view.addSubview($0)
+            $0.translatesAutoresizingMaskIntoConstraints = false
+        }
+        
+        let safeArea = view.safeAreaLayoutGuide
+        
+        NSLayoutConstraint.activate([
+            searchStocksTableView.topAnchor.constraint(
+                equalTo: safeArea.topAnchor
+            ),
+            searchStocksTableView.leadingAnchor.constraint(
+                equalTo: safeArea.leadingAnchor
+            ),
+            searchStocksTableView.trailingAnchor.constraint(
+                equalTo: safeArea.trailingAnchor
+            ),
+            searchStocksTableView.bottomAnchor.constraint(
+                equalTo: safeArea.bottomAnchor
+            ),
+        ])
+    }
+    
+    private func bind() {
         let output = viewModel.transform(
             input: .init(
                 searchTerm: searchTextField.rx
@@ -81,44 +105,18 @@ final class SearchStockViewController: BaseViewController {
             .disposed(by: disposeBag)
     }
     
-    private func configureUI() { 
-        [searchTextField, searchStocksTableView].forEach {
-            view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
-        }
-        
-        let safeArea = view.safeAreaLayoutGuide
-        
-        NSLayoutConstraint.activate([
-            searchStocksTableView.topAnchor.constraint(
-                equalTo: safeArea.topAnchor
-            ),
-            searchStocksTableView.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor
-            ),
-            searchStocksTableView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            searchStocksTableView.bottomAnchor.constraint(
-                equalTo: safeArea.bottomAnchor
-            ),
-        ])
-    }
-    
     private func configureNavigation() {
         navigationItem.titleView = searchTextField
     }
     
-    private func setupEndEditingTapGesture() {
-        let tapGesture = UITapGestureRecognizer()
-        view.addGestureRecognizer(tapGesture)
-        tapGesture.rx.event
-            .withUnretained(self)
-            .subscribe(
-                onNext: { viewController, _ in
-                    viewController.searchTextField.endEditing(true)
-                }
-            )
-            .disposed(by: disposeBag)
+    private func setGestureForEndEdit() {
+        let tapGesture = UITapGestureRecognizer(
+            target: searchStocksTableView,
+            action: #selector(searchFieldEndEdit)
+        )
+    }
+    
+    @objc private func searchFieldEndEdit() {
+        searchTextField.endEditing(true)
     }
 }

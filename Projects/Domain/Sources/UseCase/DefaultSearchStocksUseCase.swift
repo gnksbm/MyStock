@@ -34,7 +34,11 @@ public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
             .disposed(by: disposeBag)
     }
     
-    public func addFavorites(ticker: String) {
-        favoritesStockRepository.addFavorites(ticker: ticker)
+    public func addFavorites(ticker: String) throws {
+        do {
+            try favoritesStockRepository.addFavorites(ticker: ticker)
+        } catch {
+            throw error
+        }
     }
 }
