@@ -13,5 +13,7 @@ import RxSwift
 public protocol FavoritesStockRepository {
     var favoritesTicker: BehaviorSubject<[String]> { get }
     
-    func addFavorites(ticker: String)
+    func fetchFavorites()
+    func addFavorites(ticker: String) throws
+    func removeFavorites(ticker: String) throws 
 }

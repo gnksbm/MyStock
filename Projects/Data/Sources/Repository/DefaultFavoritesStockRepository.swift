@@ -17,26 +17,58 @@ public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
     private let coreDataService: CoreDataService
     public let favoritesTicker = BehaviorSubject<[String]>(value: [])
     
-    private let favoritesKey = "Favorites"
-    
     public init(coreDataService: CoreDataService) {
         self.coreDataService = coreDataService
-        fetchFavorites()
     }
     
-    private func fetchFavorites() {
+    public func fetchFavorites() {
         do {
             let savedFavorites = try coreDataService.fetch(
                 type: FavoritesTicker.self
-            )
-            favoritesTicker.onNext(savedFavorites.map { $0.ticker })
+            ).map { $0.ticker }
+            let duplicationRemoved = Array(Set(savedFavorites))
+            favoritesTicker.onNext(duplicationRemoved)
         } catch {
             favoritesTicker.onError(error)
         }
     }
     
-    public func addFavorites(ticker: String) {
-        coreDataService.save(data: FavoritesTicker(ticker: ticker))
-        fetchFavorites()
+    public func addFavorites(ticker: String) throws {
+        let data = FavoritesTicker(ticker: ticker)
+        do {
+            let status = try coreDataService.duplicationCheck(
+                data: data,
+                uniqueKeyPath: \.ticker
+            )
+            guard status != .duplicated 
+            else {
+                print("Data is Duplicated")
+                return
+            }
+            do {
+                try coreDataService.save(
+                    data: data
+                )
+                fetchFavorites()
+            } catch {
+                throw error
+            }
+        } catch {
+            throw error
+        }
+    }
+    
+    public func removeFavorites(ticker: String) throws {
+        do {
+            try coreDataService.delete(
+                data: FavoritesTicker(
+                    ticker: ticker
+                ),
+                uniqueKeyPath: \.ticker
+            )
+            fetchFavorites()
+        } catch {
+            throw error
+        }
     }
 }

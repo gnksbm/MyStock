@@ -28,6 +28,7 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
     }
     
     public func fetchFavorites() {
+        favoritesStockRepository.fetchFavorites()
         guard let favoritesTicker = try? favoritesStockRepository
             .favoritesTicker
             .value()
