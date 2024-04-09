@@ -11,6 +11,13 @@ import RxCocoa
 public final class HomeViewController: BaseViewController {
     private let viewModel: HomeViewModel
     
+    private lazy var ratioLabel: UILabel = {
+        let label = UILabel()
+        label.font = .boldSystemFont(ofSize: 20)
+        label.textColor = DesignSystemAsset.chartForeground.color
+        return label
+    }()
+    
     private lazy var collectionView: UICollectionView = {
         let layout = makeLayout()
         let collectionView = UICollectionView(
@@ -64,7 +71,7 @@ public final class HomeViewController: BaseViewController {
     }
     
     private func configureUI() {
-        [collectionView].forEach {
+        [ratioLabel, collectionView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -72,8 +79,19 @@ public final class HomeViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(
+            ratioLabel.topAnchor.constraint(
                 equalTo: safeArea.topAnchor
+            ),
+            ratioLabel.leadingAnchor.constraint(
+                equalTo: safeArea.leadingAnchor,
+                constant: 20
+            ),
+            ratioLabel.trailingAnchor.constraint(
+                equalTo: safeArea.trailingAnchor
+            ),
+            
+            collectionView.topAnchor.constraint(
+                equalTo: ratioLabel.bottomAnchor
             ),
             collectionView.leadingAnchor.constraint(
                 equalTo: safeArea.leadingAnchor
@@ -128,8 +146,9 @@ public final class HomeViewController: BaseViewController {
             .withUnretained(self)
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
-                onNext: { viewController, ratio in
-                    viewController.title = String(Int(ratio))
+                onNext: { vc, ratio in
+                    vc.ratioLabel.text
+                    = "담보 유지 비율: \(String(Int(ratio)))%"
                 }
             )
             .disposed(by: disposeBag)
@@ -142,30 +161,24 @@ extension HomeViewController {
             let item = NSCollectionLayoutItem(
                 layoutSize: .init(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalWidth(1/2)
+                    heightDimension: .estimated(1/2)
                 )
             )
-            item.contentInsets = .init(
+            
+            let group = NSCollectionLayoutGroup.vertical(
+                layoutSize: .init(
+                    widthDimension: .fractionalWidth(1),
+                    heightDimension: .estimated(1)
+                ),
+                subitems: [item]
+            )
+            let section = NSCollectionLayoutSection(group: group)
+            section.contentInsets = .init(
                 top: 10,
                 leading: 10,
                 bottom: 10,
                 trailing: 10
             )
-            let hGroup = NSCollectionLayoutGroup.horizontal(
-                layoutSize: .init(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalWidth(1/2)
-                ),
-                subitems: [item]
-            )
-            let vGroup = NSCollectionLayoutGroup.vertical(
-                layoutSize: .init(
-                    widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalWidth(1)
-                ),
-                subitems: [hGroup]
-            )
-            let section = NSCollectionLayoutSection(group: vGroup)
             return section
         }
     }

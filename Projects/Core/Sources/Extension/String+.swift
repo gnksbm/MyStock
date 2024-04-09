@@ -9,6 +9,12 @@
 import UIKit
 
 public extension String {
+    var toPercent: Self {
+        split(separator: "")
+            .prefix(4)
+            .joined(separator: "")
+    }
+    
     func checkPrice(point: Int) -> UIColor {
         guard let value = Int(self) else { return .black }
         if value == point {
