@@ -14,11 +14,16 @@ import RxSwift
 import RxCocoa
 
 final class KISTextFieldView: UIView {
-    let text = PublishSubject<String>()
+    let textChangeEvent = PublishSubject<String>()
+    
     private let disposeBag = DisposeBag()
     
-    private let titleLabel = UILabel()
-    private let textField: UITextField = {
+    private let titleLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = .white
+        return label
+    }()
+    let textField: UITextField = {
         let textField = UITextField()
         return textField
     }()
@@ -85,7 +90,7 @@ final class KISTextFieldView: UIView {
         
         textField.rx.text
             .orEmpty
-            .bind(to: text)
+            .bind(to: textChangeEvent)
             .disposed(by: disposeBag)
         
         textField.rx.controlEvent(.editingDidBegin)

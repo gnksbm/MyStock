@@ -13,49 +13,20 @@ import Core
 import CoreData
 
 public final class DefaultCoreDataService: CoreDataService {
-    private let container: NSPersistentContainer
+    private let container: NSPersistentCloudKitContainer
     
     public init() {
         container = NSPersistentCloudKitContainer(name: "Model")
-//        let localStoreLocation = URL(fileURLWithPath: "/path/to/local.store")
-//        let localStoreDescription = NSPersistentStoreDescription(
-//            url: localStoreLocation
-//        )
-//        localStoreDescription.configuration = "Local"
-//        let cloudStoreLocation = URL(fileURLWithPath: "/path/to/cloud.store")
-//        let cloudStoreDescription = NSPersistentStoreDescription(
-//            url: cloudStoreLocation
-//        )
-//        cloudStoreDescription.configuration = "Cloud"
-//        cloudStoreDescription.cloudKitContainerOptions 
-//        = NSPersistentCloudKitContainerOptions(
-//            containerIdentifier: "com.my.container"
-//        )
-//        container.persistentStoreDescriptions = [
-//            localStoreDescription,
-//            cloudStoreDescription
-//        ]
+        container.persistentStoreDescriptions.first?.setOption(
+            true as NSNumber,
+            forKey: NSPersistentHistoryTrackingKey
+        )
         container.loadPersistentStores { _, error in
             if let error {
                 print(error.localizedDescription)
                 return
             }
-//            self.migrateStore()
         }
-    }
-    
-    private func migrateStore() {
-        let dataBaseName = "Model.sqlite"
-        guard let directory = FileManager.default.urls(
-            for: .applicationSupportDirectory,
-            in: .userDomainMask
-        ).first
-        else { return }
-        let oldStoreUrl = directory.appendingPathComponent(dataBaseName)
-        guard let oldStore = container.persistentStoreCoordinator
-            .persistentStore(for: oldStoreUrl)
-        else { return }
-        print(oldStore)
     }
     
     public func fetch<T: CoreDataStorable>(type: T.Type) throws -> [T] {

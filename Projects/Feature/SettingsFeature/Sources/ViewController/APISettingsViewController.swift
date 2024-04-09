@@ -14,6 +14,8 @@ import RxCocoa
 final class APISettingsViewController: UIViewController {
     private let viewModel = APISettingsViewModel()
     
+    private let disposeBag = DisposeBag()
+    
     private let appKeyTextField = KISTextFieldView(title: "앱키")
     private let secretKeyTextField = KISTextFieldView(title: "시크릿키")
     private let saveBtn: UIButton = {
@@ -33,6 +35,7 @@ final class APISettingsViewController: UIViewController {
         super.viewDidLoad()
         configureUI()
         configureNavigation()
+        bind()
     }
     
     private func configureUI() {
@@ -75,12 +78,81 @@ final class APISettingsViewController: UIViewController {
     }
     
     private func bind() {
-        viewModel.transform(
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, _ in
+                    vc.view.endEditing(true)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        saveBtn.rx.tap
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, _ in
+                    guard let appKeyIsEmpty = vc.appKeyTextField.textField
+                        .text?.isEmpty,
+                          let secretKeyIsEmpty = vc.secretKeyTextField.textField
+                        .text?.isEmpty
+                    else { return }
+                    if appKeyIsEmpty || secretKeyIsEmpty {
+                        var message = ""
+                        if appKeyIsEmpty && secretKeyIsEmpty {
+                            message = "앱키와 시크릿키를 입력해주세요"
+                        } else if appKeyIsEmpty {
+                            message = "앱키를 입력해주세요"
+                        } else if secretKeyIsEmpty {
+                            message = "시크릿키를 입력해주세요"
+                        }
+                        let alertVC = UIAlertController(
+                            title: "잘못된 입력입니다",
+                            message: message,
+                            preferredStyle: .alert
+                        )
+                        let alertAction = UIAlertAction(
+                            title: "확인",
+                            style: .default
+                        )
+                        alertVC.addAction(alertAction)
+                        vc.present(
+                            alertVC,
+                            animated: true
+                        )
+                    }
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        let output = viewModel.transform(
             input: .init(
-                appKeyText: appKeyTextField.text,
-                secretKeyText: secretKeyTextField.text,
-                saveBtnTapEvent: saveBtn.rx.tap.asObservable()
+                viewWillAppearEvent: rx.methodInvoked(
+                    #selector(UIViewController.viewWillAppear)
+                ).map { _ in },
+                appKeyText: appKeyTextField.textChangeEvent,
+                secretKeyText: secretKeyTextField.textChangeEvent,
+                saveBtnTapEvent: saveBtn.rx.tap
+                    .withUnretained(self)
+                    .filter { vc, _ in
+                        guard let appKeyIsEmpty = vc.appKeyTextField.textField
+                            .text?.isEmpty,
+                              let secretKeyIsEmpty = vc.secretKeyTextField
+                            .textField.text?.isEmpty
+                        else { return false }
+                        return !appKeyIsEmpty && !secretKeyIsEmpty
+                    }
+                    .map { _ in }
             )
         )
+        
+        output.appKey
+            .bind(to: appKeyTextField.textField.rx.text)
+            .disposed(by: disposeBag)
+        
+        output.secretKey
+            .bind(to: secretKeyTextField.textField.rx.text)
+            .disposed(by: disposeBag)
     }
 }

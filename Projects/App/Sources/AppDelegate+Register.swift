@@ -64,5 +64,9 @@ extension AppDelegate {
                 searchStocksRepository: searchStocksRepository
             )
         )
+        DIContainer.register(
+            type: SettingsUseCase.self,
+            DefaultSettingsUseCase()
+        )
     }
 }
