@@ -47,20 +47,23 @@ public struct KISChartPriceEndPoint: KISEndPoint {
     }
     
     public var header: [String : String] {
+        let userDefaults = UserDefaults.standard
+        let appKey = userDefaults.string(forKey: "appKey") ?? ""
+        let secretKey = userDefaults.string(forKey: "secretKey") ?? ""
         switch marketType {
         case .overseas:
             return [
                 "authorization": "Bearer \(authorization)",
-                "appkey": .kisKey,
-                "appsecret": .kisSecret,
+                "appkey": appKey,
+                "appsecret": secretKey,
                 "tr_id": "FHKST03030100",
             ]
         case .domestic:
             return [
                 "content-type": "application/json",
                 "authorization": "Bearer \(authorization)",
-                "appkey": .kisKey,
-                "appsecret": .kisSecret,
+                "appkey": appKey,
+                "appsecret": secretKey,
                 "tr_id": "FHKST03010100",
                 "custtype": "P"
             ]

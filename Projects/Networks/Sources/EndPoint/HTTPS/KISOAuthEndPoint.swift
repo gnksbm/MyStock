@@ -32,10 +32,13 @@ public struct KISOAuthEndPoint: KISEndPoint {
     }
     
     public var body: [String: String] {
-        [
+        let userDefaults = UserDefaults.standard
+        let appKey = userDefaults.string(forKey: "appKey") ?? ""
+        let secretKey = userDefaults.string(forKey: "secretKey") ?? ""
+        return [
             "grant_type": "client_credentials",
-            "appkey": .kisKey,
-            secret: .kisSecret
+            "appkey": appKey,
+            secret: secretKey
         ]
     }
     

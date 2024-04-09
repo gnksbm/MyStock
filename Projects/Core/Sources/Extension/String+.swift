@@ -39,22 +39,6 @@ public extension String {
         return accountNumber
     }
     
-    static var kisKey: Self {
-        guard let kisKey = Bundle.main.object(
-            forInfoDictionaryKey: "KIS_APP_KEY"
-        ) as? String
-        else { fatalError("실패") }
-        return kisKey
-    }
-    
-    static var kisSecret: Self {
-        guard let kisSecret = Bundle.main.object(
-            forInfoDictionaryKey: "KIS_APP_SECRET"
-        ) as? String
-        else { fatalError("실패") }
-        return kisSecret
-    }
-    
     static var seibroKey: Self {
         guard let seibroKey = Bundle.main.object(
             forInfoDictionaryKey: "SEIBRO_APP_KEY"
