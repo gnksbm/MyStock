@@ -13,15 +13,49 @@ import Core
 import CoreData
 
 public final class DefaultCoreDataService: CoreDataService {
-    private var container: NSPersistentContainer
+    private let container: NSPersistentContainer
     
     public init() {
-        container = NSPersistentContainer(name: "Model")
+        container = NSPersistentCloudKitContainer(name: "Model")
+//        let localStoreLocation = URL(fileURLWithPath: "/path/to/local.store")
+//        let localStoreDescription = NSPersistentStoreDescription(
+//            url: localStoreLocation
+//        )
+//        localStoreDescription.configuration = "Local"
+//        let cloudStoreLocation = URL(fileURLWithPath: "/path/to/cloud.store")
+//        let cloudStoreDescription = NSPersistentStoreDescription(
+//            url: cloudStoreLocation
+//        )
+//        cloudStoreDescription.configuration = "Cloud"
+//        cloudStoreDescription.cloudKitContainerOptions 
+//        = NSPersistentCloudKitContainerOptions(
+//            containerIdentifier: "com.my.container"
+//        )
+//        container.persistentStoreDescriptions = [
+//            localStoreDescription,
+//            cloudStoreDescription
+//        ]
         container.loadPersistentStores { _, error in
             if let error {
                 print(error.localizedDescription)
+                return
             }
+//            self.migrateStore()
         }
+    }
+    
+    private func migrateStore() {
+        let dataBaseName = "Model.sqlite"
+        guard let directory = FileManager.default.urls(
+            for: .applicationSupportDirectory,
+            in: .userDomainMask
+        ).first
+        else { return }
+        let oldStoreUrl = directory.appendingPathComponent(dataBaseName)
+        guard let oldStore = container.persistentStoreCoordinator
+            .persistentStore(for: oldStoreUrl)
+        else { return }
+        print(oldStore)
     }
     
     public func fetch<T: CoreDataStorable>(type: T.Type) throws -> [T] {
@@ -100,6 +134,21 @@ public final class DefaultCoreDataService: CoreDataService {
             })
             else { return }
             container.viewContext.delete(object)
+        } catch {
+            throw error
+        }
+    }
+    
+    public func duplicationCheck<T: CoreDataStorable, U>(
+        data: T,
+        uniqueKeyPath: KeyPath<T, U>
+    ) throws -> DuplicationStatus {
+        do {
+            let mo = try fetchMO(type: type(of: data))
+            let isContain = mo.contains { object in
+                object.value(forKey: uniqueKeyPath.propertyName) != nil
+            }
+            return isContain ? .duplicated : .none
         } catch {
             throw error
         }

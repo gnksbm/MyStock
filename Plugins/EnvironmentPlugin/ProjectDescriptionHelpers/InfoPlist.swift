@@ -43,7 +43,10 @@ public extension [String: InfoPlist.Value] {
                     "NSTemporaryExceptionAllowsInsecureWebSocketLoads": true
                 ]
             ]
-        ]
+        ],
+        "UIBackgroundModes": [
+            "remote-notification"
+        ],
     ]
     
     static let baseInfoPlist: Self = [
