@@ -45,6 +45,14 @@ public extension String {
         return accountNumber
     }
     
+    static var appKey: Self {
+        UserDefaults.standard.string(forKey: "appKey") ?? ""
+    }
+    
+    static var secretKey: Self {
+        UserDefaults.standard.string(forKey: "secretKey") ?? ""
+    }
+    
     static var seibroKey: Self {
         guard let seibroKey = Bundle.main.object(
             forInfoDictionaryKey: "SEIBRO_APP_KEY"

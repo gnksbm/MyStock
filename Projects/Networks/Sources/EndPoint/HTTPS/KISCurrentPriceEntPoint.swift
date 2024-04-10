@@ -22,14 +22,11 @@ public struct KISCurrentPriceEntPoint: KISEndPoint {
     public var query: [String : String]
     
     public var header: [String : String] {
-        let userDefaults = UserDefaults.standard
-        let appKey = userDefaults.string(forKey: "appKey") ?? ""
-        let secretKey = userDefaults.string(forKey: "secretKey") ?? ""
         return [
             "content-type": "application/json",
             "authorization": token,
-            "appkey": appKey,
-            "appsecret": secretKey,
+            "appkey": .appKey,
+            "appsecret": .secretKey,
             "tr_id": "FHKST01010100"
         ]
         

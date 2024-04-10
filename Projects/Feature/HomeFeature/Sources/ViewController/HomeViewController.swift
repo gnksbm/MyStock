@@ -164,7 +164,6 @@ extension HomeViewController {
                     heightDimension: .estimated(1/2)
                 )
             )
-            
             let group = NSCollectionLayoutGroup.vertical(
                 layoutSize: .init(
                     widthDimension: .fractionalWidth(1),

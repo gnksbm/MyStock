@@ -37,14 +37,11 @@ public struct KISCheckBalanceEndPoint: KISEndPoint {
     ) {
         self.investType = investType
         self.query = query
-        let userDefaults = UserDefaults.standard
-        let appKey = userDefaults.string(forKey: "appKey") ?? ""
-        let secretKey = userDefaults.string(forKey: "secretKey") ?? ""
         self.header = [
             "content-type": "application/json",
             "authorization": "Bearer \(authorization)", // "Bearer ..."
-            "appkey": appKey,
-            "appsecret": secretKey,
+            "appkey": .appKey,
+            "appsecret": .secretKey,
             "tr_id": investType.tradingID
         ]
     }
