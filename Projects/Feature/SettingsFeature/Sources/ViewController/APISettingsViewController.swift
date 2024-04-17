@@ -6,18 +6,39 @@
 //  Copyright © 2024 GeonSeobKim. All rights reserved.
 //
 
+import AVFoundation
 import UIKit
+import Vision
+
+import Core
+import FeatureDependency
 
 import RxSwift
 import RxCocoa
 
-final class APISettingsViewController: UIViewController {
-    private let viewModel = APISettingsViewModel()
+final class APISettingsViewController: BaseViewController {
+    private let viewModel: APISettingsViewModel
     
-    private let disposeBag = DisposeBag()
+    let apiKeyCaptureEvent = PublishSubject<APIKey>()
     
-    private let appKeyTextField = KISTextFieldView(title: "앱키")
-    private let secretKeyTextField = KISTextFieldView(title: "시크릿키")
+    private let qrCameraBtn: UIButton = {
+        let btn = UIButton()
+        btn.setImage(
+            .init(systemName: "qrcode.viewfinder"),
+            for: .normal
+        )
+        return btn
+    }()
+    
+    private let qrBtn: UIButton = {
+        let btn = UIButton()
+        btn.setImage(
+            .init(systemName: "qrcode"),
+            for: .normal
+        )
+        return btn
+    }()
+    
     private let saveBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         var titleContainer = AttributeContainer()
@@ -31,11 +52,22 @@ final class APISettingsViewController: UIViewController {
         return button
     }()
     
+    private let appKeyTextField = KISTextFieldView(title: "앱키")
+    private let secretKeyTextField = KISTextFieldView(title: "시크릿키")
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureNavigation()
         bind()
+    }
+    
+    init(viewModel: APISettingsViewModel) {
+        self.viewModel = viewModel
+        super.init()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     private func configureUI() {
@@ -74,76 +106,57 @@ final class APISettingsViewController: UIViewController {
     }
     
     private func configureNavigation() {
-        navigationItem.rightBarButtonItem = .init(customView: saveBtn)
+        navigationItem.setRightBarButtonItems(
+            [
+                .init(customView: saveBtn),
+                .init(customView: qrBtn),
+                .init(customView: qrCameraBtn),
+            ],
+            animated: false
+        )
     }
     
     private func bind() {
-        let tapGesture = UITapGestureRecognizer()
-        view.addGestureRecognizer(tapGesture)
-        tapGesture.rx.event
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vc, _ in
-                    vc.view.endEditing(true)
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        saveBtn.rx.tap
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vc, _ in
-                    guard let appKeyIsEmpty = vc.appKeyTextField.textField
-                        .text?.isEmpty,
-                          let secretKeyIsEmpty = vc.secretKeyTextField.textField
-                        .text?.isEmpty
-                    else { return }
-                    if appKeyIsEmpty || secretKeyIsEmpty {
-                        var message = ""
-                        if appKeyIsEmpty && secretKeyIsEmpty {
-                            message = "앱키와 시크릿키를 입력해주세요"
-                        } else if appKeyIsEmpty {
-                            message = "앱키를 입력해주세요"
-                        } else if secretKeyIsEmpty {
-                            message = "시크릿키를 입력해주세요"
-                        }
-                        let alertVC = UIAlertController(
-                            title: "잘못된 입력입니다",
-                            message: message,
-                            preferredStyle: .alert
-                        )
-                        let alertAction = UIAlertAction(
-                            title: "확인",
-                            style: .default
-                        )
-                        alertVC.addAction(alertAction)
-                        vc.present(
-                            alertVC,
-                            animated: true
-                        )
-                    }
-                }
-            )
-            .disposed(by: disposeBag)
-        
+        let appKeyTextEvent = appKeyTextField.textField.rx
+            .text
+            .asObservable()
+        let secretKeyTextEvent = secretKeyTextField.textField.rx
+            .text
+            .asObservable()
         let output = viewModel.transform(
             input: .init(
                 viewWillAppearEvent: rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
                 ).map { _ in },
-                appKeyText: appKeyTextField.textChangeEvent,
-                secretKeyText: secretKeyTextField.textChangeEvent,
-                saveBtnTapEvent: saveBtn.rx.tap
-                    .withUnretained(self)
-                    .filter { vc, _ in
-                        guard let appKeyIsEmpty = vc.appKeyTextField.textField
-                            .text?.isEmpty,
-                              let secretKeyIsEmpty = vc.secretKeyTextField
-                            .textField.text?.isEmpty
-                        else { return false }
-                        return !appKeyIsEmpty && !secretKeyIsEmpty
+                qrReaderBtnEvent: qrCameraBtn.rx.tap.asObservable(),
+                qrImgBtnEvent: qrBtn.rx.tap
+                    .withLatestFrom(
+                        appKeyTextEvent
+                    )
+                    .withLatestFrom(secretKeyTextEvent) { a, b in
+                        (a, b)
                     }
-                    .map { _ in }
+                    .map { tuple in
+                        let (appKey, secretKey) = tuple
+                        return .init(
+                            appKey: appKey ?? "",
+                            secretKey: secretKey ?? ""
+                        )
+                    },
+                saveBtnTapEvent: saveBtn.rx.tap
+                    .withLatestFrom(
+                        appKeyTextEvent
+                    )
+                    .withLatestFrom(secretKeyTextEvent) { a, b in
+                        (a, b)
+                    }
+                    .map { tuple in
+                        let (appKey, secretKey) = tuple
+                        return .init(
+                            appKey: appKey ?? "",
+                            secretKey: secretKey ?? ""
+                        )
+                    }
             )
         )
         
@@ -154,5 +167,54 @@ final class APISettingsViewController: UIViewController {
         output.secretKey
             .bind(to: secretKeyTextField.textField.rx.text)
             .disposed(by: disposeBag)
+        
+        qrCameraBtn.rx.tap
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, _ in
+                    let qrCodeViewController = QRCodeReaderViewController()
+                    qrCodeViewController.delegateVC = self
+                    vc.present(
+                        qrCodeViewController,
+                        animated: true
+                    )
+                }
+                
+            )
+            .disposed(by: disposeBag)
+        
+        apiKeyCaptureEvent
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, apiKey in
+                    vc.appKeyTextField.textField.rx
+                        .text
+                        .onNext(apiKey.appKey)
+                    vc.secretKeyTextField.textField.rx
+                        .text
+                        .onNext(apiKey.secretKey)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        hideKeyboardOnTap()
     }
+    
+    private func hideKeyboardOnTap() {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, _ in
+                    vc.view.endEditing(true)
+                }
+            )
+            .disposed(by: disposeBag)
+    }
+}
+
+struct APIKey: Codable {
+    let appKey: String
+    let secretKey: String
 }

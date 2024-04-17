@@ -21,10 +21,12 @@ public final class DefaultSettingsCoordinator: SettingsCoordinator {
         )
     }
     
-    public func pushToAPIView() {
-        navigationController.pushViewController(
-            APISettingsViewController(),
-            animated: true
+    public func startApiSettingFlow() {
+        let apiSettingsCoordinator = DefaultAPISettingsCoordinator(
+            parent: self,
+            navigationController: navigationController
         )
+        childs.append(apiSettingsCoordinator)
+        apiSettingsCoordinator.start()
     }
 }

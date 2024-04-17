@@ -14,8 +14,6 @@ import RxSwift
 import RxCocoa
 
 final class KISTextFieldView: UIView {
-    let textChangeEvent = PublishSubject<String>()
-    
     private let disposeBag = DisposeBag()
     
     private let titleLabel: UILabel = {
@@ -25,6 +23,7 @@ final class KISTextFieldView: UIView {
     }()
     let textField: UITextField = {
         let textField = UITextField()
+        textField.isSecureTextEntry = true
         return textField
     }()
     
@@ -86,11 +85,6 @@ final class KISTextFieldView: UIView {
                     view.textField.becomeFirstResponder()
                 }
             )
-            .disposed(by: disposeBag)
-        
-        textField.rx.text
-            .orEmpty
-            .bind(to: textChangeEvent)
             .disposed(by: disposeBag)
         
         textField.rx.controlEvent(.editingDidBegin)

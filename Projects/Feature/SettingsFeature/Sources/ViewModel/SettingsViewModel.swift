@@ -20,7 +20,7 @@ public final class SettingsViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in
-                    viewModel.coordinator.pushToAPIView()
+                    viewModel.coordinator.startApiSettingFlow()
                 }
             )
             .disposed(by: disposeBag)

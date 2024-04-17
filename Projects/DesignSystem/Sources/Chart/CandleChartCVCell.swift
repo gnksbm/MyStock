@@ -54,11 +54,13 @@ public final class CandleChartCVCell: UICollectionViewCell {
         NSLayoutConstraint.activate([
             candleTailView.heightAnchor.constraint(
                 equalTo: contentView.heightAnchor,
-                multiplier: tailHeightRatio // (현재 최고가 - 현재 최저가) / (전체 최고가 - 전체 최저가)
+                multiplier: tailHeightRatio 
+                // (현재 최고가 - 현재 최저가) / (전체 최고가 - 전체 최저가)
             ),
             candleTailView.topAnchor.constraint(
                 equalTo: contentView.topAnchor,
-                constant: tailBodyRatio // (전체 최고가 - 종가) / (전체 최고가 - 전체 최저가)
+                constant: tailBodyRatio 
+                // (전체 최고가 - 종가) / (전체 최고가 - 전체 최저가)
             ),
             candleTailView.widthAnchor.constraint(
                 equalToConstant: 1

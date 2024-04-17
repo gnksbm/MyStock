@@ -67,7 +67,7 @@ public final class DefaultCoreDataService: CoreDataService {
     ) throws {
         do {
             let mo = try fetchMO(type: type(of: data))
-            var object = mo.first { object in
+            let object = mo.first { object in
                 object.value(forKey: uniqueKeyPath.propertyName) != nil
             }
             let mirror = Mirror(reflecting: data)

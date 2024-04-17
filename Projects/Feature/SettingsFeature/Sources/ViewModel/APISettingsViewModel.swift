@@ -16,7 +16,12 @@ import RxSwift
 
 final class APISettingsViewModel: ViewModel {
     @Injected(SettingsUseCase.self) private var useCase: SettingsUseCase
+    private let coordinator: APISettingsCoordinator
     private let disposeBag = DisposeBag()
+    
+    init(coordinator: APISettingsCoordinator) {
+        self.coordinator = coordinator
+    }
     
     func transform(input: Input) -> Output {
         let output = Output(
@@ -41,19 +46,54 @@ final class APISettingsViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        input.saveBtnTapEvent
-            .withLatestFrom(input.appKeyText)
-            .withLatestFrom(input.secretKeyText) { appKey, secretKey in
-                (appKey, secretKey)
-            }
+        input.qrImgBtnEvent
             .withUnretained(self)
             .subscribe(
-                onNext: { vm, tuple in
-                    let (appKey, secretKey) = tuple
-                    vm.useCase.saveAPIKey(
-                        appKey: appKey,
-                        secretKey: secretKey
+                onNext: { vm, apiKey in
+                    guard let data = apiKey.encode()
+                    else { return }
+                    vm.coordinator.presentWithImg(
+                        img: .generateQRImg(data: data)
                     )
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        input.qrReaderBtnEvent
+            .withUnretained(self)
+            .subscribe()
+            .disposed(by: disposeBag)
+        
+        input.saveBtnTapEvent
+            .throttle(
+                .seconds(1),
+                scheduler: MainScheduler.asyncInstance
+            )
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vm, apiKey in
+                    let appKey = apiKey.appKey
+                    let secretKey = apiKey.secretKey
+                    if !appKey.isEmpty && !secretKey.isEmpty {
+                        vm.useCase.saveAPIKey(
+                            appKey: appKey,
+                            secretKey: secretKey
+                        )
+                    } else {
+                        let title = "잘못된 입력입니다"
+                        var message = ""
+                        if appKey.isEmpty && secretKey.isEmpty {
+                            message = "앱키와 시크릿키를 입력해주세요"
+                        } else if appKey.isEmpty {
+                            message = "앱키를 입력해주세요"
+                        } else if secretKey.isEmpty {
+                            message = "시크릿키를 입력해주세요"
+                        }
+                        vm.coordinator.showAlert(
+                            title: title,
+                            message: message
+                        )
+                    }
                 }
             )
             .disposed(by: disposeBag)
@@ -65,9 +105,9 @@ final class APISettingsViewModel: ViewModel {
 extension APISettingsViewModel {
     struct Input { 
         let viewWillAppearEvent: Observable<Void>
-        let appKeyText: Observable<String>
-        let secretKeyText: Observable<String>
-        let saveBtnTapEvent: Observable<Void>
+        let qrReaderBtnEvent: Observable<Void>
+        let qrImgBtnEvent: Observable<APIKey>
+        let saveBtnTapEvent: Observable<APIKey>
     }
     struct Output { 
         let appKey: BehaviorSubject<String>

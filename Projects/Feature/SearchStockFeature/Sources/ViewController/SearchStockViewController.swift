@@ -39,7 +39,7 @@ final class SearchStockViewController: BaseViewController {
         configureUI()
         bind()
         configureNavigation()
-        setGestureForEndEdit()
+        hideKeyboardOnTapAndOrDrag()
     }
     
     private func configureUI() {
@@ -109,14 +109,18 @@ final class SearchStockViewController: BaseViewController {
         navigationItem.titleView = searchTextField
     }
     
-    private func setGestureForEndEdit() {
-        let tapGesture = UITapGestureRecognizer(
-            target: searchStocksTableView,
-            action: #selector(searchFieldEndEdit)
-        )
-    }
-    
-    @objc private func searchFieldEndEdit() {
-        searchTextField.endEditing(true)
+    private func hideKeyboardOnTapAndOrDrag() {
+        let tapGesture = UITapGestureRecognizer()
+        view.addGestureRecognizer(tapGesture)
+        tapGesture.rx.event
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, _ in
+                    vc.searchTextField.endEditing(true)
+                }
+            )
+            .disposed(by: disposeBag)
+        
+        searchStocksTableView.keyboardDismissMode = .onDrag
     }
 }

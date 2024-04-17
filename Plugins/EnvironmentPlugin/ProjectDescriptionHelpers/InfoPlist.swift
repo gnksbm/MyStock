@@ -47,6 +47,7 @@ public extension [String: InfoPlist.Value] {
         "UIBackgroundModes": [
             "remote-notification"
         ],
+        "NSCameraUsageDescription": "QR코드를 인식하려면 카메라 사용 권한이 필요합니다."
     ]
     
     static let baseInfoPlist: Self = [
