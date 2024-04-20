@@ -14,6 +14,7 @@ public final class DefaultAPISettingsCoordinator: APISettingsCoordinator {
     public var parent: Coordinator?
     public var childs: [Coordinator] = []
     public let navigationController: UINavigationController
+    private var qrDelegate: APISettingsViewModel?
     
     public init(
         parent: Coordinator?,
@@ -24,12 +25,26 @@ public final class DefaultAPISettingsCoordinator: APISettingsCoordinator {
     }
     
     public func start() {
+        let viewModel = APISettingsViewModel(coordinator: self)
+        qrDelegate = viewModel
         let apiSettingsViewController = APISettingsViewController(
-            viewModel: .init(coordinator: self)
+            viewModel: viewModel
         )
         navigationController.pushViewController(
             apiSettingsViewController,
             animated: true
         )
+    }
+}
+
+extension DefaultAPISettingsCoordinator {
+    public func startQRCodeReaderFlow() {
+        let qrCodeReaderCoordinator = DefaultQRCodeReaderCoordinator(
+            parent: self,
+            delegate: qrDelegate,
+            navigationController: navigationController
+        )
+        childs.append(qrCodeReaderCoordinator)
+        qrCodeReaderCoordinator.presentViewController()
     }
 }

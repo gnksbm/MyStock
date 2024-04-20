@@ -9,5 +9,5 @@
 import Foundation
 
 public protocol APISettingsCoordinator: Coordinator {
-    
+    func startQRCodeReaderFlow()
 }

@@ -13,8 +13,25 @@ import FeatureDependency
 import RxSwift
 
 final class QRCodeReaderViewModel: ViewModel {
+    private let coordinator: QRCodeReaderCoordinator
+    private let disposeBag = DisposeBag()
+    
+    init(coordinator: QRCodeReaderCoordinator) {
+        self.coordinator = coordinator
+    }
+    
+    deinit {
+        coordinator.finish()
+    }
+    
     func transform(input: Input) -> Output {
         let output = Output()
+        input.capturedData
+            .withUnretained(self)
+            .subscribe { vm, data in
+                vm.coordinator.finishWithData(data: data)
+            }
+            .disposed(by: disposeBag)
         return output
     }
 }

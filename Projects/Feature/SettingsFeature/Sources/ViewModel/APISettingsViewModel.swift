@@ -17,6 +17,8 @@ import RxSwift
 final class APISettingsViewModel: ViewModel {
     @Injected(SettingsUseCase.self) private var useCase: SettingsUseCase
     private let coordinator: APISettingsCoordinator
+    
+    private let capturedApiKey = PublishSubject<APIKey>()
     private let disposeBag = DisposeBag()
     
     init(coordinator: APISettingsCoordinator) {
@@ -46,7 +48,7 @@ final class APISettingsViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        input.qrImgBtnEvent
+        input.qrGenerateBtnEvent
             .withUnretained(self)
             .subscribe(
                 onNext: { vm, apiKey in
@@ -61,7 +63,11 @@ final class APISettingsViewModel: ViewModel {
         
         input.qrReaderBtnEvent
             .withUnretained(self)
-            .subscribe()
+            .subscribe(
+                onNext: { vm, _ in
+                    vm.coordinator.startQRCodeReaderFlow()
+                }
+            )
             .disposed(by: disposeBag)
         
         input.saveBtnTapEvent
@@ -98,6 +104,15 @@ final class APISettingsViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
+        capturedApiKey
+            .subscribe(
+                onNext: { apiKey in
+                    output.appKey.onNext(apiKey.appKey)
+                    output.secretKey.onNext(apiKey.secretKey)
+                }
+            )
+            .disposed(by: disposeBag)
+        
         return output
     }
 }
@@ -106,11 +121,19 @@ extension APISettingsViewModel {
     struct Input { 
         let viewWillAppearEvent: Observable<Void>
         let qrReaderBtnEvent: Observable<Void>
-        let qrImgBtnEvent: Observable<APIKey>
+        let qrGenerateBtnEvent: Observable<APIKey>
         let saveBtnTapEvent: Observable<APIKey>
     }
     struct Output { 
         let appKey: BehaviorSubject<String>
         let secretKey: BehaviorSubject<String>
+    }
+}
+
+extension APISettingsViewModel: QRCodeReaderCoordinatorFinishDelegate {
+    func capturedData(data: Data) {
+        guard let apiKey = try? data.decode(type: APIKey.self)
+        else { return }
+        capturedApiKey.onNext(apiKey)
     }
 }

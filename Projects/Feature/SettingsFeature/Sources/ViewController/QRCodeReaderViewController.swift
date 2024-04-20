@@ -157,16 +157,10 @@ extension QRCodeReaderViewController: AVCaptureMetadataOutputObjectsDelegate {
            let readableObject = metadataObject
             as? AVMetadataMachineReadableCodeObject,
            let string = readableObject.stringValue {
-            do {
-                guard let data = string.data(using: .utf8)
-                else { return }
-                capturedData.onNext(data)
-                let apiKey = try data.decode(type: APIKey.self)
-                delegateVC?.apiKeyCaptureEvent.onNext(apiKey)
-                dismiss(animated: true)
-            } catch {
-                print(error.localizedDescription)
-            }
+            guard let data = string.data(using: .utf8)
+            else { return }
+            capturedData.onNext(data)
+            dismiss(animated: true)
         }
     }
 }

@@ -21,7 +21,7 @@ final class APISettingsViewController: BaseViewController {
     
     let apiKeyCaptureEvent = PublishSubject<APIKey>()
     
-    private let qrCameraBtn: UIButton = {
+    private let qrReaderBtn: UIButton = {
         let btn = UIButton()
         btn.setImage(
             .init(systemName: "qrcode.viewfinder"),
@@ -30,7 +30,7 @@ final class APISettingsViewController: BaseViewController {
         return btn
     }()
     
-    private let qrBtn: UIButton = {
+    private let qrGenerateBtn: UIButton = {
         let btn = UIButton()
         btn.setImage(
             .init(systemName: "qrcode"),
@@ -109,8 +109,8 @@ final class APISettingsViewController: BaseViewController {
         navigationItem.setRightBarButtonItems(
             [
                 .init(customView: saveBtn),
-                .init(customView: qrBtn),
-                .init(customView: qrCameraBtn),
+                .init(customView: qrGenerateBtn),
+                .init(customView: qrReaderBtn),
             ],
             animated: false
         )
@@ -128,33 +128,33 @@ final class APISettingsViewController: BaseViewController {
                 viewWillAppearEvent: rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
                 ).map { _ in },
-                qrReaderBtnEvent: qrCameraBtn.rx.tap.asObservable(),
-                qrImgBtnEvent: qrBtn.rx.tap
-                    .withLatestFrom(
-                        appKeyTextEvent
-                    )
-                    .withLatestFrom(secretKeyTextEvent) { a, b in
-                        (a, b)
+                qrReaderBtnEvent: qrReaderBtn.rx.tap.asObservable(),
+                qrGenerateBtnEvent: qrGenerateBtn.rx.tap
+                    .flatMap { _ in
+                        Observable.combineLatest(
+                            appKeyTextEvent,
+                            secretKeyTextEvent
+                        )
                     }
                     .map { tuple in
                         let (appKey, secretKey) = tuple
                         return .init(
-                            appKey: appKey ?? "",
-                            secretKey: secretKey ?? ""
+                            appKey: appKey ?? "값 없음",
+                            secretKey: secretKey ?? "값 없음"
                         )
                     },
                 saveBtnTapEvent: saveBtn.rx.tap
-                    .withLatestFrom(
-                        appKeyTextEvent
-                    )
-                    .withLatestFrom(secretKeyTextEvent) { a, b in
-                        (a, b)
+                    .flatMap { _ in
+                        Observable.combineLatest(
+                            appKeyTextEvent,
+                            secretKeyTextEvent
+                        )
                     }
                     .map { tuple in
                         let (appKey, secretKey) = tuple
                         return .init(
-                            appKey: appKey ?? "",
-                            secretKey: secretKey ?? ""
+                            appKey: appKey ?? "값 없음",
+                            secretKey: secretKey ?? "값 없음"
                         )
                     }
             )
@@ -166,21 +166,6 @@ final class APISettingsViewController: BaseViewController {
         
         output.secretKey
             .bind(to: secretKeyTextField.textField.rx.text)
-            .disposed(by: disposeBag)
-        
-        qrCameraBtn.rx.tap
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vc, _ in
-                    let qrCodeViewController = QRCodeReaderViewController()
-                    qrCodeViewController.delegateVC = self
-                    vc.present(
-                        qrCodeViewController,
-                        animated: true
-                    )
-                }
-                
-            )
             .disposed(by: disposeBag)
         
         apiKeyCaptureEvent
