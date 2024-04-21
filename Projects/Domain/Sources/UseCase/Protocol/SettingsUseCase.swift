@@ -11,8 +11,10 @@ import Foundation
 import RxSwift
 
 public protocol SettingsUseCase {
-    func fetchAPIKey() -> Observable<(appKey: String, secretKey: String)>
-    func saveAPIKey(
+    func fetchAPIInfo(
+    ) -> Observable<(accountNum: String, appKey: String, secretKey: String)>
+    func saveAPIInfo(
+        accountNum: String,
         appKey: String,
         secretKey: String
     )

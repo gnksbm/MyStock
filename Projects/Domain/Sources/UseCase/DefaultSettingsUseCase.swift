@@ -13,26 +13,33 @@ import RxSwift
 public final class DefaultSettingsUseCase: SettingsUseCase {
     public init() { }
     
-    public func fetchAPIKey(
-    ) -> Observable<(appKey: String, secretKey: String)> {
+    public func fetchAPIInfo(
+    ) -> Observable<(accountNum: String, appKey: String, secretKey: String)> {
         .create { observer in
             let disposable = Disposables.create()
             let userDefaults = UserDefaults.standard
-            guard let appKey = userDefaults.string(forKey: "appKey"),
-            let secretKey = userDefaults.string(forKey: "secretKey")
+            guard let accountNum = userDefaults.string(forKey: "accountNum"),
+                  let appKey = userDefaults.string(forKey: "appKey"),
+                  let secretKey = userDefaults.string(forKey: "secretKey")
             else {
                 return disposable
             }
-            observer.onNext((appKey, secretKey))
+            observer.onNext((accountNum, appKey, secretKey))
+            observer.onCompleted()
             return disposable
         }
     }
     
-    public func saveAPIKey(
+    public func saveAPIInfo(
+        accountNum: String,
         appKey: String,
         secretKey: String
     ) {
         let userDefaults = UserDefaults.standard
+        userDefaults.setValue(
+            accountNum,
+            forKey: "accountNum"
+        )
         userDefaults.setValue(
             appKey,
             forKey: "appKey"

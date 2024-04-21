@@ -52,8 +52,21 @@ final class APISettingsViewController: BaseViewController {
         return button
     }()
     
+    private let accountNumTextField = KISTextFieldView(title: "계좌번호")
     private let appKeyTextField = KISTextFieldView(title: "앱키")
     private let secretKeyTextField = KISTextFieldView(title: "시크릿키")
+    private lazy var stackView: UIStackView = {
+        let stackView = UIStackView(
+            arrangedSubviews: [
+                accountNumTextField,
+                appKeyTextField,
+                secretKeyTextField,
+            ]
+        )
+        stackView.spacing = 10
+        stackView.axis = .vertical
+        return stackView
+    }()
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
@@ -71,7 +84,7 @@ final class APISettingsViewController: BaseViewController {
     }
     
     private func configureUI() {
-        [appKeyTextField, secretKeyTextField].forEach {
+        [stackView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
         }
@@ -79,27 +92,14 @@ final class APISettingsViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         NSLayoutConstraint.activate([
-            appKeyTextField.bottomAnchor.constraint(
-                equalTo: safeArea.centerYAnchor,
-                constant: -5
+            stackView.centerYAnchor.constraint(
+                equalTo: safeArea.centerYAnchor
             ),
-            appKeyTextField.widthAnchor.constraint(
+            stackView.widthAnchor.constraint(
                 equalTo: safeArea.widthAnchor,
                 multiplier: 0.8
             ),
-            appKeyTextField.centerXAnchor.constraint(
-                equalTo: safeArea.centerXAnchor
-            ),
-            
-            secretKeyTextField.topAnchor.constraint(
-                equalTo: safeArea.centerYAnchor,
-                constant: 5
-            ),
-            secretKeyTextField.widthAnchor.constraint(
-                equalTo: safeArea.widthAnchor,
-                multiplier: 0.8
-            ),
-            secretKeyTextField.centerXAnchor.constraint(
+            stackView.centerXAnchor.constraint(
                 equalTo: safeArea.centerXAnchor
             ),
         ])
@@ -117,11 +117,14 @@ final class APISettingsViewController: BaseViewController {
     }
     
     private func bind() {
-        let appKeyTextEvent = appKeyTextField.textField.rx
-            .text
+        let accountNumTextEvent = accountNumTextField.textField.rx.text
+            .orEmpty
             .asObservable()
-        let secretKeyTextEvent = secretKeyTextField.textField.rx
-            .text
+        let appKeyTextEvent = appKeyTextField.textField.rx.text
+            .orEmpty
+            .asObservable()
+        let secretKeyTextEvent = secretKeyTextField.textField.rx.text
+            .orEmpty
             .asObservable()
         let output = viewModel.transform(
             input: .init(
@@ -139,27 +142,34 @@ final class APISettingsViewController: BaseViewController {
                     .map { tuple in
                         let (appKey, secretKey) = tuple
                         return .init(
-                            appKey: appKey ?? "값 없음",
-                            secretKey: secretKey ?? "값 없음"
+                            appKey: appKey,
+                            secretKey: secretKey
                         )
                     },
                 saveBtnTapEvent: saveBtn.rx.tap
                     .flatMap { _ in
                         Observable.combineLatest(
+                            accountNumTextEvent,
                             appKeyTextEvent,
                             secretKeyTextEvent
                         )
                     }
                     .map { tuple in
-                        let (appKey, secretKey) = tuple
-                        return .init(
-                            appKey: appKey ?? "값 없음",
-                            secretKey: secretKey ?? "값 없음"
+                        let (accountNum, appKey, secretKey) = tuple
+                        return (
+                            accountNum,
+                            .init(
+                                appKey: appKey,
+                                secretKey: secretKey
+                            )
                         )
                     }
             )
         )
         
+        output.accountNum
+            .bind(to: accountNumTextField.textField.rx.text)
+            .disposed(by: disposeBag)
         output.appKey
             .bind(to: appKeyTextField.textField.rx.text)
             .disposed(by: disposeBag)

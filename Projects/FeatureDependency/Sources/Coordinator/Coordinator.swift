@@ -22,6 +22,11 @@ public extension Coordinator {
         parent?.childDidFinish(self)
     }
     
+    func finishFlow() {
+        parent?.childDidFinish(self)
+        navigationController.popViewController(animated: true)
+    }
+    
     func startChildCoordinator(_ child: Coordinator) {
         childs.append(child)
         child.start()

@@ -27,6 +27,7 @@ final class APISettingsViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         let output = Output(
+            accountNum: .init(value: ""),
             appKey: .init(value: ""),
             secretKey: .init(value: "")
         )
@@ -36,10 +37,11 @@ final class APISettingsViewModel: ViewModel {
             .withUnretained(self)
             .subscribe(
                 onNext: { vm, _ in
-                    vm.useCase.fetchAPIKey()
+                    vm.useCase.fetchAPIInfo()
                         .subscribe(
-                            onNext: { apiKey, secretKey in
-                                output.appKey.onNext(apiKey)
+                            onNext: { (accountNum, appKey, secretKey) in
+                                output.accountNum.onNext(accountNum)
+                                output.appKey.onNext(appKey)
                                 output.secretKey.onNext(secretKey)
                             }
                         )
@@ -77,19 +79,24 @@ final class APISettingsViewModel: ViewModel {
             )
             .withUnretained(self)
             .subscribe(
-                onNext: { vm, apiKey in
+                onNext: { vm, tuple in
+                    let (accountNum, apiKey) = tuple
                     let appKey = apiKey.appKey
                     let secretKey = apiKey.secretKey
-                    if !appKey.isEmpty && !secretKey.isEmpty {
-                        vm.useCase.saveAPIKey(
+                    if !accountNum.isEmpty &&
+                        !appKey.isEmpty &&
+                        !secretKey.isEmpty {
+                        vm.useCase.saveAPIInfo(
+                            accountNum: accountNum,
                             appKey: appKey,
                             secretKey: secretKey
                         )
+                        vm.coordinator.finishFlow()
                     } else {
                         let title = "잘못된 입력입니다"
                         var message = ""
-                        if appKey.isEmpty && secretKey.isEmpty {
-                            message = "앱키와 시크릿키를 입력해주세요"
+                        if accountNum.isEmpty {
+                            message = "계좌번호를 입력해주세요"
                         } else if appKey.isEmpty {
                             message = "앱키를 입력해주세요"
                         } else if secretKey.isEmpty {
@@ -122,9 +129,10 @@ extension APISettingsViewModel {
         let viewWillAppearEvent: Observable<Void>
         let qrReaderBtnEvent: Observable<Void>
         let qrGenerateBtnEvent: Observable<APIKey>
-        let saveBtnTapEvent: Observable<APIKey>
+        let saveBtnTapEvent: Observable<(String, APIKey)>
     }
     struct Output { 
+        let accountNum: BehaviorSubject<String>
         let appKey: BehaviorSubject<String>
         let secretKey: BehaviorSubject<String>
     }

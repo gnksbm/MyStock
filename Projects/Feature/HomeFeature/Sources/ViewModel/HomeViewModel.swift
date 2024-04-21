@@ -25,6 +25,10 @@ public final class HomeViewModel: ViewModel {
         )
         
         input.viewWillAppear
+            .throttle(
+                .seconds(10),
+                scheduler: MainScheduler.asyncInstance
+            )
             .withUnretained(self)
             .subscribe(
                 onNext: { viewModel, _ in

@@ -38,11 +38,7 @@ public extension String {
     }
     
     static var accountNumber: Self {
-        guard let accountNumber = Bundle.main.object(
-            forInfoDictionaryKey: "ACCOUNT_NUMBER"
-        ) as? String
-        else { fatalError("실패") }
-        return accountNumber
+        UserDefaults.standard.string(forKey: "accountNum") ?? ""
     }
     
     static var appKey: Self {

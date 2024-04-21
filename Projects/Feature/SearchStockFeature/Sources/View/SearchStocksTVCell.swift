@@ -11,7 +11,11 @@ import UIKit
 import Domain
 import DesignSystem
 
+import RxSwift
+
 final class SearchStocksTVCell: UITableViewCell {
+    public var disposeBag = DisposeBag()
+    
     private let tickerLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
@@ -38,6 +42,7 @@ final class SearchStocksTVCell: UITableViewCell {
         tickerLabel.text = ""
         nameLabel.text = ""
         contentView.layer.borderColor = UIColor.black.cgColor
+        disposeBag = .init()
     }
     
     func prepare(response: SearchStocksResponse) {

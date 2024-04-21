@@ -24,6 +24,7 @@ final class KISTextFieldView: UIView {
     let textField: UITextField = {
         let textField = UITextField()
         textField.isSecureTextEntry = true
+        textField.textColor = .white
         return textField
     }()
     
@@ -94,6 +95,7 @@ final class KISTextFieldView: UIView {
                     let accentColor = DesignSystemAsset.accentColor.color
                     view.backgroundColor = .white
                     view.titleLabel.textColor = accentColor
+                    view.textField.textColor = accentColor
                 }
             )
             .disposed(by: disposeBag)
@@ -105,6 +107,7 @@ final class KISTextFieldView: UIView {
                     let accentColor = DesignSystemAsset.accentColor.color
                     view.backgroundColor = accentColor
                     view.titleLabel.textColor = .white
+                    view.textField.textColor = .white
                 }
             )
             .disposed(by: disposeBag)

@@ -8,7 +8,11 @@
 
 import UIKit
 
+import RxSwift
+
 public final class StockInfoTVCell: UITableViewCell {
+    public var disposeBag = DisposeBag()
+    
     private let tickerLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 20)
@@ -37,6 +41,7 @@ public final class StockInfoTVCell: UITableViewCell {
         tickerLabel.text = ""
         nameLabel.text = ""
         contentView.layer.borderColor = UIColor.black.cgColor
+        disposeBag = .init()
     }
     
     public func updateUI(ticker: String, name: String) {

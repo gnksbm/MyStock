@@ -11,7 +11,11 @@ import UIKit
 import Domain
 import DesignSystem
 
+import RxSwift
+
 final class HomeStockCVCell: UICollectionViewCell {
+    public var disposeBag = DisposeBag()
+    
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 24)
@@ -58,6 +62,7 @@ final class HomeStockCVCell: UICollectionViewCell {
             $0.text = ""
             $0.textColor = foregroundColor
         }
+        disposeBag = .init()
     }
     
     func updateUI(item: KISCheckBalanceResponse) {

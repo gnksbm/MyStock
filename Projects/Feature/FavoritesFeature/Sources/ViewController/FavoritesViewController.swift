@@ -114,7 +114,7 @@ public final class FavoritesViewController: UIViewController {
             tapGesture.rx.event
                 .map { _ in item }
                 .bind(to: self.stockCellTapEvent)
-                .disposed(by: self.disposeBag)
+                .disposed(by: cell.disposeBag)
             return cell
         }
         snapshot = .init()
