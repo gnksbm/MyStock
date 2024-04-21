@@ -32,12 +32,12 @@ public final class DefualtKISRealTimePriceRepository
             investType: request.investType,
             marketType: request.marketType
         )
-        
-        wsService.open(endPoint: endPoint)
         guard let data = endPoint.requestJson else {
             print("\nBad Request\n")
             return
         }
+        
+        wsService.open(endPoint: endPoint)
         wsService.send(data)
         
         wsService.receivedMessage

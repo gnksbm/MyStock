@@ -21,7 +21,7 @@ public final class DefaultNetworkService: NetworkService {
                 return Disposables.create()
             }
             
-            URLSession.shared.dataTask(
+            let task = URLSession.shared.dataTask(
                 with: urlRequest
             ) { data, response, error in
                 if let error {
@@ -48,9 +48,12 @@ public final class DefaultNetworkService: NetworkService {
                 }
                 observer.onNext(data)
                 observer.onCompleted()
-            }.resume()
+            }
+            task.resume()
             
-            return Disposables.create()
+            return Disposables.create {
+                task.cancel()
+            }
         }
     }
 }

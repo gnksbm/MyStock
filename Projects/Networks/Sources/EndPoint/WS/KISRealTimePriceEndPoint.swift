@@ -133,8 +133,6 @@ public extension KISRealTimePriceEndPoint {
     struct RequestJson: Encodable {
         let header: Header
         let body: Body
-//        let header: [String: String]
-//        let body: [String: String]
     }
     
     struct Header: Encodable {
