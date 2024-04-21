@@ -9,7 +9,7 @@ import RxRelay
 
 final class ChartViewModel: ViewModel {
     private let coordinator: Coordinator
-    @Injected(HomeChartUseCase.self) private var useCase: HomeChartUseCase
+    private let useCase: HomeChartUseCase
     
     let title: String
     private let ticker: String
@@ -18,11 +18,13 @@ final class ChartViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     
     init(
+        useCase: HomeChartUseCase,
         title: String,
         ticker: String,
         marketType: MarketType,
         coordinator: Coordinator
     ) {
+        self.useCase = useCase
         self.title = title
         self.ticker = ticker
         self.marketType = marketType

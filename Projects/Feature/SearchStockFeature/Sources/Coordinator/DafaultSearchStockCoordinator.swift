@@ -32,6 +32,7 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
     public func start() {
         let searchStocksViewController = SearchStockViewController(
             viewModel: SearchStockViewModel(
+                useCase: DefaultSearchStocksUseCase(),
                 searchResult: searchResult,
                 coordinator: self
             )

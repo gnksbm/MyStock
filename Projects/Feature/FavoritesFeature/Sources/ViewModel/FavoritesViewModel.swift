@@ -9,11 +9,15 @@ import RxCocoa
 
 public final class FavoritesViewModel: ViewModel {
     private let coordinator: FavoritesCoordinator
-    @Injected(FavoritesUseCase.self) var useCase: FavoritesUseCase
+    private let useCase: FavoritesUseCase
     
     private let disposeBag = DisposeBag()
     
-    public init(coordinator: FavoritesCoordinator) {
+    public init(
+        useCase: FavoritesUseCase,
+        coordinator: FavoritesCoordinator
+    ) {
+        self.useCase = useCase
         self.coordinator = coordinator
     }
     

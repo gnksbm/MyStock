@@ -8,24 +8,22 @@
 
 import Foundation
 
+import Core
+
 import RxSwift
 
 public final class DefaultFavoritesUseCase: FavoritesUseCase {
-    private let favoritesStockRepository: FavoritesStockRepository
-    private let searchStocksRepository: SearchStocksRepository
+    @Injected(FavoritesStockRepository.self)
+    private var favoritesStockRepository: FavoritesStockRepository
+    @Injected(SearchStocksRepository.self)
+    private var searchStocksRepository: SearchStocksRepository
 
     public let favoritesStocks = BehaviorSubject<[SearchStocksResponse]>(
         value: []
     )
     private let disposeBag = DisposeBag()
 
-    public init(
-        favoritesStockRepository: FavoritesStockRepository,
-        searchStocksRepository: SearchStocksRepository
-    ) {
-        self.favoritesStockRepository = favoritesStockRepository
-        self.searchStocksRepository = searchStocksRepository
-    }
+    public init() { }
     
     public func fetchFavorites() {
         favoritesStockRepository.fetchFavorites()

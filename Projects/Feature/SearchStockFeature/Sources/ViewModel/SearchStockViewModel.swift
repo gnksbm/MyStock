@@ -18,14 +18,16 @@ import RxRelay
 final class SearchStockViewModel: ViewModel {
     private let searchResult: SearchResult
     private let coordinator: SearchStockCoordinator
-    @Injected(SearchStocksUseCase.self) private var useCase: SearchStocksUseCase
+    private let useCase: SearchStocksUseCase
     
     private let disposeBag = DisposeBag()
     
     init(
+        useCase: SearchStocksUseCase,
         searchResult: SearchResult,
         coordinator: SearchStockCoordinator
     ) {
+        self.useCase = useCase
         self.searchResult = searchResult
         self.coordinator = coordinator
     }

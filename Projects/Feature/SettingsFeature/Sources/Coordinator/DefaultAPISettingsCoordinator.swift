@@ -8,6 +8,7 @@
 
 import UIKit
 
+import Domain
 import FeatureDependency
 
 public final class DefaultAPISettingsCoordinator: APISettingsCoordinator {
@@ -25,7 +26,10 @@ public final class DefaultAPISettingsCoordinator: APISettingsCoordinator {
     }
     
     public func start() {
-        let viewModel = APISettingsViewModel(coordinator: self)
+        let viewModel = APISettingsViewModel(
+            useCase: DefaultSettingsUseCase(),
+            coordinator: self
+        )
         qrDelegate = viewModel
         let apiSettingsViewController = APISettingsViewController(
             viewModel: viewModel

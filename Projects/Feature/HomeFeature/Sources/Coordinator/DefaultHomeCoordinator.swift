@@ -27,7 +27,10 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
     
     public func start() {
         let homeViewController = HomeViewController(
-            viewModel: HomeViewModel(coordinator: self)
+            viewModel: HomeViewModel(
+                useCase: DefaultHomeUseCase(),
+                coordinator: self
+            )
         )
         navigationController.setViewControllers(
             [homeViewController],

@@ -26,6 +26,7 @@ public final class DefaultChartCoordinator: ChartCoordinator {
     public func start() {
         let chartViewController = ChartViewController(
             viewModel: ChartViewModel(
+                useCase: DefaultHomeChartPriceUseCase(),
                 title: title,
                 ticker: ticker,
                 marketType: marketType,

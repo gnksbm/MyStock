@@ -15,13 +15,17 @@ import FeatureDependency
 import RxSwift
 
 final class APISettingsViewModel: ViewModel {
-    @Injected(SettingsUseCase.self) private var useCase: SettingsUseCase
+    private let useCase: SettingsUseCase
     private let coordinator: APISettingsCoordinator
     
     private let capturedApiKey = PublishSubject<APIKey>()
     private let disposeBag = DisposeBag()
     
-    init(coordinator: APISettingsCoordinator) {
+    init(
+        useCase: SettingsUseCase,
+        coordinator: APISettingsCoordinator
+    ) {
+        self.useCase = useCase
         self.coordinator = coordinator
     }
     

@@ -8,23 +8,21 @@
 
 import Foundation
 
+import Core
+
 import RxSwift
 
 public final class DefaultHomeUseCase: HomeUseCase {
-    private let oAuthRepository: KISOAuthRepository
-    private let checkBalanceRepository: KISCheckBalanceRepository
+    @Injected(KISOAuthRepository.self)
+    private var oAuthRepository: KISOAuthRepository
+    @Injected(KISCheckBalanceRepository.self)
+    private var checkBalanceRepository: KISCheckBalanceRepository
     private let disposeBag = DisposeBag()
     
     public let balanceInfo = PublishSubject<[KISCheckBalanceResponse]>()
     public let collateralRatio = PublishSubject<Double>()
     
-    public init(
-        oAuthRepository: KISOAuthRepository,
-        checkBalanceRepository: KISCheckBalanceRepository
-    ) {
-        self.oAuthRepository = oAuthRepository
-        self.checkBalanceRepository = checkBalanceRepository
-    }
+    public init() { }
     
     public func checkAccount(
         accountNumber: String

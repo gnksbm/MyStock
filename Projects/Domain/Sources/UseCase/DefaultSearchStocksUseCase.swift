@@ -8,22 +8,20 @@
 
 import Foundation
 
+import Core
+
 import RxSwift
 
 public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
-    private let searchStocksRepository: SearchStocksRepository
-    private let favoritesStockRepository: FavoritesStockRepository
+    @Injected(SearchStocksRepository.self)
+    private var searchStocksRepository: SearchStocksRepository
+    @Injected(FavoritesStockRepository.self)
+    private var favoritesStockRepository: FavoritesStockRepository
     
     public let searchResult = PublishSubject<[SearchStocksResponse]>()
     private let disposeBag = DisposeBag()
     
-    public init(
-        searchStocksRepository: SearchStocksRepository,
-        favoritesStockRepository: FavoritesStockRepository
-    ) {
-        self.searchStocksRepository = searchStocksRepository
-        self.favoritesStockRepository = favoritesStockRepository
-    }
+    public init() { }
     
     public func searchStocks(searchTerm: String) {
         searchStocksRepository.searchStocks(searchTerm: searchTerm)

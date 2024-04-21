@@ -16,20 +16,15 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
     public var chartInfo = PublishSubject<[Candle]>()
     public var realTimePrice = BehaviorSubject<String>(value: "")
     
-    private let oAuthRepository: KISOAuthRepository
-    private let chartPriceRepository: KISChartPriceRepository
-    private let realTimePriceRepository: KISRealTimePriceRepository
+    @Injected(KISOAuthRepository.self)
+    private var oAuthRepository: KISOAuthRepository
+    @Injected(KISChartPriceRepository.self)
+    private var chartPriceRepository: KISChartPriceRepository
+    @Injected(KISRealTimePriceRepository.self)
+    private var realTimePriceRepository: KISRealTimePriceRepository
     private let disposeBag = DisposeBag()
     
-    public init(
-        oAuthRepository: KISOAuthRepository,
-        chartPriceRepository: KISChartPriceRepository,
-        realTimePriceRepository: KISRealTimePriceRepository
-    ) {
-        self.oAuthRepository = oAuthRepository
-        self.chartPriceRepository = chartPriceRepository
-        self.realTimePriceRepository = realTimePriceRepository
-    }
+    public init() { }
     
     public func fetchRealtimeChart(
         period: PeriodType,

@@ -8,13 +8,17 @@ import RxSwift
 import RxRelay
 
 public final class HomeViewModel: ViewModel {
-    @Injected(HomeUseCase.self) private var useCase: HomeUseCase
+    private let useCase: HomeUseCase
     
     private let disposeBag = DisposeBag()
     
     let coordinator: HomeCoordinator
     
-    public init(coordinator: HomeCoordinator) {
+    public init(
+        useCase: HomeUseCase,
+        coordinator: HomeCoordinator
+    ) {
+        self.useCase = useCase
         self.coordinator = coordinator
     }
     
