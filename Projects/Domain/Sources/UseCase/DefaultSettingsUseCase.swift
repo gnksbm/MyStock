@@ -14,7 +14,7 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
     public init() { }
     
     public func fetchAPIInfo(
-    ) -> Observable<(accountNum: String, appKey: String, secretKey: String)> {
+    ) -> Observable<KISUserInfo> {
         .create { observer in
             let disposable = Disposables.create()
             let userDefaults = UserDefaults.standard
@@ -24,28 +24,32 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
             else {
                 return disposable
             }
-            observer.onNext((accountNum, appKey, secretKey))
+            observer.onNext(
+                .init(
+                    accountNum: accountNum,
+                    appKey: appKey,
+                    secretKey: secretKey
+                )
+            )
             observer.onCompleted()
             return disposable
         }
     }
     
     public func saveAPIInfo(
-        accountNum: String,
-        appKey: String,
-        secretKey: String
+        userInfo: KISUserInfo
     ) {
         let userDefaults = UserDefaults.standard
         userDefaults.setValue(
-            accountNum,
+            userInfo.accountNum,
             forKey: "accountNum"
         )
         userDefaults.setValue(
-            appKey,
+            userInfo.appKey,
             forKey: "appKey"
         )
         userDefaults.setValue(
-            secretKey,
+            userInfo.secretKey,
             forKey: "secretKey"
         )
     }

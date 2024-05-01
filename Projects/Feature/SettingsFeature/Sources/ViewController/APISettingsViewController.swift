@@ -11,6 +11,7 @@ import UIKit
 import Vision
 
 import Core
+import Domain
 import FeatureDependency
 
 import RxSwift
@@ -19,7 +20,7 @@ import RxCocoa
 final class APISettingsViewController: BaseViewController {
     private let viewModel: APISettingsViewModel
     
-    let apiKeyCaptureEvent = PublishSubject<APIKey>()
+    let apiKeyCaptureEvent = PublishSubject<KISUserInfo>()
     
     private let qrReaderBtn: UIButton = {
         let btn = UIButton()
@@ -135,13 +136,15 @@ final class APISettingsViewController: BaseViewController {
                 qrGenerateBtnEvent: qrGenerateBtn.rx.tap
                     .flatMap { _ in
                         Observable.combineLatest(
+                            accountNumTextEvent,
                             appKeyTextEvent,
                             secretKeyTextEvent
                         )
                     }
                     .map { tuple in
-                        let (appKey, secretKey) = tuple
+                        let (accountNum, appKey, secretKey) = tuple
                         return .init(
+                            accountNum: accountNum,
                             appKey: appKey,
                             secretKey: secretKey
                         )
@@ -156,12 +159,10 @@ final class APISettingsViewController: BaseViewController {
                     }
                     .map { tuple in
                         let (accountNum, appKey, secretKey) = tuple
-                        return (
-                            accountNum,
-                            .init(
-                                appKey: appKey,
-                                secretKey: secretKey
-                            )
+                        return .init(
+                            accountNum: accountNum,
+                            appKey: appKey,
+                            secretKey: secretKey
                         )
                     }
             )
@@ -207,9 +208,4 @@ final class APISettingsViewController: BaseViewController {
             )
             .disposed(by: disposeBag)
     }
-}
-
-struct APIKey: Codable {
-    let appKey: String
-    let secretKey: String
 }

@@ -18,7 +18,7 @@ final class APISettingsViewModel: ViewModel {
     private let useCase: SettingsUseCase
     private let coordinator: APISettingsCoordinator
     
-    private let capturedApiKey = PublishSubject<APIKey>()
+    private let capturedApiKey = PublishSubject<KISUserInfo>()
     private let disposeBag = DisposeBag()
     
     init(
@@ -43,10 +43,10 @@ final class APISettingsViewModel: ViewModel {
                 onNext: { vm, _ in
                     vm.useCase.fetchAPIInfo()
                         .subscribe(
-                            onNext: { (accountNum, appKey, secretKey) in
-                                output.accountNum.onNext(accountNum)
-                                output.appKey.onNext(appKey)
-                                output.secretKey.onNext(secretKey)
+                            onNext: { userInfo in
+                                output.accountNum.onNext(userInfo.accountNum)
+                                output.appKey.onNext(userInfo.appKey)
+                                output.secretKey.onNext(userInfo.secretKey)
                             }
                         )
                         .disposed(by: vm.disposeBag)
@@ -83,17 +83,19 @@ final class APISettingsViewModel: ViewModel {
             )
             .withUnretained(self)
             .subscribe(
-                onNext: { vm, tuple in
-                    let (accountNum, apiKey) = tuple
-                    let appKey = apiKey.appKey
-                    let secretKey = apiKey.secretKey
+                onNext: { vm, userInfo in
+                    let accountNum = userInfo.accountNum
+                    let appKey = userInfo.appKey
+                    let secretKey = userInfo.secretKey
                     if !accountNum.isEmpty &&
                         !appKey.isEmpty &&
                         !secretKey.isEmpty {
                         vm.useCase.saveAPIInfo(
-                            accountNum: accountNum,
-                            appKey: appKey,
-                            secretKey: secretKey
+                            userInfo: .init(
+                                accountNum: accountNum,
+                                appKey: appKey,
+                                secretKey: secretKey
+                            )
                         )
                         vm.coordinator.finishFlow()
                     } else {
@@ -132,8 +134,8 @@ extension APISettingsViewModel {
     struct Input { 
         let viewWillAppearEvent: Observable<Void>
         let qrReaderBtnEvent: Observable<Void>
-        let qrGenerateBtnEvent: Observable<APIKey>
-        let saveBtnTapEvent: Observable<(String, APIKey)>
+        let qrGenerateBtnEvent: Observable<KISUserInfo>
+        let saveBtnTapEvent: Observable<KISUserInfo>
     }
     struct Output { 
         let accountNum: BehaviorSubject<String>
@@ -144,7 +146,7 @@ extension APISettingsViewModel {
 
 extension APISettingsViewModel: QRCodeReaderCoordinatorFinishDelegate {
     func capturedData(data: Data) {
-        guard let apiKey = try? data.decode(type: APIKey.self)
+        guard let apiKey = try? data.decode(type: KISUserInfo.self)
         else { return }
         capturedApiKey.onNext(apiKey)
     }

@@ -12,10 +12,8 @@ import RxSwift
 
 public protocol SettingsUseCase {
     func fetchAPIInfo(
-    ) -> Observable<(accountNum: String, appKey: String, secretKey: String)>
+    ) -> Observable<KISUserInfo>
     func saveAPIInfo(
-        accountNum: String,
-        appKey: String,
-        secretKey: String
+        userInfo: KISUserInfo
     )
 }
