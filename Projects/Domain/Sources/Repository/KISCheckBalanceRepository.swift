@@ -18,4 +18,9 @@ public protocol KISCheckBalanceRepository {
         request: KISCheckBalanceRequest,
         authorization: String
     )
+    
+    func fetchBalance(
+        request: KISCheckBalanceRequest,
+        authorization: String
+    ) -> Observable<[KISCheckBalanceResponse]>
 }

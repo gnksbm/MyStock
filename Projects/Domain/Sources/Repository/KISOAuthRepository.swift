@@ -17,4 +17,6 @@ public protocol KISOAuthRepository {
     func requestOAuth(
         request: KISOAuthRequest
     )
+    
+    func fetchToken(request: KISOAuthRequest) -> Observable<KISOAuthToken>
 }

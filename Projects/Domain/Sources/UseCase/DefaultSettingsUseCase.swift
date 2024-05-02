@@ -17,7 +17,7 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
     ) -> Observable<KISUserInfo> {
         .create { observer in
             let disposable = Disposables.create()
-            let userDefaults = UserDefaults.standard
+            let userDefaults = UserDefaults.appGroup
             guard let accountNum = userDefaults.string(forKey: "accountNum"),
                   let appKey = userDefaults.string(forKey: "appKey"),
                   let secretKey = userDefaults.string(forKey: "secretKey")
@@ -39,7 +39,7 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
     public func saveAPIInfo(
         userInfo: KISUserInfo
     ) {
-        let userDefaults = UserDefaults.standard
+        let userDefaults = UserDefaults.appGroup
         userDefaults.setValue(
             userInfo.accountNum,
             forKey: "accountNum"

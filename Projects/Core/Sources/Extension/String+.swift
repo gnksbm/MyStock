@@ -38,15 +38,15 @@ public extension String {
     }
     
     static var accountNumber: Self {
-        UserDefaults.standard.string(forKey: "accountNum") ?? ""
+        UserDefaults.appGroup.string(forKey: "accountNum") ?? ""
     }
     
     static var appKey: Self {
-        UserDefaults.standard.string(forKey: "appKey") ?? ""
+        UserDefaults.appGroup.string(forKey: "appKey") ?? ""
     }
     
     static var secretKey: Self {
-        UserDefaults.standard.string(forKey: "secretKey") ?? ""
+        UserDefaults.appGroup.string(forKey: "secretKey") ?? ""
     }
     
     static var seibroKey: Self {

@@ -21,6 +21,19 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
     public var fetchResult = PublishSubject<[KISCheckBalanceResponse]>()
     public var collateralRatio = PublishSubject<Double>()
     
+    public init(networkService: NetworkService) {
+        self.networkService = networkService
+    }
+    
+    deinit {
+        #if DEBUG
+        print(
+            String(describing: self),
+            ": deinit"
+        )
+        #endif
+    }
+    
     public func requestBalance(
         request: KISCheckBalanceRequest,
         authorization: String
@@ -45,14 +58,28 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
             },
             onError: {
                 print(
-                "\(String(describing: self)): \($0.localizedDescription)"
+                    "\(String(describing: self)): \($0.localizedDescription)"
                 )
             }
         )
         .disposed(by: disposeBag)
     }
     
-    public init(networkService: NetworkService) {
-        self.networkService = networkService
+    public func fetchBalance(
+        request: KISCheckBalanceRequest,
+        authorization: String
+    ) -> Observable<[KISCheckBalanceResponse]> {
+        networkService.request(
+            endPoint: KISCheckBalanceEndPoint(
+                investType: request.investType,
+                query: request.toQuery,
+                authorization: authorization
+            )
+        )
+        .decode(
+            type: KISCheckBalanceDTO.self,
+            decoder: JSONDecoder()
+        )
+        .map { $0.toDomain }
     }
 }

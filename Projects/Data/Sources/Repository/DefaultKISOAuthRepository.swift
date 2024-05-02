@@ -8,6 +8,7 @@
 
 import Foundation
 
+import Core
 import Domain
 import Networks
 
@@ -24,21 +25,13 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         self.networkService = networkService
     }
     
-    private func handleToken(
-        token: KISOAuthToken,
-        request: KISOAuthRequest
-    ) {
-        guard let data = token.expireDate.encode() else { return }
-        let tokenType = request.oAuthType.rawValue
-        let userDefault = UserDefaults.standard
-        userDefault.setValue(
-            token.token,
-            forKey: "\(tokenType)Token"
+    deinit {
+        #if DEBUG
+        print(
+            String(describing: self),
+            ": deinit"
         )
-        userDefault.setValue(
-            data,
-            forKey: "\(tokenType)Date"
-        )
+        #endif
     }
     
     public func requestOAuth(request: KISOAuthRequest) {
@@ -100,10 +93,58 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         .disposed(by: disposeBag)
     }
     
+    public func fetchToken(
+        request: KISOAuthRequest
+    ) -> Observable<KISOAuthToken> {
+        let tokenType = request.oAuthType.rawValue
+        let userDefault = UserDefaults.appGroup
+        if let token = userDefault.string(forKey: "\(tokenType)Token"),
+           let data = userDefault.data(forKey: "\(tokenType)Date"),
+           let date = try? data.decode(type: Date.self),
+           date.distance(to: .now) > 0 {
+            return .just(
+                .init(
+                    token: token,
+                    expireDate: date
+                )
+            )
+        } else {
+            let endPoint = KISOAuthEndPoint(
+                investType: request.investType,
+                oAuthType: request.oAuthType
+            )
+            return networkService.request(
+                endPoint: endPoint
+            )
+            .decode(
+                type: KISAccessOAuthDTO.self,
+                decoder: JSONDecoder()
+            )
+            .map { $0.toDomain }
+        }
+    }
+    
+    private func handleToken(
+        token: KISOAuthToken,
+        request: KISOAuthRequest
+    ) {
+        guard let data = token.expireDate.encode() else { return }
+        let tokenType = request.oAuthType.rawValue
+        let userDefault = UserDefaults.appGroup
+        userDefault.setValue(
+            token.token,
+            forKey: "\(tokenType)Token"
+        )
+        userDefault.setValue(
+            data,
+            forKey: "\(tokenType)Date"
+        )
+    }
+    
     private func checkUserDefault(request: KISOAuthRequest) -> Bool {
         if request.oAuthType == .access {
             let tokenType = request.oAuthType.rawValue
-            let userDefault = UserDefaults.standard
+            let userDefault = UserDefaults.appGroup
             if let token = userDefault.string(forKey: "\(tokenType)Token"),
                let data = userDefault.data(forKey: "\(tokenType)Date"),
                let date = try? data.decode(type: Date.self),
