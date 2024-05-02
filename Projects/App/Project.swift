@@ -5,6 +5,7 @@ import ProjectDescriptionHelpers
 let project = Project.makeProject(
     name: "App",
     moduleType: .app,
+    entitlementsPath: .relativeToCurrentFile("App.entitlements"),
     hasResource: true,
     appExtensionTarget: [
         Project.appExtensionTarget(
@@ -14,6 +15,9 @@ let project = Project.makeProject(
                 "Resources/Model.xcdatamodeld",
                 "Widget/Resources/**",
             ],
+            entitlements: .file(
+                path: .relativeToCurrentFile("Widget/Widget.entitlements")
+            ),
             dependencies: [
                 .mainFeature,
                 .data,
