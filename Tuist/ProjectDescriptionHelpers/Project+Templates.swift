@@ -14,13 +14,13 @@ import EnvironmentPlugin
 import DependencyPlugin
 
 extension Project {
-    // MARK: Refact
     public static func makeProject(
         name: String,
         moduleType: ModuleType,
         entitlementsPath: Path? = nil,
         isTestable: Bool = false,
         hasResource: Bool = false,
+        appExtensionTarget: [Target] = [],
         coreDataModel: CoreDataModel? = nil,
         dependencies: [TargetDependency]
     ) -> Self {
@@ -36,8 +36,13 @@ extension Project {
             target = appTarget(
                 name: name,
                 entitlements: entitlements,
-                dependencies: dependencies
+                dependencies: dependencies + appExtensionTarget.map {
+                    TargetDependency.target(name: $0.name)
+                }
             )
+            appExtensionTarget.forEach {
+                targets.append($0)
+            }
         case .framework, .staticFramework:
             target = frameworkTarget(
                 name: name,
@@ -69,9 +74,10 @@ extension Project {
                 )
             )
         }
-        return Project(name: name,
-                organizationName: .organizationName,
-                targets: targets
+        return Project(
+            name: name,
+            organizationName: .organizationName,
+            targets: targets
         )
     }
     
@@ -95,6 +101,43 @@ extension Project {
             settings: .appDebug
         )
         return target
+    }
+
+    public static func appExtensionTarget(
+        name: String,
+        plist: InfoPlist?,
+        resources: ResourceFileElements? = nil,
+        entitlements: Entitlements? = nil,
+        dependencies: [TargetDependency]
+    ) -> Target {
+        return Target(
+            name: name,
+            platform: .iOS,
+            product: .appExtension,
+            bundleId: .bundleID + ".\(name)",
+            deploymentTarget: .deploymentTarget,
+            infoPlist: plist,
+            sources: ["\(name)/**"],
+            resources: resources,
+            entitlements: entitlements,
+            scripts: [.swiftLint],
+            dependencies: dependencies,
+            settings: .settings(
+                base: .init()
+                    .setCodeSignManual()
+                    .setProvisioning(),
+                configurations: [
+                    .debug(
+                        name: .debug,
+                        xcconfig: .relativeToRoot("XCConfig/\(name)_Debug.xcconfig")
+                    ),
+                    .release(
+                        name: .release,
+                        xcconfig: .relativeToRoot("XCConfig/\(name)_Release.xcconfig")
+                    ),
+                ]
+            )
+        )
     }
 
     private static func demoAppTarget(
