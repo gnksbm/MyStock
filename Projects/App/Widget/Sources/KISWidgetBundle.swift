@@ -10,7 +10,6 @@ import WidgetKit
 import SwiftUI
 
 @main
-@available(iOS 17, *)
 struct KISWidgetBundle: WidgetBundle {
     var body: some Widget {
         AccountWidget()

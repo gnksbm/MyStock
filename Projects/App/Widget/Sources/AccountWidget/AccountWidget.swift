@@ -9,21 +9,31 @@
 import WidgetKit
 import SwiftUI
 
-@available(iOS 17, *)
+import Data
+import Networks
+
 struct AccountWidget: Widget {
-    let kind: String = "Widget"
+    let kind: String = "AccountWidget"
+    
+    private let networkService = DefaultNetworkService()
 
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: kind,
-            provider: AccountWidgetProvider()
-        ) { entry in
-            WidgetEntryView(entry: entry)
-                .containerBackground(
-                    .fill.tertiary,
-                    for: .widget
+            provider: AccountWidgetProvider(
+                oAuthRepository: DefaultKISOAuthRepository(
+                    networkService: networkService
+                ),
+                checkBalanceRepository: DefaultKISCheckBalanceRepository(
+                    networkService: networkService
                 )
+            )
+        ) { entry in
+            AccountWidgetEntryView(entry: entry)
+                .widgetBackground()
         }
         .supportedFamilies([.systemSmall])
+        .configurationDisplayName("나의 오늘 수익률")
+        .description("계좌 수익률을 빠르게 확인하세요")
     }
 }

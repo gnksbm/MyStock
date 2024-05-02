@@ -69,7 +69,7 @@ final class HomeStockCVCell: UICollectionViewCell {
         titleLabel.text = item.name
         priceLabel.text = item.price
         amountLabel.text = "\(item.amount)주"
-        let fluctuationRate = "\(item.fluctuationRate.toPercent)%"
+        let fluctuationRate = "\(item.rateToDoubleDigits) %"
         guard let rate = Double(item.fluctuationRate) else { return }
         var color: UIColor
         let foregroundColor = UIColor.black
@@ -81,7 +81,7 @@ final class HomeStockCVCell: UICollectionViewCell {
             fluctuationRateLabel.text = "+" + fluctuationRate
         } else {
             color = DesignSystemAsset.loss.color
-            fluctuationRateLabel.text = "-" + fluctuationRate
+            fluctuationRateLabel.text = fluctuationRate
         }
         [
             titleLabel,

@@ -8,14 +8,27 @@
 
 import WidgetKit
 
-import Data
+import Domain
 
-@available(iOS 17, *)
+import RxSwift
+
 struct AccountWidgetProvider: TimelineProvider {
+    private let oAuthRepository: KISOAuthRepository
+    private let checkBalanceRepository: KISCheckBalanceRepository
+    private let disposeBag = DisposeBag()
+    
+    public init(
+        oAuthRepository: KISOAuthRepository,
+        checkBalanceRepository: KISCheckBalanceRepository
+    ) {
+        self.oAuthRepository = oAuthRepository
+        self.checkBalanceRepository = checkBalanceRepository
+    }
+    
     func placeholder(in context: Context) -> AccountWidgetEntry {
         AccountWidgetEntry(
-            date: Date(),
-            fluctuationRate: 0.0
+            date: Date().addingTimeInterval(1),
+            balanceResponseList: []
         )
     }
     
@@ -25,7 +38,7 @@ struct AccountWidgetProvider: TimelineProvider {
     ) {
         let entry = AccountWidgetEntry(
             date: Date(),
-            fluctuationRate: 0.00
+            balanceResponseList: []
         )
         completion(entry)
     }
@@ -34,13 +47,37 @@ struct AccountWidgetProvider: TimelineProvider {
         in context: Context,
         completion: @escaping (Timeline<AccountWidgetEntry>) -> Void
     ) {
-        let entries: [AccountWidgetEntry] = [
-            AccountWidgetEntry(
-                date: Date().addingTimeInterval(300),
-                fluctuationRate: 0.0
+        guard let accountNum = UserDefaults.appGroup
+            .string(forKey: "accountNum")
+        else { return }
+        oAuthRepository.fetchToken(
+            request: .init(
+                oAuthType: .access,
+                investType: .reality
             )
-        ]
-        let timeLine = Timeline(entries: entries, policy: .atEnd)
-        completion(timeLine)
+        )
+        .flatMap { oAuthToken in
+            checkBalanceRepository.fetchBalance(
+                request: .init(
+                    investType: .reality,
+                    marketType: .domestic,
+                    accountNumber: accountNum
+                ),
+                authorization: oAuthToken.token
+            )
+        }
+        .subscribe(
+            onNext: { responses in
+                let entries: [AccountWidgetEntry] = [
+                    AccountWidgetEntry(
+                        date: Date().addingTimeInterval(300),
+                        balanceResponseList: responses
+                    )
+                ]
+                let timeLine = Timeline(entries: entries, policy: .atEnd)
+                completion(timeLine)
+            }
+        )
+        .disposed(by: disposeBag)
     }
 }

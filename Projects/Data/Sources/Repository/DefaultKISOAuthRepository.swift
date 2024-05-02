@@ -101,7 +101,7 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
         if let token = userDefault.string(forKey: "\(tokenType)Token"),
            let data = userDefault.data(forKey: "\(tokenType)Date"),
            let date = try? data.decode(type: Date.self),
-           date.distance(to: .now) > 0 {
+           date.distance(to: .now) < 0 {
             return .just(
                 .init(
                     token: token,
@@ -120,7 +120,20 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
                 type: KISAccessOAuthDTO.self,
                 decoder: JSONDecoder()
             )
-            .map { $0.toDomain }
+            .map {
+                let result = $0.toDomain
+                userDefault.setValue(
+                    result.token,
+                    forKey: "\(tokenType)Token"
+                )
+                if let data = result.expireDate.encode() {
+                    userDefault.setValue(
+                        data,
+                        forKey: "\(tokenType)Date"
+                    )
+                }
+                return result
+            }
         }
     }
     

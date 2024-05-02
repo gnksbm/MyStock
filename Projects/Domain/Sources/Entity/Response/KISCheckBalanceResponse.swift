@@ -41,42 +41,43 @@ public struct KISCheckBalanceResponse: Hashable {
         self.fluctuationRate = fluctuationRate
         self.division = division
     }
-    
-    public static func == (lhs: Self, rhs: Self) -> Bool {
-        lhs.ticker == rhs.ticker
-    }
-    
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(ticker.hashValue)
+}
+
+public extension KISCheckBalanceResponse {
+    var rateToDoubleDigits: String {
+        guard let rateDouble = Double(fluctuationRate)
+        else { return fluctuationRate }
+        let result = String(format: "%.2f", rateDouble)
+        return result
     }
 }
 
 public extension Array<KISCheckBalanceResponse> {
     var combineSameTiker: Self {
-        var amountDic = [String: Int]()
-        var plAmountDic = [String: Int]()
-        forEach { respense in
-            guard let amount = Int(respense.amount),
-                  let plAmount = Int(respense.plAmount)
-            else { return }
-            amountDic[respense.ticker, default: 0] += amount
-            plAmountDic[respense.ticker, default: 0] += plAmount
+        var dic = [String: Element]()
+        forEach { response in
+            if let oldValue = dic[response.name] {
+                guard let oldAmount = Int(oldValue.amount),
+                      let nextAmount = Int(response.amount),
+                      let oldPlAmount = Int(oldValue.plAmount),
+                      let nextPlAmount = Int(response.plAmount)
+                else { return }
+                print(oldPlAmount)
+                print(nextPlAmount)
+                dic[response.name] = .init(
+                    ticker: oldValue.ticker,
+                    name: oldValue.name,
+                    price: oldValue.price,
+                    amount: String(oldAmount + nextAmount),
+                    plAmount: String(oldPlAmount + nextPlAmount),
+                    fluctuationRate: oldValue.fluctuationRate,
+                    division: oldValue.division
+                )
+            } else {
+                dic[response.name] = response
+            }
         }
-        let result: Self = compactMap {
-            guard let amount = amountDic[$0.ticker],
-                  let plAmount = plAmountDic[$0.ticker]
-            else { return nil }
-            return Element(
-                ticker: $0.ticker,
-                name: $0.name,
-                price: $0.price,
-                amount: String(amount),
-                plAmount: String(plAmount),
-                fluctuationRate: $0.fluctuationRate,
-                division: $0.division
-            )
-        }
-        return Array(Set(result))
+        return dic.map { $0.value }
     }
 }
 

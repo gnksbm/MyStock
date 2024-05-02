@@ -4,4 +4,9 @@ storage_mode("git")
 
 type("development")
 
-app_identifier("com.GeonSeobKim.KISStock")
+app_identifier(
+    [
+        "com.GeonSeobKim.KISStock",
+        "com.GeonSeobKim.KISStock.Widget"
+    ]
+)
