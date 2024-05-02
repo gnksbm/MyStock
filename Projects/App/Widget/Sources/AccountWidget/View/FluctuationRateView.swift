@@ -30,22 +30,22 @@ struct FluctuationRateView: View {
                 }
                 .lineLimit(1)
                 .foregroundStyle(
-                    Color(rateToColor(balance.fluctuationRate))
+                    rateToColor(balance.fluctuationRate)
                 )
             }
         }
     }
     
-    func rateToColor(_ rate: String) -> UIColor {
+    func rateToColor(_ rate: String) -> Color {
         guard let rateDouble = Double(rate)
         else { return .black }
         switch rateDouble {
         case ..<0:
-            return DesignSystemAsset.loss.color
+            return .init(DesignSystemAsset.loss.color)
         case 0:
-            return .black
+            return .primary
         default:
-            return DesignSystemAsset.profit.color
+            return .init(DesignSystemAsset.profit.color)
         }
     }
 }
