@@ -120,6 +120,7 @@ final class APISettingsViewModel: ViewModel {
         capturedApiKey
             .subscribe(
                 onNext: { apiKey in
+                    output.accountNum.onNext(apiKey.accountNum)
                     output.appKey.onNext(apiKey.appKey)
                     output.secretKey.onNext(apiKey.secretKey)
                 }

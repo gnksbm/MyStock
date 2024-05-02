@@ -174,7 +174,6 @@ final class APISettingsViewController: BaseViewController {
         output.appKey
             .bind(to: appKeyTextField.textField.rx.text)
             .disposed(by: disposeBag)
-        
         output.secretKey
             .bind(to: secretKeyTextField.textField.rx.text)
             .disposed(by: disposeBag)
@@ -183,6 +182,9 @@ final class APISettingsViewController: BaseViewController {
             .withUnretained(self)
             .subscribe(
                 onNext: { vc, apiKey in
+                    vc.accountNumTextField.textField.rx
+                        .text
+                        .onNext(apiKey.accountNum)
                     vc.appKeyTextField.textField.rx
                         .text
                         .onNext(apiKey.appKey)
