@@ -10,7 +10,7 @@ import ProjectDescription
 
 public extension InfoPlist {
     static let appInfoPlist: Self = .extendingDefault(
-        with: .baseInfoPlist
+        with: .appInfoPlist
             .merging(.additionalInfoPlist) { oldValue, newValue in
                 newValue
             }
@@ -24,15 +24,25 @@ public extension InfoPlist {
                 newValue
             }
     )
+    static let widgetInfoPlist: Self = .extendingDefault(
+        with: .widget
+            .merging(.additionalInfoPlist) { oldValue, newValue in
+                newValue
+            }
+            .merging(.secrets) { oldValue, newValue in
+                newValue
+            }
+    )
 }
 
-public extension [String: InfoPlist.Value] {
+public extension [String: Plist.Value] {
     static let secrets: Self = [
         "ACCOUNT_NUMBER": "$(ACCOUNT_NUMBER)",
         "KIS_APP_KEY": "$(KIS_APP_KEY)",
         "KIS_APP_SECRET": "$(KIS_APP_SECRET)",
         "SEIBRO_APP_KEY": "$(SEIBRO_APP_KEY)",
     ]
+    
     static let additionalInfoPlist: Self = [
         "ITSAppUsesNonExemptEncryption": "NO",
         "NSAppTransportSecurity": [
@@ -44,13 +54,9 @@ public extension [String: InfoPlist.Value] {
                 ]
             ]
         ],
-        "UIBackgroundModes": [
-            "remote-notification"
-        ],
-        "NSCameraUsageDescription": "QR코드를 인식하려면 카메라 사용 권한이 필요합니다."
     ]
     
-    static let baseInfoPlist: Self = [
+    static let appInfoPlist: Self = [
         "CFBundleDisplayName": .bundleDisplayName,
         "CFBundleShortVersionString": .bundleShortVersionString,
         "CFBundleVersion": .bundleVersion,
@@ -66,6 +72,10 @@ public extension [String: InfoPlist.Value] {
                 ]
             ]
         ],
+        "UIBackgroundModes": [
+            "remote-notification"
+        ],
+        "NSCameraUsageDescription": "QR코드를 인식하기 위해 카메라 사용 권한이 필요합니다.",
     ]
     
     static let framework: Self = [
@@ -77,5 +87,15 @@ public extension [String: InfoPlist.Value] {
         "CFBundlePackageType": "FMWK",
         "CFBundleShortVersionString": "1.0",
         "CFBundleVersion": "1",
+    ]
+    
+    static let widget: Self = [
+        "CFBundleShortVersionString": .bundleShortVersionString,
+        "CFBundleVersion": .bundleVersion,
+        "CFBundleDisplayName": .bundleDisplayName,
+        "CFBundlePackageType": "$(PRODUCT_BUNDLE_PACKAGE_TYPE)",
+        "NSExtension": [
+            "NSExtensionPointIdentifier": "com.apple.widgetkit-extension",
+        ],
     ]
 }
