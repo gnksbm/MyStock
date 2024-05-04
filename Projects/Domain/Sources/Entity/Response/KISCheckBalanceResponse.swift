@@ -9,6 +9,7 @@
 import UIKit
 
 public struct KISCheckBalanceResponse: Hashable {
+    public var image: UIImage?
     public let ticker: String
     public let name: String
     public let price: String

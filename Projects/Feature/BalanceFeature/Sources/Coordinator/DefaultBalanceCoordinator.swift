@@ -28,7 +28,7 @@ public final class DefaultBalanceCoordinator: BalanceCoordinator {
     public func start() {
         let homeViewController = BalanceViewController(
             viewModel: BalanceViewModel(
-                useCase: DefaultHomeUseCase(),
+                useCase: DefaultBalanceUseCase(),
                 coordinator: self
             )
         )

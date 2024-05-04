@@ -68,7 +68,7 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
     public func fetchBalance(
         request: KISCheckBalanceRequest,
         authorization: String
-    ) -> Observable<[KISCheckBalanceResponse]> {
+    ) -> Observable<(collateralRatio: Double, [KISCheckBalanceResponse])> {
         networkService.request(
             endPoint: KISCheckBalanceEndPoint(
                 investType: request.investType,
@@ -80,6 +80,6 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
             type: KISCheckBalanceDTO.self,
             decoder: JSONDecoder()
         )
-        .map { $0.toDomain }
+        .map { ($0.collateralRatio, $0.toDomain) }
     }
 }

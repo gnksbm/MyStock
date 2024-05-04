@@ -67,7 +67,7 @@ struct AccountWidgetProvider: TimelineProvider {
             )
         }
         .subscribe(
-            onNext: { responses in
+            onNext: { (_, responses) in
                 let entries: [AccountWidgetEntry] = [
                     AccountWidgetEntry(
                         date: Date().addingTimeInterval(300),

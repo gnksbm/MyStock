@@ -22,5 +22,5 @@ public protocol KISCheckBalanceRepository {
     func fetchBalance(
         request: KISCheckBalanceRequest,
         authorization: String
-    ) -> Observable<[KISCheckBalanceResponse]>
+    ) -> Observable<(collateralRatio: Double, [KISCheckBalanceResponse])>
 }
