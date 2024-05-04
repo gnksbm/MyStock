@@ -13,8 +13,7 @@ import Core
 import RxSwift
 
 public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
-    public var chartInfo = PublishSubject<[Candle]>()
-    public var realTimePrice = BehaviorSubject<String>(value: "")
+    public var chartInfo = PublishSubject<[KISChartPriceResponse]>()
     
     @Injected(KISOAuthRepository.self)
     private var oAuthRepository: KISOAuthRepository
@@ -76,10 +75,31 @@ public final class DefaultHomeChartPriceUseCase: HomeChartUseCase {
             .disposed(by: disposeBag)
         
         realTimePriceRepository.price
+            .withLatestFrom(chartInfo) { realTimePrice, chartData in
+                (realTimePrice, chartData)
+            }
             .withUnretained(self)
             .subscribe(
-                onNext: { useCase, price in
-                    useCase.realTimePrice.onNext(price)
+                onNext: { useCase, tuple in
+                    let (realTimePrice, chartData) = tuple
+                    var sortedChartData = chartData.sorted(
+                        by: { $0.date < $1.date }
+                    )
+                    if let todayResponse = sortedChartData.last,
+                       !realTimePrice.isEmpty {
+                        guard let closingPrice = Double(realTimePrice)
+                        else { return }
+                        let oldResponse = sortedChartData.removeLast()
+                        let newResponse = KISChartPriceResponse(
+                            date: oldResponse.date,
+                            openingPrice: oldResponse.openingPrice,
+                            highestPrice: oldResponse.highestPrice,
+                            lowestPrice: oldResponse.lowestPrice,
+                            closingPrice: closingPrice
+                        )
+                        sortedChartData.append(newResponse)
+                    }
+                    useCase.chartInfo.onNext(sortedChartData)
                 }
             )
             .disposed(by: disposeBag)

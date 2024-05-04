@@ -62,8 +62,6 @@ public extension Array<KISCheckBalanceResponse> {
                       let oldPlAmount = Int(oldValue.plAmount),
                       let nextPlAmount = Int(response.plAmount)
                 else { return }
-                print(oldPlAmount)
-                print(nextPlAmount)
                 dic[response.name] = .init(
                     ticker: oldValue.ticker,
                     name: oldValue.name,

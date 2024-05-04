@@ -13,7 +13,7 @@ import Core
 import RxSwift
 
 public protocol KISChartPriceRepository {
-    var chartResponse: PublishSubject<[Candle]> { get }
+    var chartResponse: PublishSubject<[KISChartPriceResponse]> { get }
     
     func requestChartData(
         request: KISChartPriceRequest

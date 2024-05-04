@@ -18,7 +18,7 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
     private let networkService: NetworkService
     private let disposeBag = DisposeBag()
     
-    public var chartResponse = PublishSubject<[Candle]>()
+    public var chartResponse = PublishSubject<[KISChartPriceResponse]>()
     
     public init(networkService: NetworkService) {
         self.networkService = networkService

@@ -68,34 +68,10 @@ final class ChartViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        Observable.combineLatest(
-            useCase.chartInfo,
-            useCase.realTimePrice
-        )
-        .subscribe(
-            onNext: { candles, realTimePrice in
-                let sortedCandles = candles.sorted(by: { $0.date < $1.date })
-                if let last = sortedCandles.last,
-                   !realTimePrice.isEmpty {
-                    var newCandles = sortedCandles
-                    guard let closePrice = Double(realTimePrice)
-                    else { return }
-                    let newCandle = Candle(
-                        date: last.date.toString(dateFormat: "yyyyMMdd"),
-                        open: last.open,
-                        low: last.low,
-                        high: last.high,
-                        close: closePrice
-                    )
-                    newCandles.removeLast()
-                    newCandles.append(newCandle)
-                    output.candleList.onNext(newCandles)
-                    return
-                }
-                output.candleList.onNext(candles)
-            }
-        )
-        .disposed(by: disposeBag)
+        useCase.chartInfo
+            .distinctUntilChanged()
+            .bind(to: output.candleList)
+            .disposed(by: disposeBag)
         
         return output
     }
@@ -109,6 +85,6 @@ extension ChartViewModel {
     }
     
     struct Output {
-        let candleList: PublishSubject<[Candle]>
+        let candleList: PublishSubject<[KISChartPriceResponse]>
     }
 }

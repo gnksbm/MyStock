@@ -13,10 +13,10 @@ import Core
 import CoreData
 
 public final class DefaultCoreDataService: CoreDataService {
-    private let container: NSPersistentCloudKitContainer
+    private let container: NSPersistentContainer
     
     public init() {
-        container = NSPersistentCloudKitContainer(name: "Model")
+        container = NSPersistentContainer(name: "Model")
         container.persistentStoreDescriptions.first?.setOption(
             true as NSNumber,
             forKey: NSPersistentHistoryTrackingKey

@@ -25,14 +25,14 @@ struct KISDomesticChartPriceDTO: Codable {
 }
 
 extension KISDomesticChartPriceDTO {
-    var toDomain: [Candle] {
+    var toDomain: [KISChartPriceResponse] {
         output2.compactMap {
-            Candle(
+            .init(
                 date: $0.stckBsopDate,
-                open: $0.stckOprc,
-                low: $0.stckLwpr,
-                high: $0.stckHgpr,
-                close: $0.stckClpr
+                openingPrice: $0.stckOprc,
+                highestPrice: $0.stckHgpr,
+                lowestPrice: $0.stckLwpr,
+                closingPrice: $0.stckClpr
             )
         }
     }

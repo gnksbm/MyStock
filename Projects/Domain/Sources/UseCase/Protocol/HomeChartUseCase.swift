@@ -13,8 +13,7 @@ import Core
 import RxSwift
 
 public protocol HomeChartUseCase {
-    var chartInfo: PublishSubject<[Candle]> { get }
-    var realTimePrice: BehaviorSubject<String> { get }
+    var chartInfo: PublishSubject<[KISChartPriceResponse]> { get }
     
     func fetchRealtimeChart(
         period: PeriodType,

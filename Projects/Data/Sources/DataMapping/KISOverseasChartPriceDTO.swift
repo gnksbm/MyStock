@@ -8,7 +8,7 @@
 
 import Foundation
 
-import Core
+import Domain
 
 struct KISOverseasChartPriceDTO: Codable {
     let output1: Output1
@@ -16,14 +16,14 @@ struct KISOverseasChartPriceDTO: Codable {
 }
 
 extension KISOverseasChartPriceDTO {
-    var toDomain: [Candle] {
+    var toDomain: [KISChartPriceResponse] {
         output2.compactMap {
-            Candle(
+            .init(
                 date: $0.stckBsopDate,
-                open: $0.ovrsNmixOprc,
-                low: $0.ovrsNmixLwpr,
-                high: $0.ovrsNmixHgpr,
-                close: $0.ovrsNmixPrpr
+                openingPrice: $0.ovrsNmixOprc,
+                highestPrice: $0.ovrsNmixHgpr,
+                lowestPrice: $0.ovrsNmixLwpr,
+                closingPrice: $0.ovrsNmixPrpr
             )
         }
     }
