@@ -50,7 +50,8 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
             onNext: { repository, data in
                 do {
                     let dto = try data.decode(type: KISCheckBalanceDTO.self)
-                    repository.fetchResult.onNext(dto.toDomain)
+                    let result = dto.toDomain(marketType: request.marketType)
+                    repository.fetchResult.onNext(result)
                     repository.collateralRatio.onNext(dto.collateralRatio)
                 } catch {
                     repository.fetchResult.onError(error)
@@ -80,6 +81,8 @@ public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
             type: KISCheckBalanceDTO.self,
             decoder: JSONDecoder()
         )
-        .map { ($0.collateralRatio, $0.toDomain) }
+        .map {
+            ($0.collateralRatio, $0.toDomain(marketType: request.marketType))
+        }
     }
 }

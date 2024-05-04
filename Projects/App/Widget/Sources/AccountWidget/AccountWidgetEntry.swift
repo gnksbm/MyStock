@@ -27,7 +27,8 @@ extension AccountWidgetEntry {
                 amount: "57",
                 plAmount: "-1916478",
                 fluctuationRate: "99.00000000",
-                division: KISCheckBalanceResponse.Division.cash
+                division: KISCheckBalanceResponse.Division.cash, 
+                marketType: .domestic
             ),
             KISCheckBalanceResponse(
                 ticker: "035420",
@@ -36,7 +37,8 @@ extension AccountWidgetEntry {
                 amount: "73",
                 plAmount: "-1983100",
                 fluctuationRate: "-99.00000000",
-                division: KISCheckBalanceResponse.Division.loan
+                division: KISCheckBalanceResponse.Division.loan,
+                marketType: .domestic
             )
         ]
     )

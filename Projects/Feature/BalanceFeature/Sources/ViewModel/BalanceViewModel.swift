@@ -8,14 +8,14 @@ import RxSwift
 import RxRelay
 
 public final class BalanceViewModel: ViewModel {
-    private let useCase: HomeUseCase
+    private let useCase: BalanceUseCase
     
     private let disposeBag = DisposeBag()
     
     let coordinator: BalanceCoordinator
     
     public init(
-        useCase: HomeUseCase,
+        useCase: BalanceUseCase,
         coordinator: BalanceCoordinator
     ) {
         self.useCase = useCase
@@ -34,11 +34,13 @@ public final class BalanceViewModel: ViewModel {
                 scheduler: MainScheduler.asyncInstance
             )
             .withUnretained(self)
+            .flatMap { vm, _ in
+                vm.useCase.fetchBalance()
+            }
             .subscribe(
-                onNext: { viewModel, _ in
-                    viewModel.useCase.checkAccount(
-                        accountNumber: .accountNumber
-                    )
+                onNext: { collateralRatio, responses in
+                    output.collateralRatio.onNext(collateralRatio)
+                    output.balanceList.accept(responses)
                 }
             )
             .disposed(by: disposeBag)
@@ -63,13 +65,6 @@ public final class BalanceViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        useCase.balanceInfo
-            .bind(to: output.balanceList)
-            .disposed(by: disposeBag)
-        
-        useCase.collateralRatio
-            .bind(to: output.collateralRatio)
-            .disposed(by: disposeBag)
         return output
     }
 }

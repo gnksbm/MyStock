@@ -27,7 +27,7 @@ struct KISCheckBalanceDTO: Codable {
 }
 
 extension KISCheckBalanceDTO {
-    public var toDomain: [KISCheckBalanceResponse] {
+    public func toDomain(marketType: MarketType) -> [KISCheckBalanceResponse] {
         output1.map {
             var division: KISCheckBalanceResponse.Division
             switch $0.tradDvsnName {
@@ -45,7 +45,8 @@ extension KISCheckBalanceDTO {
                 amount: $0.hldgQty,
                 plAmount: $0.evluPflsAmt,
                 fluctuationRate: $0.flttRt,
-                division: division
+                division: division,
+                marketType: marketType
             )
         }
     }

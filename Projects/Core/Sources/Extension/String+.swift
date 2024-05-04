@@ -37,6 +37,17 @@ public extension String {
         return date
     }
     
+    func toCurrency(style: NumberFormatter.Style) -> Self {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = style
+        formatter.locale = Locale(
+            languageCode: .korean,
+            languageRegion: .southKorea
+        )
+        guard let number = Int(self) else { return self }
+        return formatter.string(from: number as NSNumber) ?? self
+    }
+    
     static var accountNumber: Self {
         UserDefaults.appGroup.string(forKey: "accountNum") ?? ""
     }

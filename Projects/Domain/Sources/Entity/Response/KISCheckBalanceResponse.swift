@@ -17,13 +17,7 @@ public struct KISCheckBalanceResponse: Hashable {
     public let plAmount: String
     public let fluctuationRate: String
     public let division: Division
-    
-    public var value: String {
-        guard let price = Int(price),
-              let amount = Int(amount)
-        else { return "" }
-        return String(price * amount)
-    }
+    public let marketType: MarketType
     
     public init(
         ticker: String,
@@ -32,7 +26,8 @@ public struct KISCheckBalanceResponse: Hashable {
         amount: String,
         plAmount: String,
         fluctuationRate: String,
-        division: Division
+        division: Division,
+        marketType: MarketType
     ) {
         self.ticker = ticker
         self.name = name
@@ -41,10 +36,18 @@ public struct KISCheckBalanceResponse: Hashable {
         self.plAmount = plAmount
         self.fluctuationRate = fluctuationRate
         self.division = division
+        self.marketType = marketType
     }
 }
 
 public extension KISCheckBalanceResponse {
+    var value: String {
+        guard let price = Int(price),
+              let amount = Int(amount)
+        else { return "" }
+        return String(price * amount)
+    }
+    
     var rateToDoubleDigits: String {
         guard let rateDouble = Double(fluctuationRate)
         else { return fluctuationRate }
@@ -70,7 +73,8 @@ public extension Array<KISCheckBalanceResponse> {
                     amount: String(oldAmount + nextAmount),
                     plAmount: String(oldPlAmount + nextPlAmount),
                     fluctuationRate: oldValue.fluctuationRate,
-                    division: oldValue.division
+                    division: oldValue.division,
+                    marketType: oldValue.marketType
                 )
             } else {
                 dic[response.name] = response
