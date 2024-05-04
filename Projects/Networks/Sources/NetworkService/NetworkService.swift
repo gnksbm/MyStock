@@ -12,4 +12,5 @@ import RxSwift
 
 public protocol NetworkService {
     func request(endPoint: HTTPSEndPoint) -> Observable<Data>
+    func requestWithCache(endPoint: HTTPSEndPoint) -> Observable<Data>
 }

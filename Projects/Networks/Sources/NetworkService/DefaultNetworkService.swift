@@ -7,10 +7,14 @@
 //
 
 import Foundation
+import Core
 
 import RxSwift
 
 public final class DefaultNetworkService: NetworkService {
+    @Injected(CacheService.self)
+    private var cacheService: CacheService
+    
     public init() { }
     
     public func request(endPoint: HTTPSEndPoint) -> Observable<Data> {
@@ -54,6 +58,14 @@ public final class DefaultNetworkService: NetworkService {
             return Disposables.create {
                 task.cancel()
             }
+        }
+    }
+    
+    public func requestWithCache(endPoint: HTTPSEndPoint) -> Observable<Data> {
+        if let data = cacheService.getCachedData(endPoint: endPoint) {
+            return .just(data)
+        } else {
+            return request(endPoint: endPoint)
         }
     }
 }
