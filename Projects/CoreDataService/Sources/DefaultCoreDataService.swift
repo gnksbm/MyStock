@@ -7,10 +7,9 @@
 //
 
 import Foundation
+import CoreData
 
 import Core
-
-import CoreData
 
 public final class DefaultCoreDataService: CoreDataService {
     private let container: NSPersistentContainer
