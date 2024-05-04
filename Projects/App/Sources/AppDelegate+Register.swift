@@ -21,8 +21,28 @@ extension AppDelegate {
         let coreDataService = DefaultRxCoreDataService()
         
         DIContainer.register(
+            type: CacheService.self,
+            DefaultCacheService()
+        )
+        DIContainer.register(
+            type: RxCoreDataService.self,
+            DefaultRxCoreDataService()
+        )
+        DIContainer.register(
+            type: NetworkService.self,
+            DefaultNetworkService()
+        )
+        DIContainer.register(
+            type: WebSocketService.self,
+            DefaultWebSocketService()
+        )
+        DIContainer.register(
+            type: LogoRepository.self,
+            DefaultLogoRepository()
+        )
+        DIContainer.register(
             type: FavoritesStockRepository.self,
-            DefaultFavoritesStockRepository(coreDataService: coreDataService)
+            DefaultFavoritesStockRepository()
         )
         DIContainer.register(
             type: SearchStocksRepository.self,
@@ -30,19 +50,19 @@ extension AppDelegate {
         )
         DIContainer.register(
             type: KISChartPriceRepository.self,
-            DefaultKISChartPriceRepository(networkService: networkService)
+            DefaultKISChartPriceRepository()
         )
         DIContainer.register(
             type: KISOAuthRepository.self,
-            DefaultKISOAuthRepository(networkService: networkService)
+            DefaultKISOAuthRepository()
         )
         DIContainer.register(
             type: KISCheckBalanceRepository.self,
-            DefaultKISCheckBalanceRepository(networkService: networkService)
+            DefaultKISCheckBalanceRepository()
         )
         DIContainer.register(
             type: KISRealTimePriceRepository.self,
-            DefualtKISRealTimePriceRepository(wsService: webSocketService)
+            DefualtKISRealTimePriceRepository()
         )
     }
 }

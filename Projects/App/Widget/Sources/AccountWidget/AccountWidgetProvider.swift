@@ -8,21 +8,33 @@
 
 import WidgetKit
 
+import Core
 import Domain
+import Data
+import Networks
 
 import RxSwift
 
 struct AccountWidgetProvider: TimelineProvider {
-    private let oAuthRepository: KISOAuthRepository
-    private let checkBalanceRepository: KISCheckBalanceRepository
+    @Injected(KISOAuthRepository.self)
+    private var oAuthRepository: KISOAuthRepository
+    @Injected(KISCheckBalanceRepository.self)
+    private var checkBalanceRepository: KISCheckBalanceRepository
     private let disposeBag = DisposeBag()
     
-    public init(
-        oAuthRepository: KISOAuthRepository,
-        checkBalanceRepository: KISCheckBalanceRepository
-    ) {
-        self.oAuthRepository = oAuthRepository
-        self.checkBalanceRepository = checkBalanceRepository
+    public init() {
+        DIContainer.register(
+            type: KISOAuthRepository.self,
+            DefaultKISOAuthRepository()
+        )
+        DIContainer.register(
+            type: KISCheckBalanceRepository.self,
+            DefaultKISCheckBalanceRepository()
+        )
+        DIContainer.register(
+            type: NetworkService.self,
+            DefaultNetworkService()
+        )
     }
     
     func placeholder(in context: Context) -> AccountWidgetEntry {

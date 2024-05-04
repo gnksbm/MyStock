@@ -15,15 +15,15 @@ import Networks
 import RxSwift
 
 public final class DefaultKISOAuthRepository: KISOAuthRepository {
-    private let networkService: NetworkService
+    @Injected(NetworkService.self)
+    private var networkService: NetworkService
+
     private let disposeBag = DisposeBag()
     
     public let accessToken = PublishSubject<KISOAuthToken>()
     public let wsToken = PublishSubject<KISOAuthToken>()
     
-    public init(networkService: NetworkService) {
-        self.networkService = networkService
-    }
+    public init() { }
     
     deinit {
         #if DEBUG

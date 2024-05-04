@@ -11,8 +11,6 @@ import Foundation
 import RxSwift
 
 public protocol FavoritesStockRepository {
-    var favoritesTicker: BehaviorSubject<[String]> { get }
-    
     func fetchFavorites() -> Observable<[FavoritesTicker]>
     func addFavorites(ticker: String) -> Observable<FavoritesTicker>
     func removeFavorites(ticker: String) -> Observable<FavoritesTicker>

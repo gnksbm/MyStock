@@ -15,19 +15,10 @@ import Networks
 struct AccountWidget: Widget {
     let kind: String = "AccountWidget"
     
-    private let networkService = DefaultNetworkService()
-
     var body: some WidgetConfiguration {
         StaticConfiguration(
             kind: kind,
-            provider: AccountWidgetProvider(
-                oAuthRepository: DefaultKISOAuthRepository(
-                    networkService: networkService
-                ),
-                checkBalanceRepository: DefaultKISCheckBalanceRepository(
-                    networkService: networkService
-                )
-            )
+            provider: AccountWidgetProvider()
         ) { entry in
             AccountWidgetEntryView(entry: entry)
                 .widgetBackground()

@@ -15,14 +15,14 @@ import Networks
 import RxSwift
 
 public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
-    private let networkService: NetworkService
+    @Injected(NetworkService.self)
+    private var networkService: NetworkService
+    
     private let disposeBag = DisposeBag()
     
     public var chartResponse = PublishSubject<[KISChartPriceResponse]>()
     
-    public init(networkService: NetworkService) {
-        self.networkService = networkService
-    }
+    public init() { }
     
     public func requestChartData(
         request: KISChartPriceRequest

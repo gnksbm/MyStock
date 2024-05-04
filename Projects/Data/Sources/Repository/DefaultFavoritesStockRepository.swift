@@ -8,21 +8,18 @@
 
 import Foundation
 
-import Domain
+import Core
 import CoreDataService
+import Domain
 
 import RxSwift
 import RxCocoa
 
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
-    private let coreDataService: RxCoreDataService
-    public let favoritesTicker = BehaviorSubject<[String]>(value: [])
+    @Injected(RxCoreDataService.self)
+    private var coreDataService: RxCoreDataService
     
-    private let disposeBag = DisposeBag()
-    
-    public init(coreDataService: RxCoreDataService) {
-        self.coreDataService = coreDataService
-    }
+    public init() { }
     
     public func fetchFavorites() -> Observable<[FavoritesTicker]> {
         coreDataService.fetch(type: FavoritesTicker.self)

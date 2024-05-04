@@ -16,14 +16,13 @@ import RxSwift
 
 public final class DefualtKISRealTimePriceRepository
 : KISRealTimePriceRepository {
-    private let wsService: WebSocketService
+    @Injected(WebSocketService.self)
+    private var wsService: WebSocketService
     private let disposeBag = DisposeBag()
     
     public let price = PublishSubject<String>()
     
-    public init(wsService: WebSocketService) {
-        self.wsService = wsService
-    }
+    public init() { }
     
     public func requestData(request: KISRealTimePriceRequest) {
         let endPoint = KISRealTimePriceEndPoint(

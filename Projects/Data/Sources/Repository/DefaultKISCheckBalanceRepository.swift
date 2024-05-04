@@ -15,16 +15,16 @@ import Networks
 import RxSwift
 
 public final class DefaultKISCheckBalanceRepository: KISCheckBalanceRepository {
-    private let networkService: NetworkService
+    @Injected(NetworkService.self)
+    private var networkService: NetworkService
+
     private let disposeBag = DisposeBag()
     
     public var fetchResult = PublishSubject<[KISCheckBalanceResponse]>()
     public var collateralRatio = PublishSubject<Double>()
     
-    public init(networkService: NetworkService) {
-        self.networkService = networkService
-    }
-    
+    public init() { }
+
     deinit {
         #if DEBUG
         print(
