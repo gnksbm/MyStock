@@ -1,6 +1,6 @@
 //
-//  DefaultHomeCoordinator.swift
-//  HomeFeature
+//  DefaultBalanceCoordinator.swift
+//  BalanceFeature
 //
 //  Created by gnksbm on 2023/12/31.
 //  Copyright © 2023 Pepsi-Club. All rights reserved.
@@ -11,7 +11,7 @@ import UIKit
 import Domain
 import FeatureDependency
 
-public final class DefaultHomeCoordinator: HomeCoordinator {
+public final class DefaultBalanceCoordinator: BalanceCoordinator {
     public var parent: Coordinator?
     public var childs: [Coordinator] = []
     public var navigationController: UINavigationController
@@ -26,8 +26,8 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
     }
     
     public func start() {
-        let homeViewController = HomeViewController(
-            viewModel: HomeViewModel(
+        let homeViewController = BalanceViewController(
+            viewModel: BalanceViewModel(
                 useCase: DefaultHomeUseCase(),
                 coordinator: self
             )
@@ -39,7 +39,7 @@ public final class DefaultHomeCoordinator: HomeCoordinator {
     }
 }
 
-public extension DefaultHomeCoordinator {
+public extension DefaultBalanceCoordinator {
     func startChartFlow(with response: KISCheckBalanceResponse) {
         let chartCoordinator = coordinatorProvider.makeChartCoordinator(
             title: response.name,

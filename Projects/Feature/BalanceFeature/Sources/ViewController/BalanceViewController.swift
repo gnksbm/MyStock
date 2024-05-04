@@ -8,8 +8,8 @@ import DesignSystem
 import RxSwift
 import RxCocoa
 
-public final class HomeViewController: BaseViewController {
-    private let viewModel: HomeViewModel
+public final class BalanceViewController: BaseViewController {
+    private let viewModel: BalanceViewModel
     
     private lazy var ratioLabel: UILabel = {
         let label = UILabel()
@@ -48,7 +48,7 @@ public final class HomeViewController: BaseViewController {
         return button
     }()
     
-    public init(viewModel: HomeViewModel) {
+    public init(viewModel: BalanceViewModel) {
         self.viewModel = viewModel
         super.init()
     }
@@ -155,7 +155,7 @@ public final class HomeViewController: BaseViewController {
     }
 }
 
-extension HomeViewController {
+extension BalanceViewController {
     func makeLayout() -> UICollectionViewCompositionalLayout {
         .init { _, _ in
             let item = NSCollectionLayoutItem(

@@ -2,7 +2,7 @@ import ProjectDescription
 import ProjectDescriptionHelpers
 
 let project = Project.makeProject(
-    name: "HomeFeature",
+    name: "BalanceFeature",
     moduleType: .feature,
     dependencies: [
         .featureDependency

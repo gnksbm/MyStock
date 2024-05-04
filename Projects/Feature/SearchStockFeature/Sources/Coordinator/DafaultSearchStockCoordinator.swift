@@ -1,6 +1,6 @@
 //
 //  DefaultSearchStockCoordinator.swift
-//  HomeFeature
+//  SearchFeature
 //
 //  Created by gnksbm on 1/20/24.
 //  Copyright © 2024 GeonSeobKim. All rights reserved.

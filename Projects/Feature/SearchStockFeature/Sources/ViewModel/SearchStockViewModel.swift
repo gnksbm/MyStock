@@ -1,6 +1,6 @@
 //
 //  SearchStockViewModel.swift
-//  HomeFeature
+//  SearchFeature
 //
 //  Created by gnksbm on 1/16/24.
 //  Copyright © 2024 Pepsi-Club. All rights reserved.

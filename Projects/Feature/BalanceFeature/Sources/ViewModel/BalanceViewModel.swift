@@ -7,16 +7,16 @@ import FeatureDependency
 import RxSwift
 import RxRelay
 
-public final class HomeViewModel: ViewModel {
+public final class BalanceViewModel: ViewModel {
     private let useCase: HomeUseCase
     
     private let disposeBag = DisposeBag()
     
-    let coordinator: HomeCoordinator
+    let coordinator: BalanceCoordinator
     
     public init(
         useCase: HomeUseCase,
-        coordinator: HomeCoordinator
+        coordinator: BalanceCoordinator
     ) {
         self.useCase = useCase
         self.coordinator = coordinator
@@ -74,7 +74,7 @@ public final class HomeViewModel: ViewModel {
     }
 }
 
-extension HomeViewModel {
+extension BalanceViewModel {
     public struct Input {
         let viewWillAppear: Observable<Void>
         let stockCellTapEvent: Observable<Int>
