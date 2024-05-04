@@ -18,7 +18,7 @@ extension AppDelegate {
     func registerDependencies() {
         let networkService = DefaultNetworkService()
         let webSocketService = DefaultWebSocketService()
-        let coreDataService = DefaultCoreDataService()
+        let coreDataService = DefaultRxCoreDataService()
         
         DIContainer.register(
             type: FavoritesStockRepository.self,

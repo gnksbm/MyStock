@@ -12,63 +12,52 @@ import Domain
 import CoreDataService
 
 import RxSwift
+import RxCocoa
 
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
-    private let coreDataService: CoreDataService
+    private let coreDataService: RxCoreDataService
     public let favoritesTicker = BehaviorSubject<[String]>(value: [])
     
-    public init(coreDataService: CoreDataService) {
+    private let disposeBag = DisposeBag()
+    
+    public init(coreDataService: RxCoreDataService) {
         self.coreDataService = coreDataService
     }
     
-    public func fetchFavorites() {
-        do {
-            let savedFavorites = try coreDataService.fetch(
-                type: FavoritesTicker.self
-            ).map { $0.ticker }
-            let duplicationRemoved = Array(Set(savedFavorites))
-            favoritesTicker.onNext(duplicationRemoved)
-        } catch {
-            favoritesTicker.onError(error)
-        }
+    public func fetchFavorites() -> Observable<[FavoritesTicker]> {
+        coreDataService.fetch(type: FavoritesTicker.self)
+            .withUnretained(self)
+            .map { repository, favoritesList in
+                var deduplicateDic = [String: Int]()
+                var result = [FavoritesTicker]()
+                favoritesList.forEach { favorites in
+                    if deduplicateDic[favorites.ticker] == nil {
+                        deduplicateDic[favorites.ticker, default: 0] += 1
+                        result.append(favorites)
+                    } else {
+                        _ = repository.coreDataService.delete(
+                            data: favorites,
+                            uniqueKeyPath: \.ticker
+                        )
+                    }
+                }
+                return result
+            }
     }
     
-    public func addFavorites(ticker: String) throws {
-        let data = FavoritesTicker(ticker: ticker)
-        do {
-            let status = try coreDataService.duplicationCheck(
-                data: data,
-                uniqueKeyPath: \.ticker
-            )
-            guard status != .duplicated 
-            else {
-                print("Data is Duplicated")
-                return
-            }
-            do {
-                try coreDataService.save(
-                    data: data
-                )
-                fetchFavorites()
-            } catch {
-                throw error
-            }
-        } catch {
-            throw error
-        }
+    public func addFavorites(ticker: String) -> Observable<FavoritesTicker> {
+        let newFavorites = FavoritesTicker(ticker: ticker)
+        return coreDataService.saveUniqueData(
+            data: newFavorites,
+            uniqueKeyPath: \.ticker
+        )
     }
     
-    public func removeFavorites(ticker: String) throws {
-        do {
-            try coreDataService.delete(
-                data: FavoritesTicker(
-                    ticker: ticker
-                ),
-                uniqueKeyPath: \.ticker
-            )
-            fetchFavorites()
-        } catch {
-            throw error
-        }
+    public func removeFavorites(ticker: String) -> Observable<FavoritesTicker> {
+        let favoritesToRemove = FavoritesTicker(ticker: ticker)
+        return coreDataService.delete(
+            data: favoritesToRemove,
+            uniqueKeyPath: \.ticker
+        )
     }
 }

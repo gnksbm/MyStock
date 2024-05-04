@@ -32,11 +32,10 @@ public final class FavoritesViewModel: ViewModel {
         
         input.viewWillAppearEvent
             .withUnretained(self)
-            .subscribe(
-                onNext: { viewModel, _ in
-                    viewModel.useCase.fetchFavorites()
-                }
-            )
+            .flatMap { vm, _ in
+                vm.useCase.fetchFavorites()
+            }
+            .bind(to: output.favoritesStocks)
             .disposed(by: disposeBag)
         
         input.addBtnTapEvent
@@ -57,10 +56,6 @@ public final class FavoritesViewModel: ViewModel {
                     )
                 }
             )
-            .disposed(by: disposeBag)
-        
-        useCase.favoritesStocks
-            .bind(to: output.favoritesStocks)
             .disposed(by: disposeBag)
         
         return output

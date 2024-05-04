@@ -11,7 +11,5 @@ import Foundation
 import RxSwift
 
 public protocol FavoritesUseCase {
-    var favoritesStocks: BehaviorSubject<[SearchStocksResponse]> { get }
-    
-    func fetchFavorites()
+    func fetchFavorites() -> Observable<[SearchStocksResponse]>
 }

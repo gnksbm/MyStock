@@ -18,34 +18,22 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
     @Injected(SearchStocksRepository.self)
     private var searchStocksRepository: SearchStocksRepository
 
-    public let favoritesStocks = BehaviorSubject<[SearchStocksResponse]>(
-        value: []
-    )
-    private let disposeBag = DisposeBag()
-
     public init() { }
     
-    public func fetchFavorites() {
+    public func fetchFavorites() -> Observable<[SearchStocksResponse]> {
         favoritesStockRepository.fetchFavorites()
-        guard let favoritesTicker = try? favoritesStockRepository
-            .favoritesTicker
-            .value()
-        else { return }
-        Observable.combineLatest(
-            favoritesTicker
-                .map {
-                    searchStocksRepository.searchStocks(searchTerm: $0)
-                }
-        )
-        .map { response in
-            response.flatMap { Set($0) }
-        }
-        .withUnretained(self)
-        .subscribe(
-            onNext: { useCase, respoense in
-                useCase.favoritesStocks.onNext(respoense)
+            .withUnretained(self)
+            .flatMap { useCase, favoritesList in
+                Observable.zip(
+                    favoritesList.map { favorites in
+                        useCase.searchStocksRepository.searchStocks(
+                            searchTerm: favorites.ticker
+                        )
+                    }
+                )
             }
-        )
-        .disposed(by: disposeBag)
+            .map { responses in
+                responses.flatMap { $0 }
+            }
     }
 }
