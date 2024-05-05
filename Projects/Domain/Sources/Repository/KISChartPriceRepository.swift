@@ -18,4 +18,7 @@ public protocol KISChartPriceRepository {
     func requestChartData(
         request: KISChartPriceRequest
     )
+    func fetchChartData(
+        request: KISChartPriceRequest
+    ) -> Observable<[KISChartPriceResponse]>
 }

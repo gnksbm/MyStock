@@ -59,4 +59,28 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
         )
         .disposed(by: disposeBag)
     }
+    
+    public func fetchChartData(
+        request: KISChartPriceRequest
+    ) -> Observable<[KISChartPriceResponse]> {
+        networkService.request(
+            endPoint: KISChartPriceEndPoint(
+                investType: request.investType,
+                marketType: request.marketType,
+                period: request.period,
+                ticker: request.ticker,
+                startDate: request.startDate,
+                endDate: request.endDate,
+                authorization: request.authorization
+            )
+        )
+        .compactMap {
+            switch request.marketType {
+            case .overseas:
+                try? $0.decode(type: KISOverseasChartPriceDTO.self).toDomain
+            case .domestic:
+                try? $0.decode(type: KISDomesticChartPriceDTO.self).toDomain
+            }
+        }
+    }
 }

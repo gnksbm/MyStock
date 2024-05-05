@@ -1,5 +1,5 @@
 //
-//  HomeChartUseCase.swift
+//  ChartUseCase.swift
 //  Domain
 //
 //  Created by gnksbm on 2023/12/31.
@@ -12,16 +12,14 @@ import Core
 
 import RxSwift
 
-public protocol HomeChartUseCase {
-    var chartInfo: PublishSubject<[KISChartPriceResponse]> { get }
-    
+public protocol ChartUseCase {
     func fetchRealtimeChart(
         period: PeriodType,
         marketType: MarketType,
         ticker: String,
         startDate: String,
         endDate: String
-    )
+    ) -> Observable<[KISChartPriceResponse]>
     
     func disconnectRealTimePrice()
 }

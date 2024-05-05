@@ -16,10 +16,6 @@ import Networks
 
 extension AppDelegate {
     func registerDependencies() {
-        let networkService = DefaultNetworkService()
-        let webSocketService = DefaultWebSocketService()
-        let coreDataService = DefaultRxCoreDataService()
-        
         DIContainer.register(
             type: CacheService.self,
             DefaultCacheService()

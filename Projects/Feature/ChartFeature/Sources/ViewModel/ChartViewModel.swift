@@ -9,7 +9,7 @@ import RxRelay
 
 final class ChartViewModel: ViewModel {
     private let coordinator: Coordinator
-    private let useCase: HomeChartUseCase
+    private let useCase: ChartUseCase
     
     let title: String
     private let ticker: String
@@ -18,7 +18,7 @@ final class ChartViewModel: ViewModel {
     private let disposeBag = DisposeBag()
     
     init(
-        useCase: HomeChartUseCase,
+        useCase: ChartUseCase,
         title: String,
         ticker: String,
         marketType: MarketType,
@@ -42,19 +42,23 @@ final class ChartViewModel: ViewModel {
         
         input.viewWillAppear
             .withUnretained(self)
+            .flatMap { vm, _ in
+                let date = Date()
+                return vm.useCase.fetchRealtimeChart(
+                    period: .day,
+                    marketType: vm.marketType,
+                    ticker: vm.ticker,
+                    startDate: Date(
+                        timeInterval: 86400 * -100,
+                        since: date
+                    ).toString(dateFormat: "yyyyMMdd"),
+                    endDate: date.toString(dateFormat: "yyyyMMdd")
+                )
+            }
+            .distinctUntilChanged()
             .subscribe(
-                onNext: { viewModel, _ in
-                    let date = Date()
-                    viewModel.useCase.fetchRealtimeChart(
-                        period: .day,
-                        marketType: viewModel.marketType,
-                        ticker: viewModel.ticker,
-                        startDate: Date(
-                            timeInterval: 86400 * -100,
-                            since: date
-                        ).toString(dateFormat: "yyyyMMdd"),
-                        endDate: date.toString(dateFormat: "yyyyMMdd")
-                    )
+                onNext: { response in
+                    output.candleList.onNext(response)
                 }
             )
             .disposed(by: disposeBag)
@@ -66,11 +70,6 @@ final class ChartViewModel: ViewModel {
                     viewModel.useCase.disconnectRealTimePrice()
                 }
             )
-            .disposed(by: disposeBag)
-        
-        useCase.chartInfo
-            .distinctUntilChanged()
-            .bind(to: output.candleList)
             .disposed(by: disposeBag)
         
         return output
