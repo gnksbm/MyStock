@@ -6,10 +6,10 @@
 //  Copyright © 2024 GeonSeobKim. All rights reserved.
 //
 
-import Foundation
-// Request = RequestDTO
-// Response = Model
-public struct SearchStocksResponse: Hashable {
+import UIKit
+
+public struct SearchStocksResponse: Hashable, LogoNecessary {
+    public var image: UIImage?
     public let ticker: String
     public let name: String
     public let marketType: MarketType

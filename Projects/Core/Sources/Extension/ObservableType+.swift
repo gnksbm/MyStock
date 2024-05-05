@@ -13,7 +13,8 @@ import RxSwift
 public extension ObservableType {
     func bindSnapshot(
         to method: @escaping (Element) -> Void) -> Disposable {
-            self.subscribe(
+            self.observe(on: MainScheduler.asyncInstance)
+                .subscribe(
                 onNext: { element in
                     method(element)
                 }

@@ -13,17 +13,26 @@ import RxSwift
 public final class StockInfoTVCell: UITableViewCell {
     public var disposeBag = DisposeBag()
     
+    private let imgViewSize = 40.f
+    
+    private lazy var logoImgView: UIImageView = {
+        let imgView = UIImageView()
+        imgView.layer.cornerRadius = imgViewSize / 2
+        imgView.clipsToBounds = true
+        return imgView
+    }()
+    
     private let tickerLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
         label.textColor = DesignSystemAsset.chartForeground.color
+        label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
     
     private let nameLabel: UILabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
         label.textColor = DesignSystemAsset.chartForeground.color
+        label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
     
@@ -38,13 +47,24 @@ public final class StockInfoTVCell: UITableViewCell {
     
     public override func prepareForReuse() {
         super.prepareForReuse()
-        tickerLabel.text = ""
-        nameLabel.text = ""
-        contentView.layer.borderColor = UIColor.black.cgColor
+        logoImgView.image = nil
+        [tickerLabel, nameLabel].forEach {
+            $0.text = nil
+        }
         disposeBag = .init()
     }
     
-    public func updateUI(ticker: String, name: String) {
+    public func updateUI(
+        image: UIImage?,
+        ticker: String,
+        name: String
+    ) {
+        logoImgView.image = image?.resized(
+            to: .init(
+                width: imgViewSize,
+                height: imgViewSize
+            )
+        )
         tickerLabel.text = ticker
         nameLabel.text = name
     }
@@ -52,37 +72,43 @@ public final class StockInfoTVCell: UITableViewCell {
     private func configureUI() {
         selectionStyle = .none
         let foregroundColor = DesignSystemAsset.chartForeground.color
-        contentView.layer.borderColor = foregroundColor.cgColor
         contentView.backgroundColor = DesignSystemAsset.chartBackground.color
         
-        [tickerLabel, nameLabel].forEach {
+        [logoImgView, tickerLabel, nameLabel].forEach {
             contentView.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
+            $0.centerYAnchor.constraint(equalTo: contentView.centerYAnchor)
+                .isActive = true
         }
         
         NSLayoutConstraint.activate([
-            tickerLabel.leadingAnchor.constraint(
+            logoImgView.leadingAnchor.constraint(
                 equalTo: contentView.leadingAnchor,
-                constant: 10
+                constant: 20
+            ),
+            logoImgView.heightAnchor.constraint(
+                equalToConstant: imgViewSize
+            ),
+            logoImgView.widthAnchor.constraint(
+                equalTo: logoImgView.heightAnchor
+            ),
+            
+            tickerLabel.leadingAnchor.constraint(
+                equalTo: logoImgView.trailingAnchor,
+                constant: 20
             ),
             tickerLabel.widthAnchor.constraint(
                 equalTo: contentView.widthAnchor,
-                multiplier: 1/4
-            ),
-            tickerLabel.centerYAnchor.constraint(
-                equalTo: contentView.centerYAnchor
+                multiplier: 1 / 4
             ),
             
             nameLabel.leadingAnchor.constraint(
                 equalTo: tickerLabel.trailingAnchor,
-                constant: 10
+                constant: 20
             ),
             nameLabel.trailingAnchor.constraint(
                 equalTo: contentView.trailingAnchor,
-                constant: -10
-            ),
-            nameLabel.centerYAnchor.constraint(
-                equalTo: contentView.centerYAnchor
+                constant: -20
             ),
         ])
     }

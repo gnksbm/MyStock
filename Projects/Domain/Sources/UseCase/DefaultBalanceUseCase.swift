@@ -49,28 +49,15 @@ public final class DefaultBalanceUseCase: BalanceUseCase {
                     useCase.logoRepository.fetchLogo(
                         request: .init(
                             ticker: response.ticker,
-                            markeyType: .domestic
+                            marketType: .domestic
                         )
                     )
                 }
             )
             .map { ($0, responses, collateralRatio) }
         }
-        .map { tuple in
-            let (logoArr, balanceArr, collateralRatio) = tuple
-            var logoDic = [String: UIImage?]()
-            
-            logoArr.forEach { logoResponse in
-                logoDic[logoResponse.ticker] = logoResponse.image
-            }
-            
-            let resultBalance = balanceArr.map { balance in
-                var newBalance = balance
-                if let logoImage = logoDic[balance.ticker] {
-                    newBalance.image = logoImage
-                }
-                return newBalance
-            }
+        .map { logoArr, balanceArr, collateralRatio in
+            let resultBalance = logoArr.updateWithLogo(list: balanceArr)
             return (collateralRatio, resultBalance)
         }
     }

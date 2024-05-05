@@ -38,11 +38,24 @@ final class SearchStockViewModel: ViewModel {
         )
         
         input.searchTerm
+            .distinctUntilChanged()
+            .filter { !$0.isEmpty }
+            .debounce(
+                .milliseconds(500),
+                scheduler: MainScheduler.asyncInstance
+            )
             .withUnretained(self)
             .flatMap { viewModel, searchTerm in
                 viewModel.useCase.searchStocks(searchTerm: searchTerm)
             }
-            .bind(to: output.searchResult)
+            .subscribe(
+                onNext: { response in
+                    output.searchResult.accept(response)
+                },
+                onError: { [weak self] error in
+                    self?.coordinator.showError(error: error)
+                }
+            )
             .disposed(by: disposeBag)
         
         input.stockCellTapEvent

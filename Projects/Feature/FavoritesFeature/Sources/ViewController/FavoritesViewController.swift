@@ -106,6 +106,7 @@ public final class FavoritesViewController: UIViewController {
                   let self
             else { return .init() }
             cell.updateUI(
+                image: item.image,
                 ticker: item.ticker,
                 name: item.name
             )

@@ -10,13 +10,13 @@ import Foundation
 
 public struct LogoRequest {
     public let ticker: String
-    public let markeyType: MarketType
+    public let marketType: MarketType
     
     public init(
         ticker: String,
-        markeyType: MarketType
+        marketType: MarketType
     ) {
         self.ticker = ticker
-        self.markeyType = markeyType
+        self.marketType = marketType
     }
 }

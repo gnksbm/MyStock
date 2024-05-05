@@ -72,10 +72,12 @@ public extension Coordinator {
         alertAction.forEach { alertAction in
             alertVC.addAction(alertAction)
         }
-        navigationController.present(
-            alertVC,
-            animated: true
-        )
+        DispatchQueue.main.async { [weak self] in
+            self?.navigationController.present(
+                alertVC,
+                animated: true
+            )
+        }
     }
     
     func showError(
@@ -87,17 +89,9 @@ public extension Coordinator {
             )
         ]
     ) {
-        let alertVC = UIAlertController(
+        showAlert(
             title: "오류가 발생했습니다",
-            message: error.localizedDescription,
-            preferredStyle: .alert
-        )
-        alertAction.forEach { alertAction in
-            alertVC.addAction(alertAction)
-        }
-        navigationController.present(
-            alertVC,
-            animated: true
+            message: error.localizedDescription
         )
     }
 }

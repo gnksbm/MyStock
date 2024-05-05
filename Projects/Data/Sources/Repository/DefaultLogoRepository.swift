@@ -26,7 +26,7 @@ public final class DefaultLogoRepository: LogoRepository {
             .map { data in
                 LogoResponse(
                     ticker: request.ticker,
-                    image: UIImage(data: data)
+                    logo: UIImage(data: data)
                 )
             }
     }

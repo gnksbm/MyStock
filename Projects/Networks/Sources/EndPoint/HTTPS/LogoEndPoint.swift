@@ -23,7 +23,7 @@ public struct LogoEndPoint: HTTPSEndPoint {
     
     public var path: String {
         var path = "/img/logos/"
-        switch request.markeyType {
+        switch request.marketType {
         case .overseas:
             path += "US"
         case .domestic:

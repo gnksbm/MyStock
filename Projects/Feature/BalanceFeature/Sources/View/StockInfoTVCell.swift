@@ -28,7 +28,10 @@ final class StockInfoTVCell: UITableViewCell {
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.textColor = DesignSystemAsset.chartForeground.color
-        label.font = .boldSystemFont(ofSize: 20)
+        label.font = .systemFont(
+            ofSize: 18,
+            weight: .medium
+        )
         return label
     }()
     
@@ -40,19 +43,23 @@ final class StockInfoTVCell: UITableViewCell {
     
     private let priceLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18)
+        label.font = .systemFont(
+            ofSize: 14,
+            weight: .medium
+        )
         return label
     }()
     
     private let valueLabel: UILabel = {
         let label = UILabel()
+        label.textColor = DesignSystemAsset.chartForeground.color
         label.font = .boldSystemFont(ofSize: 18)
         return label
     }()
     
     private let plAmoutLabel: UILabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 18)
+        label.font = .systemFont(ofSize: 14)
         return label
     }()
     
@@ -91,9 +98,9 @@ final class StockInfoTVCell: UITableViewCell {
         )
         let amountMutableString = NSMutableAttributedString()
         let amountText = NSAttributedString(
-            string: item.amount,
+            string: "\(item.amount)주",
             attributes: [
-                .font: UIFont.systemFont(ofSize: 16)
+                .font: UIFont.systemFont(ofSize: 14)
             ]
         )
         amountMutableString.append(amountText)
@@ -102,7 +109,7 @@ final class StockInfoTVCell: UITableViewCell {
                 .init(
                     string: " 신용",
                     attributes: [
-                        .font: UIFont.systemFont(ofSize: 16),
+                        .font: UIFont.systemFont(ofSize: 14),
                         .foregroundColor: DesignSystemAsset.whiteCandle.color
                     ]
                 )
@@ -113,7 +120,7 @@ final class StockInfoTVCell: UITableViewCell {
         valueLabel.text = item.value.toCurrency(style: .decimal) + "원"
         plAmoutLabel.text
         = item.plAmount.toCurrency(style: .decimal) + "원"
-        var priceText = item.price
+        var priceText = item.price.toCurrency(style: .decimal) + "원"
         let fluctuationRate = "\(item.rateToDoubleDigits) %"
         guard let rate = Double(item.fluctuationRate) else { return }
         switch rate {

@@ -77,6 +77,7 @@ final class SearchStockViewController: BaseViewController {
                 searchTerm: searchTextField.rx
                     .text
                     .orEmpty
+                    .skip(1)
                     .asObservable(),
                 stockCellTapEvent: stockCellTapEvent
             )
@@ -125,6 +126,7 @@ final class SearchStockViewController: BaseViewController {
                 for: indexPath
             ) as? StockInfoTVCell else { return .init() }
             cell.updateUI(
+                image: item.image,
                 ticker: item.ticker,
                 name: item.name
             )

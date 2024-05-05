@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct KISCheckBalanceResponse: Hashable {
+public struct KISCheckBalanceResponse: Hashable, LogoNecessary {
     public var image: UIImage?
     public let ticker: String
     public let name: String

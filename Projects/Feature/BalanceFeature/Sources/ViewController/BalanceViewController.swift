@@ -23,6 +23,7 @@ public final class BalanceViewController: BaseViewController {
     private lazy var portfolioTableView: UITableView = {
         let tableView = UITableView()
         tableView.register(StockInfoTVCell.self)
+        tableView.separatorStyle = .none
         tableView.backgroundColor = DesignSystemAsset.chartBackground.color
         tableView.separatorColor = DesignSystemAsset.chartForeground.color
         return tableView

@@ -19,6 +19,7 @@ public final class StockInfoTableView: UITableView {
     }
     
     func setup() {
+        separatorStyle = .none
         register(
             StockInfoTVCell.self,
             forCellReuseIdentifier: StockInfoTVCell.identifier
