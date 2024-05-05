@@ -18,8 +18,8 @@ import RxSwift
 struct AccountWidgetProvider: TimelineProvider {
     @Injected(KISOAuthRepository.self)
     private var oAuthRepository: KISOAuthRepository
-    @Injected(KISCheckBalanceRepository.self)
-    private var checkBalanceRepository: KISCheckBalanceRepository
+    @Injected(KISBalanceRepository.self)
+    private var checkBalanceRepository: KISBalanceRepository
     private let disposeBag = DisposeBag()
     
     public init() {
@@ -28,8 +28,8 @@ struct AccountWidgetProvider: TimelineProvider {
             DefaultKISOAuthRepository()
         )
         DIContainer.register(
-            type: KISCheckBalanceRepository.self,
-            DefaultKISCheckBalanceRepository()
+            type: KISBalanceRepository.self,
+            DefaultKISBalanceRepository()
         )
         DIContainer.register(
             type: NetworkService.self,

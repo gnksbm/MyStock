@@ -53,8 +53,8 @@ extension AppDelegate {
             DefaultKISOAuthRepository()
         )
         DIContainer.register(
-            type: KISCheckBalanceRepository.self,
-            DefaultKISCheckBalanceRepository()
+            type: KISBalanceRepository.self,
+            DefaultKISBalanceRepository()
         )
         DIContainer.register(
             type: KISRealTimePriceRepository.self,
