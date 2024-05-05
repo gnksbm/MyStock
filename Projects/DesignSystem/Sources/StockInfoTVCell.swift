@@ -50,6 +50,7 @@ public final class StockInfoTVCell: UITableViewCell {
     }
     
     private func configureUI() {
+        selectionStyle = .none
         let foregroundColor = DesignSystemAsset.chartForeground.color
         contentView.layer.borderColor = foregroundColor.cgColor
         contentView.backgroundColor = DesignSystemAsset.chartBackground.color

@@ -10,12 +10,16 @@ import UIKit
 
 import FeatureDependency
 import DesignSystem
+import Domain
 
 import RxSwift
 import RxCocoa
 
 final class SearchStockViewController: BaseViewController {
     private let viewModel: SearchStockViewModel
+    private var dataSource: DataSource!
+    
+    private let stockCellTapEvent = PublishSubject<SearchStocksResponse>()
     
     private let searchTextField: UITextField = {
         let textField = UITextField()
@@ -37,8 +41,9 @@ final class SearchStockViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
         configureNavigation()
+        configureTableView()
+        bind()
         hideKeyboardOnTapAndOrDrag()
     }
     
@@ -73,25 +78,12 @@ final class SearchStockViewController: BaseViewController {
                     .text
                     .orEmpty
                     .asObservable(),
-                stockCellTapEvent: searchStocksTableView.rx
-                    .itemSelected
-                    .map { $0.row }
+                stockCellTapEvent: stockCellTapEvent
             )
         )
         
         output.searchResult
-            .bind(
-                to: searchStocksTableView.rx.items(
-                    cellIdentifier: StockInfoTVCell.identifier,
-                    cellType: StockInfoTVCell.self
-                ),
-                curriedArgument: { _, response, cell in
-                    cell.updateUI(
-                        ticker: response.ticker,
-                        name: response.name
-                    )
-                }
-            )
+            .bindSnapshot(to: updateSnapshot)
             .disposed(by: disposeBag)
         
         rx.methodInvoked(#selector(UIViewController.viewDidAppear))
@@ -123,4 +115,47 @@ final class SearchStockViewController: BaseViewController {
         
         searchStocksTableView.keyboardDismissMode = .onDrag
     }
+    
+    private func configureTableView() {
+        dataSource = DataSource(
+            tableView: searchStocksTableView
+        ) { [weak self] tableView, indexPath, item in
+            guard let cell = tableView.dequeueReusableCell(
+                withIdentifier: StockInfoTVCell.identifier,
+                for: indexPath
+            ) as? StockInfoTVCell else { return .init() }
+            cell.updateUI(
+                ticker: item.ticker,
+                name: item.name
+            )
+            let tapGesture = UITapGestureRecognizer()
+            cell.addGestureRecognizer(tapGesture)
+            tapGesture.rx.event
+                .map { _ in item }
+                .subscribe(
+                    onNext: { response in
+                        self?.stockCellTapEvent.onNext(response)
+                    }
+                )
+                .disposed(by: cell.disposeBag)
+            return cell
+        }
+    }
+    
+    private func updateSnapshot(items: [SearchStocksResponse]) {
+        var snapshot = Snapshot()
+        snapshot.appendSections([0])
+        snapshot.appendItems(items)
+        dataSource.apply(
+            snapshot,
+            animatingDifferences: false
+        )
+    }
+}
+
+extension SearchStockViewController {
+    typealias DataSource
+    = UITableViewDiffableDataSource<Int, SearchStocksResponse>
+    typealias Snapshot
+    = NSDiffableDataSourceSnapshot<Int, SearchStocksResponse>
 }

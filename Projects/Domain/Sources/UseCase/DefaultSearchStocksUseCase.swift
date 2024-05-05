@@ -18,25 +18,15 @@ public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
     @Injected(FavoritesStockRepository.self)
     private var favoritesStockRepository: FavoritesStockRepository
     
-    public let searchResult = PublishSubject<[SearchStocksResponse]>()
-    private let disposeBag = DisposeBag()
-    
     public init() { }
     
-    public func searchStocks(searchTerm: String) {
+    public func searchStocks(
+        searchTerm: String
+    ) -> Observable<[SearchStocksResponse]> {
         searchStocksRepository.searchStocks(searchTerm: searchTerm)
-            .withUnretained(self)
-            .subscribe { useCase, results in
-                useCase.searchResult.onNext(results)
-            }
-            .disposed(by: disposeBag)
     }
     
-    public func addFavorites(ticker: String) throws {
-        do {
-            try favoritesStockRepository.addFavorites(ticker: ticker)
-        } catch {
-            throw error
-        }
+    public func addFavorites(ticker: String) -> Observable<FavoritesTicker> {
+        favoritesStockRepository.addFavorites(ticker: ticker)
     }
 }

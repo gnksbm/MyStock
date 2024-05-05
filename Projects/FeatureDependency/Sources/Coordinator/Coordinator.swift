@@ -77,4 +77,27 @@ public extension Coordinator {
             animated: true
         )
     }
+    
+    func showError(
+        error: Error,
+        alertAction : [UIAlertAction] = [
+            UIAlertAction(
+                title: "확인",
+                style: .default
+            )
+        ]
+    ) {
+        let alertVC = UIAlertController(
+            title: "오류가 발생했습니다",
+            message: error.localizedDescription,
+            preferredStyle: .alert
+        )
+        alertAction.forEach { alertAction in
+            alertVC.addAction(alertAction)
+        }
+        navigationController.present(
+            alertVC,
+            animated: true
+        )
+    }
 }

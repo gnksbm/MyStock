@@ -12,7 +12,7 @@ import Domain
 import FeatureDependency
 
 public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
-    public var searchResult: SearchResult
+    public var searchResult: SearchFlow
     
     public var parent: Coordinator?
     public var childs: [Coordinator] = []
@@ -20,7 +20,7 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
     public var coordinatorProvider: CoordinatorProvider
     
     public init(
-        searchResult: SearchResult,
+        searchResult: SearchFlow,
         navigationController: UINavigationController,
         coordinatorProvider: CoordinatorProvider
     ) {

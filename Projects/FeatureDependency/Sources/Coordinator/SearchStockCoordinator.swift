@@ -3,12 +3,12 @@ import Foundation
 import Domain
 
 public protocol SearchStockCoordinator: Coordinator {
-    var searchResult: SearchResult { get }
+    var searchResult: SearchFlow { get }
     
     func startChartFlow(with response: SearchStocksResponse)
     func updateFavoritesFinished()
 }
 
-public enum SearchResult {
+public enum SearchFlow {
     case chart, stockInfo
 }

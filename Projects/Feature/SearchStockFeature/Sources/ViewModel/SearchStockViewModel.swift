@@ -16,7 +16,7 @@ import RxSwift
 import RxRelay
 
 final class SearchStockViewModel: ViewModel {
-    private let searchResult: SearchResult
+    private let searchFlow: SearchFlow
     private let coordinator: SearchStockCoordinator
     private let useCase: SearchStocksUseCase
     
@@ -24,11 +24,11 @@ final class SearchStockViewModel: ViewModel {
     
     init(
         useCase: SearchStocksUseCase,
-        searchResult: SearchResult,
+        searchResult: SearchFlow,
         coordinator: SearchStockCoordinator
     ) {
         self.useCase = useCase
-        self.searchResult = searchResult
+        self.searchFlow = searchResult
         self.coordinator = coordinator
     }
     
@@ -39,39 +39,43 @@ final class SearchStockViewModel: ViewModel {
         
         input.searchTerm
             .withUnretained(self)
-            .subscribe(
-                onNext: { viewModel, searchTerm in
-                    viewModel.useCase.searchStocks(searchTerm: searchTerm)
+            .flatMap { viewModel, searchTerm in
+                viewModel.useCase.searchStocks(searchTerm: searchTerm)
+            }
+            .bind(to: output.searchResult)
+            .disposed(by: disposeBag)
+        
+        input.stockCellTapEvent
+            .withUnretained(self)
+            .filter { vm, _ in
+                vm.searchFlow == .chart
+            }
+            .bind(
+                onNext: { vm, stocks in
+                    vm.coordinator.startChartFlow(with: stocks)
                 }
             )
             .disposed(by: disposeBag)
         
         input.stockCellTapEvent
             .withUnretained(self)
+            .filter { vm, _ in
+                vm.searchFlow == .stockInfo
+            }
+            .flatMap { vm, stocks in
+                vm.useCase.addFavorites(
+                    ticker: stocks.ticker
+                )
+            }
+            .withUnretained(self)
             .subscribe(
-                onNext: { viewModel, index in
-                    let response = output.searchResult.value[index]
-                    switch viewModel.searchResult {
-                    case .chart:
-                        viewModel.coordinator.startChartFlow(with: response)
-                    case .stockInfo:
-                        do {
-                            try viewModel.useCase.addFavorites(
-                                ticker: response.ticker
-                            )
-                            viewModel.coordinator.updateFavoritesFinished()
-                        } catch {
-                            print(error.localizedDescription)
-                        }
-                    }
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        useCase.searchResult
-            .subscribe(
-                onNext: {
-                    output.searchResult.accept($0)
+                onNext: { vm, _ in
+                    vm.coordinator.updateFavoritesFinished()
+                },
+                onError: { [weak self] error in
+                    self?.coordinator.showError(
+                        error: error
+                    )
                 }
             )
             .disposed(by: disposeBag)
@@ -83,7 +87,7 @@ final class SearchStockViewModel: ViewModel {
 extension SearchStockViewModel {
     struct Input { 
         let searchTerm: Observable<String>
-        let stockCellTapEvent: Observable<Int>
+        let stockCellTapEvent: Observable<SearchStocksResponse>
     }
     struct Output { 
         let searchResult: BehaviorRelay<[SearchStocksResponse]>

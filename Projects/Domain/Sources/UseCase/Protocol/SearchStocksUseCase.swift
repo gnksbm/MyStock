@@ -11,8 +11,6 @@ import Foundation
 import RxSwift
 
 public protocol SearchStocksUseCase {
-    var searchResult: PublishSubject<[SearchStocksResponse]> { get }
-    
-    func searchStocks(searchTerm: String)
-    func addFavorites(ticker: String) throws
+    func searchStocks(searchTerm: String) -> Observable<[SearchStocksResponse]>
+    func addFavorites(ticker: String) -> Observable<FavoritesTicker>
 }
