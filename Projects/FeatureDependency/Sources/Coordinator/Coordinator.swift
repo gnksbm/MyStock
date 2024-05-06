@@ -64,15 +64,15 @@ public extension Coordinator {
             )
         ]
     ) {
-        let alertVC = UIAlertController(
-            title: title,
-            message: message,
-            preferredStyle: .alert
-        )
-        alertAction.forEach { alertAction in
-            alertVC.addAction(alertAction)
-        }
         DispatchQueue.main.async { [weak self] in
+            let alertVC = UIAlertController(
+                title: title,
+                message: message,
+                preferredStyle: .alert
+            )
+            alertAction.forEach { alertAction in
+                alertVC.addAction(alertAction)
+            }
             self?.navigationController.present(
                 alertVC,
                 animated: true
