@@ -29,7 +29,7 @@ public struct LogoEndPoint: HTTPSEndPoint {
         case .domestic:
             path += "KO"
         }
-        path += "/\(request.ticker).png"
+        path += "/\(request.ticker.lowercased()).png"
         return path
     }
     
@@ -37,15 +37,15 @@ public struct LogoEndPoint: HTTPSEndPoint {
         [:]
     }
     
-    public var header: [String : String]  {
+    public var header: [String : String] {
         [:]
     }
     
-    public var body: [String : String]  {
+    public var body: [String : String] {
         [:]
     }
     
-    public var method: HTTPMethod  {
+    public var method: HTTPMethod {
         .get
     }
     
