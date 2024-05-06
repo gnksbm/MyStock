@@ -18,6 +18,8 @@ public final class StockInfoTVCell: UITableViewCell {
     private lazy var logoImgView: UIImageView = {
         let imgView = UIImageView()
         imgView.layer.cornerRadius = imgViewSize / 2
+        imgView.contentMode = .scaleAspectFit
+        imgView.backgroundColor = DesignSystemAsset.lightBlack.color
         imgView.clipsToBounds = true
         return imgView
     }()
