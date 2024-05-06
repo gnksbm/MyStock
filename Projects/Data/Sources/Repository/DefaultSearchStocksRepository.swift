@@ -14,6 +14,9 @@ import Domain
 import RxSwift
 
 public final class DefaultSearchStocksRepository: SearchStocksRepository {
+    @Injected(LogoRepository.self)
+    private var logoRepository: LogoRepository
+    
     private var stocks = [SearchStocksResponse]()
     
     public init() {
@@ -32,6 +35,30 @@ public final class DefaultSearchStocksRepository: SearchStocksRepository {
             )
             observer.onCompleted()
             return Disposables.create()
+        }
+        .withUnretained(self)
+        .flatMapLatest { useCase, stockList in
+            guard !stockList.isEmpty
+            else { return Observable.just([SearchStocksResponse]())}
+            return Observable.zip(
+                stockList.map { stock in
+                    useCase.logoRepository.fetchLogo(
+                        request: .init(
+                            ticker: stock.ticker,
+                            marketType: stock.marketType
+                        )
+                    )
+                    .catchAndReturn(
+                        .init(
+                            ticker: stock.ticker,
+                            logo: nil
+                        )
+                    )
+                }
+            )
+            .map { logoList in
+                logoList.updateWithLogo(list: stockList)
+            }
         }
     }
     

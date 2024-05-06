@@ -8,10 +8,21 @@
 
 import Foundation
 
-struct KISWebSocketOAuthDTO: Codable {
+import Domain
+
+struct KISWebSocketOAuthDTO: Codable, KISOAuthDTO {
     let approvalKey: String
 
     enum CodingKeys: String, CodingKey {
         case approvalKey = "approval_key"
+    }
+}
+
+extension KISWebSocketOAuthDTO {
+    var toDomain: KISOAuthToken {
+        .init(
+            token: approvalKey,
+            expireDate: .now
+        )
     }
 }

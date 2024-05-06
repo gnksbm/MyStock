@@ -52,12 +52,21 @@ public final class DefaultKISOAuthRepository: KISOAuthRepository {
             return networkService.request(
                 endPoint: endPoint
             )
-            .decode(
-                type: KISAccessOAuthDTO.self,
-                decoder: JSONDecoder()
-            )
-            .map {
-                let result = $0.toDomain
+            .map { data in
+                var dto: KISOAuthDTO
+                do {
+                    switch request.oAuthType {
+                    case .webSocket:
+                        dto = try data.decode(type: KISWebSocketOAuthDTO.self)
+                    case .access:
+                        dto = try data.decode(type: KISAccessOAuthDTO.self)
+                    }
+                } catch {
+                    throw error
+                }
+                return dto.toDomain
+            }
+            .map { result in
                 userDefault.setValue(
                     result.token,
                     forKey: "\(tokenType)Token"

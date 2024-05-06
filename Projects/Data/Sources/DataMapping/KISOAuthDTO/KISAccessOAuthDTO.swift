@@ -11,7 +11,7 @@ import Foundation
 import Core
 import Domain
 
-struct KISAccessOAuthDTO: Codable {
+struct KISAccessOAuthDTO: Codable, KISOAuthDTO {
     let accessToken: String
     let accessTokenTokenExpired: String
     let tokenType: String
