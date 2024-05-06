@@ -42,7 +42,7 @@ public final class DefaultRxCoreDataService: RxCoreDataService {
             }
     }
     
-    public func saveUniqueData<T: CoreDataStorable, U>(
+    public func saveUniqueData<T: CoreDataStorable, U: Equatable>(
         data: T,
         uniqueKeyPath: KeyPath<T, U>
     ) -> Observable<T> {
@@ -50,9 +50,11 @@ public final class DefaultRxCoreDataService: RxCoreDataService {
             .flatMap { managedObjects in
                 if managedObjects.contains(
                     where: { managedObject in
-                        managedObject.value(
+                        guard let value = managedObject.value(
                             forKey: uniqueKeyPath.propertyName
-                        ) != nil
+                        ) as? U
+                        else { return false }
+                        return value == data[keyPath: uniqueKeyPath]
                     }
                 ) {
                     return Observable<T>.error(

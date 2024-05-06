@@ -16,7 +16,7 @@ public protocol RxCoreDataService {
     func fetch<T: CoreDataStorable>(
         type: T.Type
     ) -> Observable<[T]>
-    func saveUniqueData<T: CoreDataStorable, U>(
+    func saveUniqueData<T: CoreDataStorable, U: Equatable>(
         data: T,
         uniqueKeyPath: KeyPath<T, U>
     ) -> Observable<T>
