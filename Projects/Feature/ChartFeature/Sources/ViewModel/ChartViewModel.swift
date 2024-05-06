@@ -25,7 +25,7 @@ final class ChartViewModel: ViewModel {
         coordinator: Coordinator
     ) {
         self.useCase = useCase
-        self.title = title
+        self.title = title 
         self.ticker = ticker
         self.marketType = marketType
         self.coordinator = coordinator
@@ -37,7 +37,8 @@ final class ChartViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         let output = Output(
-            candleList: .init()
+            candleList: .init(),
+            title: title
         )
         
         input.viewWillAppear
@@ -59,6 +60,9 @@ final class ChartViewModel: ViewModel {
             .subscribe(
                 onNext: { response in
                     output.candleList.onNext(response)
+                },
+                onError: { [weak self] error in
+                    self?.coordinator.showError(error: error)
                 }
             )
             .disposed(by: disposeBag)
@@ -85,5 +89,6 @@ extension ChartViewModel {
     
     struct Output {
         let candleList: PublishSubject<[KISChartPriceResponse]>
+        let title: String
     }
 }

@@ -46,6 +46,11 @@ final class ChartViewController: BaseViewController {
     }
     
     private func configureUI() {
+        let foregrondColor = DesignSystemAsset.chartForeground.color
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: foregrondColor
+        ]
+
         [candleChartView].forEach {
             view.addSubview($0)
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -83,8 +88,12 @@ final class ChartViewController: BaseViewController {
             .withUnretained(self)
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(
-                onNext: { vc, candles in
-                    vc.candleChartView.updateChart(dataSource: candles)
+                onNext: { vc, responses in
+                    vc.candleChartView.updateChart(dataSource: responses)
+                    if let candleData = responses.last {
+                        let closingPrice = candleData.closingPrice.removeDecimal
+                        vc.title = "\(output.title) \(closingPrice)"
+                    }
                 }
             )
             .disposed(by: disposeBag)

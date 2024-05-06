@@ -86,12 +86,8 @@ public final class FavoritesViewController: UIViewController {
         )
         
         output.favoritesStocks
-            .withUnretained(self)
-            .subscribe(
-                onNext: { viewController, responses in
-                    viewController.updateSnapshot(responses: responses)
-                }
-            )
+            .distinctUntilChanged()
+            .bindSnapshot(to: updateSnapshot)
             .disposed(by: disposeBag)
     }
     
@@ -134,7 +130,10 @@ public final class FavoritesViewController: UIViewController {
                 toSection: marketType.toString
             )
         }
-        dataSource.apply(snapshot)
+        dataSource.apply(
+            snapshot,
+            animatingDifferences: false
+        )
     }
     
     private func configureNavigation() {

@@ -9,23 +9,6 @@
 import UIKit
 
 public extension String {
-    var toPercent: Self {
-        split(separator: "")
-            .prefix(4)
-            .joined(separator: "")
-    }
-    
-    func checkPrice(point: Int) -> UIColor {
-        guard let value = Int(self) else { return .black }
-        if value == point {
-            return .black
-        } else if value > point {
-            return .green
-        } else {
-            return .red
-        }
-    }
-    
     func toDate(dateFormat: String) -> Date {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = dateFormat
