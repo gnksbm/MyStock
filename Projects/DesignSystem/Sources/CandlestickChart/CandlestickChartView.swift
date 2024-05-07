@@ -30,6 +30,7 @@ public final class CandlestickChartView: UIScrollView {
         super.init(frame: .zero)
         showsVerticalScrollIndicator = false
         showsHorizontalScrollIndicator = false
+        delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -136,5 +137,22 @@ public final class CandlestickChartView: UIScrollView {
             candleColor = appearance.blackCandleColor
         }
         return candleColor
+    }
+}
+
+extension CandlestickChartView: UIScrollViewDelegate {
+    public func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+        setNeedsDisplay()
+    }
+    
+    public func scrollViewWillBeginDecelerating(_ scrollView: UIScrollView) {
+        setNeedsDisplay()
+    }
+    
+    public func scrollViewDidEndDragging(
+        _ scrollView: UIScrollView,
+        willDecelerate decelerate: Bool
+    ) {
+        setNeedsDisplay()
     }
 }
