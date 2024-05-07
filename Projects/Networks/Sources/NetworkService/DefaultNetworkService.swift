@@ -17,7 +17,9 @@ public final class DefaultNetworkService: NetworkService {
     
     public init() { }
     
-    public func request(endPoint: HTTPSEndPoint) -> Observable<Data> {
+    public func request(
+        endPoint: RestfulEndPoint
+    ) -> Observable<Data> {
         .create { observer in
             guard let urlRequest = endPoint.toURLRequest
             else {
@@ -61,11 +63,33 @@ public final class DefaultNetworkService: NetworkService {
         }
     }
     
-    public func requestWithCache(endPoint: HTTPSEndPoint) -> Observable<Data> {
+    public func requestWithCache(
+        endPoint: RestfulEndPoint
+    ) -> Observable<Data> {
         if let data = cacheService.getCachedData(endPoint: endPoint) {
             return .just(data)
         } else {
             return request(endPoint: endPoint)
         }
+    }
+    
+    public func request(
+        endPoints: [RestfulEndPoint]
+    ) -> Observable<[Data]> {
+        Observable.zip(
+            endPoints.map { endPoint in
+                request(endPoint: endPoint)
+            }
+        )
+    }
+    
+    public func requestWithCache(
+        endPoints: [RestfulEndPoint]
+    ) -> Observable<[Data]> {
+        Observable.zip(
+            endPoints.map { endPoint in
+                requestWithCache(endPoint: endPoint)
+            }
+        )
     }
 }

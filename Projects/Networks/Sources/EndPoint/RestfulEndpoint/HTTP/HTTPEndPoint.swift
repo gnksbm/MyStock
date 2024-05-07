@@ -8,7 +8,7 @@
 
 import Foundation
 
-public protocol HTTPEndPoint: EndPoint { }
+public protocol HTTPEndPoint: RestfulEndPoint { }
 
 public extension HTTPEndPoint {
     var scheme: Scheme {

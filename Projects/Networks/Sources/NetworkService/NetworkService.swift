@@ -11,6 +11,6 @@ import Foundation
 import RxSwift
 
 public protocol NetworkService {
-    func request(endPoint: HTTPSEndPoint) -> Observable<Data>
-    func requestWithCache(endPoint: HTTPSEndPoint) -> Observable<Data>
+    func request(endPoint: RestfulEndPoint) -> Observable<Data>
+    func requestWithCache(endPoint: RestfulEndPoint) -> Observable<Data>
 }
