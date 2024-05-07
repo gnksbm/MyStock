@@ -76,7 +76,7 @@ public final class DefaultChartPriceUseCase: ChartUseCase {
                 useCase.realTimePriceRepository.price.map { realtimePrice in
                     if let lastChart = sortedChartList.last,
                        let closingPrice = Double(realtimePrice) {
-                        _ = sortedChartList.dropLast()
+                        sortedChartList.removeLast()
                         let realtimeChart = KISChartPriceResponse(
                             date: lastChart.date,
                             openingPrice: lastChart.openingPrice,
