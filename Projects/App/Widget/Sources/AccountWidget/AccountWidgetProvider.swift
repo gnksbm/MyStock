@@ -16,10 +16,8 @@ import Networks
 import RxSwift
 
 struct AccountWidgetProvider: TimelineProvider {
-    @Injected(KISOAuthRepository.self)
-    private var oAuthRepository: KISOAuthRepository
-    @Injected(KISBalanceRepository.self)
-    private var checkBalanceRepository: KISBalanceRepository
+    @Injected private var oAuthRepository: KISOAuthRepository
+    @Injected private var checkBalanceRepository: KISBalanceRepository
     private let disposeBag = DisposeBag()
     
     public init() {

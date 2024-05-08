@@ -15,8 +15,7 @@ import Networks
 import RxSwift
 
 public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
-    @Injected(NetworkService.self)
-    private var networkService: NetworkService
+    @Injected private var networkService: NetworkService
     
     private let disposeBag = DisposeBag()
     

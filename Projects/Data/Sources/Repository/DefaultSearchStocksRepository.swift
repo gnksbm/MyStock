@@ -14,8 +14,7 @@ import Domain
 import RxSwift
 
 public final class DefaultSearchStocksRepository: SearchStocksRepository {
-    @Injected(LogoRepository.self)
-    private var logoRepository: LogoRepository
+    @Injected private var logoRepository: LogoRepository
     
     private var stocks = [SearchStocksResponse]()
     

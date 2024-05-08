@@ -12,8 +12,7 @@ import Core
 import RxSwift
 
 public final class DefaultNetworkService: NetworkService {
-    @Injected(CacheService.self)
-    private var cacheService: CacheService
+    @Injected private var cacheService: CacheService
     
     public init() { }
     

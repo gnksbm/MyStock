@@ -15,8 +15,7 @@ import Networks
 import RxSwift
 
 public final class DefaultLogoRepository: LogoRepository {
-    @Injected(NetworkService.self)
-    private var networkService: NetworkService
+    @Injected private var networkService: NetworkService
     
     public init() { }
     

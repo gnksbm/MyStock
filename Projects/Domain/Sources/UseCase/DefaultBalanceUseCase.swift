@@ -13,12 +13,9 @@ import Core
 import RxSwift
 
 public final class DefaultBalanceUseCase: BalanceUseCase {
-    @Injected(KISOAuthRepository.self)
-    private var oAuthRepository: KISOAuthRepository
-    @Injected(KISBalanceRepository.self)
-    private var checkBalanceRepository: KISBalanceRepository
-    @Injected(LogoRepository.self)
-    private var logoRepository: LogoRepository
+    @Injected private var oAuthRepository: KISOAuthRepository
+    @Injected private var checkBalanceRepository: KISBalanceRepository
+    @Injected private var logoRepository: LogoRepository
     
     public init() { }
     

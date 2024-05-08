@@ -13,12 +13,9 @@ import Core
 import RxSwift
 
 public final class DefaultChartPriceUseCase: ChartUseCase {
-    @Injected(KISOAuthRepository.self)
-    private var oAuthRepository: KISOAuthRepository
-    @Injected(KISChartPriceRepository.self)
-    private var chartPriceRepository: KISChartPriceRepository
-    @Injected(KISRealTimePriceRepository.self)
-    private var realTimePriceRepository: KISRealTimePriceRepository
+    @Injected private var oAuthRepository: KISOAuthRepository
+    @Injected private var chartPriceRepository: KISChartPriceRepository
+    @Injected private var realTimePriceRepository: KISRealTimePriceRepository
     
     public init() { }
     

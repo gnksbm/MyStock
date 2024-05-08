@@ -13,10 +13,8 @@ import Core
 import RxSwift
 
 public final class DefaultFavoritesUseCase: FavoritesUseCase {
-    @Injected(FavoritesStockRepository.self)
-    private var favoritesStockRepository: FavoritesStockRepository
-    @Injected(SearchStocksRepository.self)
-    private var searchStocksRepository: SearchStocksRepository
+    @Injected private var favoritesStockRepository: FavoritesStockRepository
+    @Injected private var searchStocksRepository: SearchStocksRepository
 
     public init() { }
     

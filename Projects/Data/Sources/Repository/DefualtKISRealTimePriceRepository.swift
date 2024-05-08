@@ -16,8 +16,7 @@ import RxSwift
 
 public final class DefualtKISRealTimePriceRepository
 : KISRealTimePriceRepository {
-    @Injected(WebSocketService.self)
-    private var wsService: WebSocketService
+    @Injected private var wsService: WebSocketService
     private let disposeBag = DisposeBag()
     
     public let price = PublishSubject<String>()

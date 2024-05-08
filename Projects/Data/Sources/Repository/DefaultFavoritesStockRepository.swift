@@ -16,8 +16,7 @@ import RxSwift
 import RxCocoa
 
 public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
-    @Injected(RxCoreDataService.self)
-    private var coreDataService: RxCoreDataService
+    @Injected private var coreDataService: RxCoreDataService
     
     public init() { }
     
