@@ -44,4 +44,3 @@ public extension Array<LogoResponse> {
         return resultList
     }
 }
-

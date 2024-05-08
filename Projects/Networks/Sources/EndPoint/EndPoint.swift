@@ -35,16 +35,21 @@ extension EndPoint {
                 .init(name: $0.key, value: $0.value)
             }
         }
-        guard let url = urlComponent.url else { return nil }
+        guard let urlStr = urlComponent.url?.absoluteString
+            .replacingOccurrences(of: "%25", with: "%"),
+              let url = URL(string: urlStr)
+        else { return nil }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = method.toString
         urlRequest.allHTTPHeaderFields = header
         if !body.isEmpty {
             do {
-                let body = try JSONSerialization.data(withJSONObject: body)
-                urlRequest.httpBody = body
+                let httpBody = try JSONSerialization.data(withJSONObject: body)
+                urlRequest.httpBody = httpBody
             } catch {
+                #if DEBUG
                 print(error.localizedDescription)
+                #endif
             }
         }
         return urlRequest

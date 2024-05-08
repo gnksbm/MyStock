@@ -73,7 +73,6 @@ public final class StockInfoTVCell: UITableViewCell {
     
     private func configureUI() {
         selectionStyle = .none
-        let foregroundColor = DesignSystemAsset.chartForeground.color
         contentView.backgroundColor = DesignSystemAsset.chartBackground.color
         
         [logoImgView, tickerLabel, nameLabel].forEach {

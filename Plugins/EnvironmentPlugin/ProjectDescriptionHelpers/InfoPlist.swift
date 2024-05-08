@@ -51,6 +51,10 @@ public extension [String: Plist.Value] {
                     "NSIncludesSubdomains": true,
                     "NSExceptionAllowsInsecureHTTPLoads": true,
                     "NSTemporaryExceptionAllowsInsecureWebSocketLoads": true
+                ],
+                "apis.data.go.kr": [
+                    "NSIncludesSubdomains": true,
+                    "NSExceptionAllowsInsecureHTTPLoads": true,
                 ]
             ]
         ],
