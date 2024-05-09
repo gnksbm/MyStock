@@ -10,6 +10,7 @@ import Foundation
 
 enum WebSocketError: LocalizedError {
     case sendError(Error)
+    case pingError(Error)
     case invalidURL
     case unknownMessage
     
@@ -17,6 +18,8 @@ enum WebSocketError: LocalizedError {
         switch self {
         case .sendError(let error):
             return "에러: \(error.localizedDescription)"
+        case .pingError(let error):
+            return "핑 에러: \(error.localizedDescription)"
         case .invalidURL:
             return "유효하지 않은 URL입니다."
         case .unknownMessage:
