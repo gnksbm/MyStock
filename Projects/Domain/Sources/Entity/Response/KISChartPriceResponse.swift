@@ -8,7 +8,7 @@
 
 import Foundation
 
-import DesignSystem
+import Core
 
 public struct KISChartPriceResponse: CandlestickRepresentable, Equatable {
     public let date: Date

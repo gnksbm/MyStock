@@ -18,7 +18,7 @@ public protocol CandlestickRepresentable {
     var closingPrice: Price { get }
 }
 
-extension CandlestickRepresentable {
+public extension CandlestickRepresentable {
     var dailyRange: Price {
         highestPrice - lowestPrice
     }
@@ -39,7 +39,7 @@ extension CandlestickRepresentable {
     }
 }
 
-extension Array<CandlestickRepresentable> {
+public extension Array<CandlestickRepresentable> {
     var chartHighest: Element.Price? {
         self.lazy.map { $0.highestPrice }.max()
     }

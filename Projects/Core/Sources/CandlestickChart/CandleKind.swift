@@ -8,6 +8,6 @@
 
 import Foundation
 
-enum CandleKind {
+public enum CandleKind {
     case white, dodge, black
 }
