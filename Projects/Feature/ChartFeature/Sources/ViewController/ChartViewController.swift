@@ -75,16 +75,13 @@ final class ChartViewController: BaseViewController {
     private func bind() {
         let output = viewModel.transform(
             input: .init(
-                viewWillAppear: self.rx.methodInvoked(
+                viewWillAppearEvent: self.rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
-                ).map { _ in },
-                viewWillDisappear: self.rx.methodInvoked(
-                    #selector(UIViewController.viewWillDisappear)
                 ).map { _ in }
             )
         )
         
-        output.candleList
+        output.candleDatas
             .withUnretained(self)
             .observe(on: MainScheduler.asyncInstance)
             .subscribe(

@@ -37,11 +37,11 @@ final class ChartViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         let output = Output(
-            candleList: .init(),
+            candleDatas: .init(),
             title: title
         )
         
-        input.viewWillAppear
+        input.viewWillAppearEvent
             .withUnretained(self)
             .flatMap { vm, _ in
                 let date = Date()
@@ -59,19 +59,10 @@ final class ChartViewModel: ViewModel {
             .distinctUntilChanged()
             .subscribe(
                 onNext: { response in
-                    output.candleList.onNext(response)
+                    output.candleDatas.onNext(response)
                 },
                 onError: { [weak self] error in
                     self?.coordinator.showError(error: error)
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        input.viewWillDisappear
-            .withUnretained(self)
-            .subscribe(
-                onNext: { viewModel, _ in
-                    viewModel.useCase.disconnectRealTimePrice()
                 }
             )
             .disposed(by: disposeBag)
@@ -83,12 +74,11 @@ final class ChartViewModel: ViewModel {
 
 extension ChartViewModel {
     struct Input {
-        let viewWillAppear: Observable<Void>
-        let viewWillDisappear: Observable<Void>
+        let viewWillAppearEvent: Observable<Void>
     }
     
     struct Output {
-        let candleList: PublishSubject<[KISChartPriceResponse]>
+        let candleDatas: PublishSubject<[KISChartPriceResponse]>
         let title: String
     }
 }
