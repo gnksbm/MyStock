@@ -8,29 +8,29 @@
 
 import Foundation
 
+import Core
+
 import RxSwift
 
 public final class DefaultSettingsUseCase: SettingsUseCase {
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     public init() { }
     
     public func fetchAPIInfo(
     ) -> Observable<KISUserInfo> {
-        .create { observer in
+        .create { [weak self] observer in
             let disposable = Disposables.create()
-            let userDefaults = UserDefaults.appGroup
-            guard let accountNum = userDefaults.string(forKey: "accountNum"),
-                  let appKey = userDefaults.string(forKey: "appKey"),
-                  let secretKey = userDefaults.string(forKey: "secretKey")
-            else {
-                return disposable
-            }
-            observer.onNext(
-                .init(
-                    accountNum: accountNum,
-                    appKey: appKey,
-                    secretKey: secretKey
-                )
-            )
+            guard let self else { return disposable }
+            observer.onNext(userInfo)
             observer.onCompleted()
             return disposable
         }
@@ -39,18 +39,6 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
     public func saveAPIInfo(
         userInfo: KISUserInfo
     ) {
-        let userDefaults = UserDefaults.appGroup
-        userDefaults.setValue(
-            userInfo.accountNum,
-            forKey: "accountNum"
-        )
-        userDefaults.setValue(
-            userInfo.appKey,
-            forKey: "appKey"
-        )
-        userDefaults.setValue(
-            userInfo.secretKey,
-            forKey: "secretKey"
-        )
+        self.userInfo = userInfo
     }
 }
