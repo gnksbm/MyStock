@@ -17,60 +17,14 @@ import RxSwift
 public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
     @Injected private var networkService: NetworkService
     
-    private let disposeBag = DisposeBag()
-    
-    public var chartResponse = PublishSubject<[KISChartPriceResponse]>()
-    
     public init() { }
-    
-    public func requestChartData(
-        request: KISChartPriceRequest
-    ) {
-        networkService.request(
-            endPoint: KISChartPriceEndPoint(
-                investType: request.investType,
-                marketType: request.marketType,
-                period: request.period,
-                ticker: request.ticker,
-                startDate: request.startDate,
-                endDate: request.endDate,
-                authorization: request.authorization
-            )
-        )
-        .compactMap {
-            switch request.marketType {
-            case .overseas:
-                try? $0.decode(type: KISOverseasChartPriceDTO.self).toDomain
-            case .domestic:
-                try? $0.decode(type: KISDomesticChartPriceDTO.self).toDomain
-            }
-        }
-        .withUnretained(self)
-        .subscribe(
-            onNext: { repository, response in
-                repository.chartResponse.onNext(response)
-            },
-            onError: {
-                print(
-                "\(String(describing: self)): \($0.localizedDescription)"
-                )
-            }
-        )
-        .disposed(by: disposeBag)
-    }
     
     public func fetchChartData(
         request: KISChartPriceRequest
     ) -> Observable<[KISChartPriceResponse]> {
         networkService.request(
             endPoint: KISChartPriceEndPoint(
-                investType: request.investType,
-                marketType: request.marketType,
-                period: request.period,
-                ticker: request.ticker,
-                startDate: request.startDate,
-                endDate: request.endDate,
-                authorization: request.authorization
+                request: request
             )
         )
         .compactMap {
