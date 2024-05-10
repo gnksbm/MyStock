@@ -8,9 +8,20 @@
 
 import Foundation
 
+import Core
 import Domain
 
 public struct KISCurrentPriceEntPoint: KISEndPoint {
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     let investType: InvestType
     let token: String
     let ticker: String
@@ -22,11 +33,11 @@ public struct KISCurrentPriceEntPoint: KISEndPoint {
     public var query: [String : String]
     
     public var header: [String : String] {
-        return [
+        [
             "content-type": "application/json",
             "authorization": token,
-            "appkey": .appKey,
-            "appsecret": .secretKey,
+            "appkey": userInfo.appKey,
+            "appsecret": userInfo.secretKey,
             "tr_id": "FHKST01010100"
         ]
         

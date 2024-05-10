@@ -12,6 +12,16 @@ import Core
 import Domain
 
 public struct KISChartPriceEndPoint: KISEndPoint {
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     let request: KISChartPriceRequest
     
     public var path: String {
@@ -45,16 +55,16 @@ public struct KISChartPriceEndPoint: KISEndPoint {
         case .overseas:
             return [
                 "authorization": "Bearer \(request.authorization)",
-                "appkey": .appKey,
-                "appsecret": .secretKey,
+                "appkey": userInfo.appKey,
+                "appsecret": userInfo.secretKey,
                 "tr_id": "FHKST03030100",
             ]
         case .domestic:
             return [
                 "content-type": "application/json",
                 "authorization": "Bearer \(request.authorization)",
-                "appkey": .appKey,
-                "appsecret": .secretKey,
+                "appkey": userInfo.appKey,
+                "appsecret": userInfo.secretKey,
                 "tr_id": "FHKST03010100",
                 "custtype": "P"
             ]

@@ -12,7 +12,18 @@ import Domain
 import Core
 
 public struct KISCheckBalanceEndPoint: KISEndPoint {
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     let investType: InvestType
+    private let authorization: String
     
     public var path: String {
         "/uapi/domestic-stock/v1/trading/inquire-balance"
@@ -20,7 +31,15 @@ public struct KISCheckBalanceEndPoint: KISEndPoint {
     
     public var query: [String : String]
     
-    public var header: [String : String]
+    public var header: [String : String] {
+        [
+            "content-type": "application/json",
+            "authorization": "Bearer \(authorization)", // "Bearer ..."
+            "appkey": userInfo.appKey,
+            "appsecret": userInfo.secretKey,
+            "tr_id": investType.tradingID
+        ]
+    }
     
     public var body: [String: String] {
         [:]
@@ -37,13 +56,7 @@ public struct KISCheckBalanceEndPoint: KISEndPoint {
     ) {
         self.investType = investType
         self.query = query
-        self.header = [
-            "content-type": "application/json",
-            "authorization": "Bearer \(authorization)", // "Bearer ..."
-            "appkey": .appKey,
-            "appsecret": .secretKey,
-            "tr_id": investType.tradingID
-        ]
+        self.authorization = authorization
     }
 }
 

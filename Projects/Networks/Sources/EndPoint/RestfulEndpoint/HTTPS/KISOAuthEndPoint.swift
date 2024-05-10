@@ -12,6 +12,16 @@ import Domain
 import Core
 
 public struct KISOAuthEndPoint: KISEndPoint {
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     let investType: InvestType
     
     let oAuthType: KISOAuthRequest.OAuthType
@@ -34,8 +44,8 @@ public struct KISOAuthEndPoint: KISEndPoint {
     public var body: [String: String] {
         [
             "grant_type": "client_credentials",
-            "appkey": .appKey,
-            secret: .secretKey
+            "appkey": userInfo.appKey,
+            secret: userInfo.secretKey
         ]
     }
     

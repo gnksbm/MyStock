@@ -37,9 +37,6 @@ public extension InfoPlist {
 
 public extension [String: Plist.Value] {
     static let secrets: Self = [
-        "ACCOUNT_NUMBER": "$(ACCOUNT_NUMBER)",
-        "KIS_APP_KEY": "$(KIS_APP_KEY)",
-        "KIS_APP_SECRET": "$(KIS_APP_SECRET)",
         "SEIBRO_APP_KEY": "$(SEIBRO_APP_KEY)",
     ]
     

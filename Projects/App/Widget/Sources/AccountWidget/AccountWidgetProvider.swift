@@ -18,6 +18,15 @@ import RxSwift
 struct AccountWidgetProvider: TimelineProvider {
     @Injected private var oAuthRepository: KISOAuthRepository
     @Injected private var checkBalanceRepository: KISBalanceRepository
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
     private let disposeBag = DisposeBag()
     
     public init() {
@@ -57,9 +66,6 @@ struct AccountWidgetProvider: TimelineProvider {
         in context: Context,
         completion: @escaping (Timeline<AccountWidgetEntry>) -> Void
     ) {
-        guard let accountNum = UserDefaults.appGroup
-            .string(forKey: "accountNum")
-        else { return }
         oAuthRepository.fetchToken(
             request: .init(
                 oAuthType: .access,
@@ -71,7 +77,7 @@ struct AccountWidgetProvider: TimelineProvider {
                 request: .init(
                     investType: .reality,
                     marketType: .domestic,
-                    accountNumber: accountNum
+                    accountNumber: userInfo.accountNum
                 ),
                 authorization: oAuthToken.token
             )

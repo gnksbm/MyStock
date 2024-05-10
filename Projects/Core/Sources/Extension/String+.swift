@@ -31,18 +31,6 @@ public extension String {
         return formatter.string(from: number as NSNumber) ?? self
     }
     
-    static var accountNumber: Self {
-        UserDefaults.appGroup.string(forKey: "accountNum") ?? ""
-    }
-    
-    static var appKey: Self {
-        UserDefaults.appGroup.string(forKey: "appKey") ?? ""
-    }
-    
-    static var secretKey: Self {
-        UserDefaults.appGroup.string(forKey: "secretKey") ?? ""
-    }
-    
     static var seibroKey: Self {
         guard let seibroKey = Bundle.main.object(
             forInfoDictionaryKey: "SEIBRO_APP_KEY"

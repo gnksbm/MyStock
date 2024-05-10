@@ -17,6 +17,16 @@ public final class DefaultBalanceUseCase: BalanceUseCase {
     @Injected private var checkBalanceRepository: KISBalanceRepository
     @Injected private var logoRepository: LogoRepository
     
+    @UserDefaultsWrapper(
+        key: "kisUserInfo",
+        defaultValue: KISUserInfo(
+            accountNum: "",
+            appKey: "",
+            secretKey: ""
+        )
+    )
+    private var userInfo: KISUserInfo
+    
     public init() { }
     
     public func fetchBalance(
@@ -33,7 +43,7 @@ public final class DefaultBalanceUseCase: BalanceUseCase {
                 request: .init(
                     investType: .reality,
                     marketType: .domestic,
-                    accountNumber: .accountNumber
+                    accountNumber: useCase.userInfo.accountNum
                 ),
                 authorization: token.token
             )
