@@ -11,15 +11,8 @@ import Foundation
 import RxSwift
 
 public protocol WebSocketService {
-    var receivedMessage: PublishSubject<(String?, Data?)> { get }
-    
     func openSocket(
         endPoint: WSEndPoint,
         dataToSend: Data
     ) -> Observable<(String?, Data?)>
-    
-    func open(endPoint: WSEndPoint)
-    func close()
-    func send(_ str: String)
-    func send(_ data: Data)
 }
