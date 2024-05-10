@@ -59,18 +59,18 @@ public final class DefaultChartPriceUseCase: ChartUseCase {
         .withUnretained(self)
         .flatMap { useCase, tuple in
             let (chartList, token) = tuple
-            useCase.realTimePriceRepository.requestData(
-                request: .init(
-                    approvalKey: token.token,
-                    ticker: ticker,
-                    investType: .reality,
-                    marketType: marketType
-                )
-            )
             var sortedChartList = chartList.sorted { $0.date < $1.date }
             return Observable.merge(
                 Observable.just(sortedChartList),
-                useCase.realTimePriceRepository.price.map { realtimePrice in
+                useCase.realTimePriceRepository.fetchRealTimePrice(
+                    request: .init(
+                        approvalKey: token.token,
+                        ticker: ticker,
+                        investType: .reality,
+                        marketType: marketType
+                    )
+                )
+                .map { realtimePrice in
                     if let lastChart = sortedChartList.last,
                        let closingPrice = Double(realtimePrice) {
                         sortedChartList.removeLast()
@@ -87,9 +87,5 @@ public final class DefaultChartPriceUseCase: ChartUseCase {
                 }
             )
         }
-    }
-    
-    public func disconnectRealTimePrice() {
-        realTimePriceRepository.disconnectSocket()
     }
 }

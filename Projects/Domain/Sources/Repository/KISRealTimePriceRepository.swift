@@ -12,11 +12,7 @@ import Core
 import RxSwift
 
 public protocol KISRealTimePriceRepository {
-    var price: PublishSubject<String> { get }
-    
-    func requestData(
+    func fetchRealTimePrice(
         request: KISRealTimePriceRequest
-    )
-    
-    func disconnectSocket()
+    ) -> Observable<String>
 }

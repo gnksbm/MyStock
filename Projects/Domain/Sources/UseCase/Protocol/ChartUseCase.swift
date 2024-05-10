@@ -20,6 +20,4 @@ public protocol ChartUseCase {
         startDate: String,
         endDate: String
     ) -> Observable<[KISChartPriceResponse]>
-    
-    func disconnectRealTimePrice()
 }

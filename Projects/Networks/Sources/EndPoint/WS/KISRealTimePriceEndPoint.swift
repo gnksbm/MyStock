@@ -6,6 +6,10 @@
 //  Copyright © 2023 Pepsi-Club. All rights reserved.
 //
 
+/* https://apiportal.koreainvestment.com/apiservice/
+ apiservice-domestic-stock-real2#L_714d1437-8f62-43db-a73c-cf509d3f6aa7
+*/
+
 import Foundation
 
 import Domain
@@ -86,6 +90,47 @@ public struct KISRealTimePriceEndPoint: WSEndPoint {
 }
 
 public extension KISRealTimePriceEndPoint {
+    func dataToSend() throws -> Data {
+        let requestJson = RequestJson(
+            header: .init(
+                approvalKey: approvalKey,
+                custType: "P",
+                trType: "1",
+                contentType: "utf-8"
+            ),
+            body: .init(
+                trID: tradingID,
+                trKey: ticker
+            )
+        )
+        guard let dicJson = """
+        {
+                 "header":
+                 {
+                          "approval_key":"\(approvalKey)",
+                          "custtype":"P",
+                          "tr_type":"1",
+                          "content-type":"utf-8"
+                 },
+                 "body":
+                 {
+                          "input":
+                          {
+                                   "tr_id":"\(tradingID)",
+                                   "tr_key":"\(ticker)"
+                          }
+                 }
+        }
+        """.data(using: .utf8)
+        else { throw WebSocketError.invalidURL }
+        do {
+            let json = try JSONSerialization.jsonObject(with: dicJson)
+            return try JSONSerialization.data(withJSONObject: json)
+        } catch {
+            throw error
+        }
+    }
+    
     var requestJson: Data? {
         let requestJson = RequestJson(
             header: .init(
