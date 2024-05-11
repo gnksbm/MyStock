@@ -91,18 +91,6 @@ public struct KISRealTimePriceEndPoint: WSEndPoint {
 
 public extension KISRealTimePriceEndPoint {
     func dataToSend() throws -> Data {
-        let requestJson = RequestJson(
-            header: .init(
-                approvalKey: approvalKey,
-                custType: "P",
-                trType: "1",
-                contentType: "utf-8"
-            ),
-            body: .init(
-                trID: tradingID,
-                trKey: ticker
-            )
-        )
         guard let dicJson = """
         {
                  "header":
