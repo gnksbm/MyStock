@@ -31,9 +31,9 @@ final class APISettingsViewModel: ViewModel {
     
     func transform(input: Input) -> Output {
         let output = Output(
-            accountNum: .init(value: ""),
-            appKey: .init(value: ""),
-            secretKey: .init(value: "")
+            accountNum: .init(),
+            appKey: .init(),
+            secretKey: .init()
         )
         
         input.viewWillAppearEvent
@@ -139,9 +139,9 @@ extension APISettingsViewModel {
         let saveBtnTapEvent: Observable<KISUserInfo>
     }
     struct Output { 
-        let accountNum: BehaviorSubject<String>
-        let appKey: BehaviorSubject<String>
-        let secretKey: BehaviorSubject<String>
+        let accountNum: PublishSubject<String>
+        let appKey: PublishSubject<String>
+        let secretKey: PublishSubject<String>
     }
 }
 
