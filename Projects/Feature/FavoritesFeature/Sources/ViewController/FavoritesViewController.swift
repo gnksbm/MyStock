@@ -5,6 +5,7 @@ import Domain
 import DesignSystem
 
 import RxSwift
+import SnapKit
 
 public final class FavoritesViewController: UIViewController {
     private let viewModel: FavoritesViewModel
@@ -53,25 +54,13 @@ public final class FavoritesViewController: UIViewController {
     private func configureUI() {
         [favoritesTableView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            favoritesTableView.topAnchor.constraint(
-                equalTo: safeArea.topAnchor
-            ),
-            favoritesTableView.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor
-            ),
-            favoritesTableView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            favoritesTableView.bottomAnchor.constraint(
-                equalTo: safeArea.bottomAnchor
-            ),
-        ])
+        favoritesTableView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalTo(safeArea)
+        }
     }
     
     private func bind() {
