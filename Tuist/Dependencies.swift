@@ -41,6 +41,7 @@ let dependencies = Dependencies(
             "RxCocoaRuntime": .framework,
             "CryptoSwift": .framework,
             "XMLCoder": .framework,
+            "SnapKit": .framework,
         ]
     ),
     platforms: [.iOS]

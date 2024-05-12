@@ -9,7 +9,7 @@ import ProjectDescription
 
 public extension Array<TargetDependency> {
     enum ThirdPartyExternal: CaseIterable {
-        case rxCocoa, cryptoSwift, xmlCoder
+        case rxCocoa, cryptoSwift, xmlCoder, snapKit
         
         public var name: String {
             switch self {
@@ -19,6 +19,8 @@ public extension Array<TargetDependency> {
                 return "CryptoSwift"
             case .xmlCoder:
                 return "XMLCoder"
+            case .snapKit:
+                return "SnapKit"
             }
         }
     }
