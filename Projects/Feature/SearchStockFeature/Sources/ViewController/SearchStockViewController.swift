@@ -14,6 +14,7 @@ import Domain
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class SearchStockViewController: BaseViewController {
     private let viewModel: SearchStockViewModel
@@ -50,25 +51,13 @@ final class SearchStockViewController: BaseViewController {
     private func configureUI() {
         [searchTextField, searchStocksTableView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            searchStocksTableView.topAnchor.constraint(
-                equalTo: safeArea.topAnchor
-            ),
-            searchStocksTableView.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor
-            ),
-            searchStocksTableView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            searchStocksTableView.bottomAnchor.constraint(
-                equalTo: safeArea.bottomAnchor
-            ),
-        ])
+        searchStocksTableView.snp.makeConstraints { make in
+            make.top.leading.trailing.bottom.equalTo(safeArea)
+        }
     }
     
     private func bind() {
