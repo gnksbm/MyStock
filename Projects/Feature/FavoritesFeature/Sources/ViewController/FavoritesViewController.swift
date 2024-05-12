@@ -59,7 +59,7 @@ public final class FavoritesViewController: UIViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         favoritesTableView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalTo(safeArea)
+            make.edges.equalTo(safeArea)
         }
     }
     

@@ -56,7 +56,7 @@ final class SearchStockViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         searchStocksTableView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalTo(safeArea)
+            make.edges.equalTo(safeArea)
         }
     }
     

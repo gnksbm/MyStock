@@ -59,7 +59,7 @@ final class ChartViewController: BaseViewController {
         let safeArea = view.safeAreaLayoutGuide
         
         candleChartView.snp.makeConstraints { make in
-            make.top.leading.trailing.bottom.equalTo(safeArea)
+            make.edges.equalTo(safeArea)
         }
     }
     
