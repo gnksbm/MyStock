@@ -16,6 +16,7 @@ import FeatureDependency
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class APISettingsViewController: BaseViewController {
     private let viewModel: APISettingsViewModel
@@ -87,23 +88,14 @@ final class APISettingsViewController: BaseViewController {
     private func configureUI() {
         [stackView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            stackView.centerYAnchor.constraint(
-                equalTo: safeArea.centerYAnchor
-            ),
-            stackView.widthAnchor.constraint(
-                equalTo: safeArea.widthAnchor,
-                multiplier: 0.8
-            ),
-            stackView.centerXAnchor.constraint(
-                equalTo: safeArea.centerXAnchor
-            ),
-        ])
+        stackView.snp.makeConstraints { make in
+            make.centerX.centerY.equalTo(safeArea)
+            make.width.equalTo(safeArea).multipliedBy(0.8)
+        }
     }
     
     private func configureNavigation() {

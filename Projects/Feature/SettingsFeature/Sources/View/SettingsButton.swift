@@ -10,6 +10,8 @@ import UIKit
 
 import DesignSystem
 
+import SnapKit
+
 final class SettingsButton: UIButton {
     private let imgConfig = UIImage.SymbolConfiguration.init(
         font: .boldSystemFont(ofSize: 20)
@@ -70,46 +72,28 @@ final class SettingsButton: UIButton {
             underLineView
         ].forEach {
             addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        NSLayoutConstraint.activate([
-            iconImgView.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: 20
-            ),
-            iconImgView.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: 10
-            ),
-            iconImgView.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
-                constant: -20
-            ),
-            
-            descriptionLabel.leadingAnchor.constraint(
-                equalTo: iconImgView.trailingAnchor,
-                constant: 20
-            ),
-            descriptionLabel.centerYAnchor.constraint(
-                equalTo: iconImgView.centerYAnchor
-            ),
-            
-            navigationImgView.trailingAnchor.constraint(
-                equalTo: trailingAnchor,
-                constant: -20
-            ),
-            navigationImgView.centerYAnchor.constraint(
-                equalTo: iconImgView.centerYAnchor
-            ),
-            
-            underLineView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            underLineView.centerXAnchor.constraint(equalTo: centerXAnchor),
-            underLineView.heightAnchor.constraint(equalToConstant: 1),
-            underLineView.widthAnchor.constraint(
-                equalTo: widthAnchor,
-                constant: -20
-            ),
-        ])
+        iconImgView.snp.makeConstraints { make in
+            make.top.equalTo(self).offset(10)
+            make.leading.equalTo(self).offset(20)
+            make.bottom.equalTo(self).offset(-20)
+        }
+        
+        descriptionLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(iconImgView)
+            make.leading.equalTo(iconImgView.snp.trailing).offset(20)
+        }
+        
+        navigationImgView.snp.makeConstraints { make in
+            make.centerY.equalTo(iconImgView)
+            make.trailing.equalTo(self).offset(-20)
+        }
+        
+        underLineView.snp.makeConstraints { make in
+            make.bottom.centerX.equalTo(self)
+            make.height.equalTo(1)
+            make.width.equalTo(self).offset(-20)
+        }
     }
 }
