@@ -12,6 +12,7 @@ import Domain
 import DesignSystem
 
 import RxSwift
+import SnapKit
 
 final class StockInfoTVCell: UITableViewCell {
     public var disposeBag = DisposeBag()
@@ -148,67 +149,38 @@ final class StockInfoTVCell: UITableViewCell {
             plAmoutLabel,
         ].forEach {
             contentView.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        NSLayoutConstraint.activate([
-            logoImgView.centerYAnchor.constraint(
-                equalTo: contentView.centerYAnchor
-            ),
-            logoImgView.heightAnchor.constraint(
-                equalToConstant: imgViewSize
-            ),
-            logoImgView.widthAnchor.constraint(
-                equalTo: logoImgView.heightAnchor
-            ),
-            logoImgView.leadingAnchor.constraint(
-                equalTo: contentView.leadingAnchor,
-                constant: 20
-            ),
-            
-            titleLabel.topAnchor.constraint(
-                equalTo: contentView.topAnchor,
-                constant: 10
-            ),
-            titleLabel.leadingAnchor.constraint(
-                equalTo: logoImgView.trailingAnchor,
-                constant: 20
-            ),
-            
-            amountLabel.centerYAnchor.constraint(
-                equalTo: titleLabel.centerYAnchor
-            ),
-            amountLabel.leadingAnchor.constraint(
-                equalTo: titleLabel.trailingAnchor,
-                constant: 5
-            ),
-            
-            priceLabel.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 5
-            ),
-            priceLabel.leadingAnchor.constraint(
-                equalTo: titleLabel.leadingAnchor
-            ),
-            priceLabel.bottomAnchor.constraint(
-                equalTo: contentView.bottomAnchor,
-                constant: -10
-            ),
-            
-            valueLabel.centerYAnchor.constraint(
-                equalTo: titleLabel.centerYAnchor
-            ),
-            valueLabel.trailingAnchor.constraint(
-                equalTo: contentView.trailingAnchor,
-                constant: -20
-            ),
-            
-            plAmoutLabel.bottomAnchor.constraint(
-                equalTo: priceLabel.bottomAnchor
-            ),
-            plAmoutLabel.trailingAnchor.constraint(
-                equalTo: valueLabel.trailingAnchor
-            ),
-        ])
+        logoImgView.snp.makeConstraints { make in
+            make.centerY.equalTo(contentView)
+            make.width.height.equalTo(imgViewSize)
+            make.leading.equalTo(contentView).offset(20)
+        }
+        
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalTo(contentView).offset(10)
+            make.leading.equalTo(logoImgView.snp.trailing).offset(20)
+        }
+        
+        amountLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.leading.equalTo(titleLabel.snp.trailing).offset(5)
+        }
+        
+        priceLabel.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(5)
+            make.leading.equalTo(titleLabel)
+            make.bottom.equalTo(contentView).offset(-10)
+        }
+        
+        valueLabel.snp.makeConstraints { make in
+            make.centerY.equalTo(titleLabel)
+            make.trailing.equalTo(contentView).offset(-20)
+        }
+        
+        plAmoutLabel.snp.makeConstraints { make in
+            make.bottom.equalTo(priceLabel)
+            make.trailing.equalTo(valueLabel)
+        }
     }
 }

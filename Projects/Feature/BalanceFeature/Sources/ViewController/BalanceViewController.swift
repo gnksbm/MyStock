@@ -7,6 +7,7 @@ import DesignSystem
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 public final class BalanceViewController: BaseViewController {
     private let viewModel: BalanceViewModel
@@ -68,36 +69,19 @@ public final class BalanceViewController: BaseViewController {
     private func configureUI() {
         [ratioLabel, portfolioTableView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            ratioLabel.topAnchor.constraint(
-                equalTo: safeArea.topAnchor
-            ),
-            ratioLabel.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor,
-                constant: 20
-            ),
-            ratioLabel.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            
-            portfolioTableView.topAnchor.constraint(
-                equalTo: ratioLabel.bottomAnchor
-            ),
-            portfolioTableView.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor
-            ),
-            portfolioTableView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            portfolioTableView.bottomAnchor.constraint(
-                equalTo: safeArea.bottomAnchor
-            ),
-        ])
+        ratioLabel.snp.makeConstraints { make in
+            make.top.trailing.equalTo(safeArea)
+            make.leading.equalTo(safeArea).offset(20)
+        }
+        
+        portfolioTableView.snp.makeConstraints { make in
+            make.top.equalTo(ratioLabel.snp.bottom)
+            make.leading.trailing.bottom.equalTo(safeArea)
+        }
     }
     
     private func bind() {
