@@ -15,6 +15,7 @@ import FeatureDependency
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 public final class QRCodeReaderViewController: BaseViewController {
     private let viewModel: QRCodeReaderViewModel
@@ -68,33 +69,19 @@ public final class QRCodeReaderViewController: BaseViewController {
         view.backgroundColor = DesignSystemAsset.chartBackground.color
         [cameraView, dismissBtn].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            cameraView.widthAnchor.constraint(
-                equalTo: safeArea.widthAnchor,
-                multiplier: 0.8
-            ),
-            cameraView.heightAnchor.constraint(equalTo: cameraView.widthAnchor),
-            cameraView.centerXAnchor.constraint(
-                equalTo: safeArea.centerXAnchor
-            ),
-            cameraView.centerYAnchor.constraint(
-                equalTo: safeArea.centerYAnchor
-            ),
-            
-            dismissBtn.topAnchor.constraint(
-                equalTo: safeArea.topAnchor,
-                constant: 10
-            ),
-            dismissBtn.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor,
-                constant: 10
-            ),
-        ])
+        cameraView.snp.makeConstraints { make in
+            make.width.equalTo(safeArea).multipliedBy(0.8)
+            make.height.equalTo(cameraView.snp.width)
+            make.centerX.centerY.equalTo(safeArea)
+        }
+        
+        dismissBtn.snp.makeConstraints { make in
+            make.top.leading.equalTo(safeArea).offset(10)
+        }
     }
     
     private func bind() {

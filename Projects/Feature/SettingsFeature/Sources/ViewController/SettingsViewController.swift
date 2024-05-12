@@ -4,6 +4,7 @@ import DesignSystem
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 public final class SettingsViewController: UIViewController {
     private let viewModel: SettingsViewModel
@@ -41,18 +42,13 @@ public final class SettingsViewController: UIViewController {
     private func configureUI() {
         [stackView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            stackView.widthAnchor.constraint(
-                equalTo: safeArea.widthAnchor
-            ),
-            stackView.centerXAnchor.constraint(equalTo: safeArea.centerXAnchor),
-        ])
+        stackView.snp.makeConstraints { make in
+            make.top.width.centerX.equalTo(safeArea)
+        }
     }
     
     private func bind() {

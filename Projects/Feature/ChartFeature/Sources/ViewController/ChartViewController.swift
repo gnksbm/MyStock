@@ -5,6 +5,7 @@ import DesignSystem
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class ChartViewController: BaseViewController {
     private var viewModel: ChartViewModel
@@ -53,23 +54,13 @@ final class ChartViewController: BaseViewController {
 
         [candleChartView].forEach {
             view.addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
         let safeArea = view.safeAreaLayoutGuide
         
-        NSLayoutConstraint.activate([
-            candleChartView.topAnchor.constraint(equalTo: safeArea.topAnchor),
-            candleChartView.leadingAnchor.constraint(
-                equalTo: safeArea.leadingAnchor
-            ),
-            candleChartView.trailingAnchor.constraint(
-                equalTo: safeArea.trailingAnchor
-            ),
-            candleChartView.bottomAnchor.constraint(
-                equalTo: safeArea.bottomAnchor
-            ),
-        ])
+        candleChartView.snp.makeConstraints { make in
+            make.edges.equalTo(safeArea)
+        }
     }
     
     private func bind() {

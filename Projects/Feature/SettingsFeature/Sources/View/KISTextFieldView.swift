@@ -12,6 +12,7 @@ import DesignSystem
 
 import RxSwift
 import RxCocoa
+import SnapKit
 
 final class KISTextFieldView: UIView {
     private let disposeBag = DisposeBag()
@@ -45,35 +46,19 @@ final class KISTextFieldView: UIView {
         
         [textField, titleLabel].forEach {
             addSubview($0)
-            $0.translatesAutoresizingMaskIntoConstraints = false
         }
         
-        NSLayoutConstraint.activate([
-            titleLabel.leadingAnchor.constraint(
-                equalTo: leadingAnchor,
-                constant: 20
-            ),
-            titleLabel.topAnchor.constraint(
-                equalTo: topAnchor,
-                constant: 10
-            ),
-            
-            textField.topAnchor.constraint(
-                equalTo: titleLabel.bottomAnchor,
-                constant: 10
-            ),
-            textField.widthAnchor.constraint(
-                equalTo: widthAnchor,
-                multiplier: 0.9
-            ),
-            textField.centerXAnchor.constraint(
-                equalTo: centerXAnchor
-            ),
-            textField.bottomAnchor.constraint(
-                equalTo: bottomAnchor,
-                constant: -10
-            ),
-        ])
+        titleLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
+        }
+        
+        textField.snp.makeConstraints { make in
+            make.top.equalTo(titleLabel.snp.bottom).offset(10)
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10)
+        }
     }
     
     private func bind() {

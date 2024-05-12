@@ -14,7 +14,7 @@ public extension Array<Package> {
 
 public extension Array<Package>.ThirdPartyRemote {
     enum SPM: CaseIterable {
-        case rxSwift, cryptoSwift, xmlCoder
+        case rxSwift, cryptoSwift, xmlCoder, snapKit
         
         public var url: String {
             switch self {
@@ -24,6 +24,8 @@ public extension Array<Package>.ThirdPartyRemote {
                 return "https://github.com/krzyzanowskim/CryptoSwift"
             case .xmlCoder:
                 return "https://github.com/CoreOffice/XMLCoder.git"
+            case .snapKit:
+                return "https://github.com/SnapKit/SnapKit.git"
             }
         }
         
@@ -35,6 +37,8 @@ public extension Array<Package>.ThirdPartyRemote {
                 return "1.8.0"
             case .xmlCoder:
                 return "0.17.1"
+            case .snapKit:
+                return "5.1.1"
             }
         }
     }
