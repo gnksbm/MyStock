@@ -49,15 +49,15 @@ final class KISTextFieldView: UIView {
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(10)
-            make.leading.equalTo(self).offset(20)
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
         }
         
         textField.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(10)
-            make.width.equalTo(self).multipliedBy(0.9)
-            make.centerX.equalTo(self)
-            make.bottom.equalTo(self).offset(-10)
+            make.width.equalToSuperview().multipliedBy(0.9)
+            make.centerX.equalToSuperview()
+            make.bottom.equalToSuperview().offset(-10)
         }
     }
     

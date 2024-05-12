@@ -75,9 +75,9 @@ final class SettingsButton: UIButton {
         }
         
         iconImgView.snp.makeConstraints { make in
-            make.top.equalTo(self).offset(10)
-            make.leading.equalTo(self).offset(20)
-            make.bottom.equalTo(self).offset(-20)
+            make.top.equalToSuperview().offset(10)
+            make.leading.equalToSuperview().offset(20)
+            make.bottom.equalToSuperview().offset(-20)
         }
         
         descriptionLabel.snp.makeConstraints { make in
@@ -87,13 +87,13 @@ final class SettingsButton: UIButton {
         
         navigationImgView.snp.makeConstraints { make in
             make.centerY.equalTo(iconImgView)
-            make.trailing.equalTo(self).offset(-20)
+            make.trailing.equalToSuperview().offset(-20)
         }
         
         underLineView.snp.makeConstraints { make in
-            make.bottom.centerX.equalTo(self)
+            make.bottom.centerX.equalToSuperview()
             make.height.equalTo(1)
-            make.width.equalTo(self).offset(-20)
+            make.width.equalToSuperview().offset(-20)
         }
     }
 }

@@ -152,13 +152,13 @@ final class StockInfoTVCell: UITableViewCell {
         }
         
         logoImgView.snp.makeConstraints { make in
-            make.centerY.equalTo(contentView)
+            make.centerY.equalToSuperview()
             make.width.height.equalTo(imgViewSize)
-            make.leading.equalTo(contentView).offset(20)
+            make.leading.equalToSuperview().offset(20)
         }
         
         titleLabel.snp.makeConstraints { make in
-            make.top.equalTo(contentView).offset(10)
+            make.top.equalToSuperview().offset(10)
             make.leading.equalTo(logoImgView.snp.trailing).offset(20)
         }
         
@@ -170,12 +170,12 @@ final class StockInfoTVCell: UITableViewCell {
         priceLabel.snp.makeConstraints { make in
             make.top.equalTo(titleLabel.snp.bottom).offset(5)
             make.leading.equalTo(titleLabel)
-            make.bottom.equalTo(contentView).offset(-10)
+            make.bottom.equalToSuperview().offset(-10)
         }
         
         valueLabel.snp.makeConstraints { make in
             make.centerY.equalTo(titleLabel)
-            make.trailing.equalTo(contentView).offset(-20)
+            make.trailing.equalToSuperview().offset(-20)
         }
         
         plAmoutLabel.snp.makeConstraints { make in
