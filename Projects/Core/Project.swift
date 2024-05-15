@@ -1,11 +1,12 @@
 import ProjectDescription
-import DependencyPlugin
 import ProjectDescriptionHelpers
+
+import DependencyPlugin
 
 let project = Project.makeProject(
     name: "Core",
     moduleType: .framework,
     dependencies: [
-        .thirdPartyLibs
+        AppDependency.thirdPartyLibs
     ]
 )

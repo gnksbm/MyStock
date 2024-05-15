@@ -1,8 +1,10 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+import DependencyPlugin
+
 let project = Project.makeProject(
     name: "MainFeature",
     moduleType: .staticFramework,
-    dependencies: .Feature.allCases.map { $0.dependency }
+    dependencies: AppDependency.features
 )

@@ -1,12 +1,13 @@
 import ProjectDescription
-import DependencyPlugin
 import ProjectDescriptionHelpers
+
+import DependencyPlugin
 
 let project = Project.makeProject(
     name: "Data",
     moduleType: .staticFramework,
     dependencies: [
-        .networks,
-        .coreDataService
+        AppDependency.networks,
+        AppDependency.coreDataService
     ]
 )

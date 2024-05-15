@@ -1,11 +1,13 @@
 import ProjectDescription
 import ProjectDescriptionHelpers
 
+import DependencyPlugin
+
 let project = Project.makeProject(
     name: "FeatureDependency",
     moduleType: .framework,
     dependencies: [
-        .domain,
-        .designSystem
+        AppDependency.domain,
+        AppDependency.designSystem
     ]
 )

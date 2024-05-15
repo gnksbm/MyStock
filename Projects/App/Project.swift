@@ -1,6 +1,7 @@
 import ProjectDescription
-import DependencyPlugin
 import ProjectDescriptionHelpers
+
+import DependencyPlugin
 
 let project = Project.makeProject(
     name: "App",
@@ -19,15 +20,15 @@ let project = Project.makeProject(
                 path: .relativeToCurrentFile("Widget/Widget.entitlements")
             ),
             dependencies: [
-                .mainFeature,
-                .data,
+                AppDependency.mainFeature,
+                AppDependency.data,
             ]
         )
     ],
     coreDataModel: .init("Resources/Model.xcdatamodeld"),
     dependencies: [
-        .mainFeature,
-        .data,
-        .domain,
+        AppDependency.mainFeature,
+        AppDependency.data,
+        AppDependency.domain,
     ]
 )

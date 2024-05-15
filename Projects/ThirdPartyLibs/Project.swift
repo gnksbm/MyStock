@@ -1,11 +1,10 @@
 import ProjectDescription
-import DependencyPlugin
 import ProjectDescriptionHelpers
+
+import DependencyPlugin
 
 let project = Project.makeProject(
     name: "ThirdPartyLibs",
     moduleType: .framework,
-    dependencies: .ThirdPartyExternal.allCases.map {
-        .external(name: $0.name)
-    }
+    dependencies: AppDependency.thirdPartyDependencies
 )
