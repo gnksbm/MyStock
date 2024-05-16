@@ -92,8 +92,8 @@ public extension SettingsDictionary {
         merging(
             [
                 "VERSIONING_SYSTEM": .string("apple-generic"),
-                "CURRENT_PROJECT_VERSION": .currentProjectVersion,
-                "MARKETING_VERSION": .marketingVersion
+                "CURRENT_PROJECT_VERSION": .string(AppEnvironment.buildVersion),
+                "MARKETING_VERSION": .string(AppEnvironment.marketingVersion)
             ]
         )
     }

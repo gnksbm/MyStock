@@ -73,7 +73,7 @@ extension Project {
         }
         return Project(
             name: name,
-            organizationName: .organizationName,
+            organizationName: AppEnvironment.organizationName,
             targets: targets
         )
     }
@@ -87,8 +87,8 @@ extension Project {
             name: name,
             platform: .iOS,
             product: .app,
-            bundleId: .bundleID,
-            deploymentTarget: .deploymentTarget,
+            bundleId: AppEnvironment.bundleID,
+            deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: .appInfoPlist,
             sources: ["Sources/**"],
             resources: ["Resources/**"],
@@ -111,8 +111,8 @@ extension Project {
             name: name,
             platform: .iOS,
             product: .appExtension,
-            bundleId: .bundleID + ".\(name)",
-            deploymentTarget: .deploymentTarget,
+            bundleId: AppEnvironment.bundleID + ".\(name)",
+            deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: plist,
             sources: ["\(name)/**"],
             resources: resources,
@@ -146,8 +146,8 @@ extension Project {
             name: "\(name)DemoApp",
             platform: .iOS,
             product: .app,
-            bundleId: .bundleID + ".\(name)DemoApp",
-            deploymentTarget: .deploymentTarget,
+            bundleId: AppEnvironment.bundleID + ".\(name)DemoApp",
+            deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: .appInfoPlist,
             sources: [
                 "Demo/**",
@@ -173,8 +173,8 @@ extension Project {
             name: name,
             platform: .iOS,
             product: productType,
-            bundleId: .bundleID + ".\(name)",
-            deploymentTarget: .deploymentTarget,
+            bundleId: AppEnvironment.bundleID + ".\(name)",
+            deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: .frameworkInfoPlist,
             sources: ["Sources/**"],
             resources: hasResource ? ["Resources/**"] : nil,
@@ -194,8 +194,8 @@ extension Project {
             name: "\(name)Tests",
             platform: .iOS,
             product: .unitTests,
-            bundleId: .bundleID + ".\(name)Test",
-            deploymentTarget: .deploymentTarget,
+            bundleId: AppEnvironment.bundleID + ".\(name)Test",
+            deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: .frameworkInfoPlist,
             sources: ["Tests/**"],
             scripts: isFeature ? [.featureSwiftLint] : [.swiftLint],

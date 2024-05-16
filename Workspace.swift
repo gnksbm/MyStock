@@ -9,7 +9,7 @@ import ProjectDescription
 import EnvironmentPlugin
 
 let workspace = Workspace(
-    name: .appName,
+    name: AppEnvironment.appName,
     projects: ["Projects/**"],
     additionalFiles: [
         .glob(pattern: .relativeToRoot(".swiftlint.yml")),
