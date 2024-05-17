@@ -58,9 +58,9 @@ public extension [String: Plist.Value] {
     ]
     
     static let appInfoPlist: Self = [
-        "CFBundleDisplayName": AppEnvironment.bundleDisplayName,
-        "CFBundleShortVersionString": AppEnvironment.bundleShortVersionString,
-        "CFBundleVersion": AppEnvironment.bundleVersion,
+        "CFBundleDisplayName": .string(AppEnvironment.displayName),
+        "CFBundleShortVersionString": .string(AppEnvironment.marketingVersion),
+        "CFBundleVersion": .string(AppEnvironment.buildVersion),
         "UILaunchStoryboardName": "LaunchScreen.storyboard",
         "UIApplicationSceneManifest": [
             "UIApplicationSupportsMultipleScenes": false,
@@ -91,9 +91,9 @@ public extension [String: Plist.Value] {
     ]
     
     static let widget: Self = [
-        "CFBundleShortVersionString": AppEnvironment.bundleShortVersionString,
-        "CFBundleVersion": AppEnvironment.bundleVersion,
-        "CFBundleDisplayName": AppEnvironment.bundleDisplayName,
+        "CFBundleDisplayName": .string(AppEnvironment.displayName),
+        "CFBundleShortVersionString": .string(AppEnvironment.marketingVersion),
+        "CFBundleVersion": .string(AppEnvironment.buildVersion),
         "CFBundlePackageType": "$(PRODUCT_BUNDLE_PACKAGE_TYPE)",
         "NSExtension": [
             "NSExtensionPointIdentifier": "com.apple.widgetkit-extension",

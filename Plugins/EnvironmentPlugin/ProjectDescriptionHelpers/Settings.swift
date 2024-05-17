@@ -76,10 +76,6 @@ public extension SettingsDictionary {
         ]
     ]
     
-    static let deploymentTarget: Self = [
-        "IPHONEOS_DEPLOYMENT_TARGET" : "iOS 16.0"
-    ]
-    
     func enableTestabilty() -> SettingsDictionary {
         merging(
             [

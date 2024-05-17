@@ -93,7 +93,7 @@ extension Project {
             sources: ["Sources/**"],
             resources: ["Resources/**"],
             entitlements: entitlements,
-            scripts: [.swiftLint],
+            scripts: [AppEnvironment.swiftLint],
             dependencies: dependencies,
             settings: .appDebug
         )
@@ -117,7 +117,7 @@ extension Project {
             sources: ["\(name)/**"],
             resources: resources,
             entitlements: entitlements,
-            scripts: [.swiftLint],
+            scripts: [AppEnvironment.swiftLint],
             dependencies: dependencies,
             settings: .settings(
                 base: .init()
@@ -154,7 +154,7 @@ extension Project {
                 "Sources/**"
             ],
             entitlements: entitlements,
-            scripts: [.featureSwiftLint],
+            scripts: [AppEnvironment.featureSwiftLint],
             dependencies: dependencies
         )
         return target
@@ -179,7 +179,7 @@ extension Project {
             sources: ["Sources/**"],
             resources: hasResource ? ["Resources/**"] : nil,
             entitlements: entitlements,
-            scripts: isFeature ? [.featureSwiftLint] : [.swiftLint],
+            scripts: isFeature ? [AppEnvironment.featureSwiftLint] : [AppEnvironment.swiftLint],
             dependencies: dependencies
         )
         return target
@@ -198,7 +198,7 @@ extension Project {
             deploymentTarget: AppEnvironment.deploymentTarget,
             infoPlist: .frameworkInfoPlist,
             sources: ["Tests/**"],
-            scripts: isFeature ? [.featureSwiftLint] : [.swiftLint],
+            scripts: isFeature ? [AppEnvironment.featureSwiftLint] : [AppEnvironment.swiftLint],
             dependencies: dependencies
         )
     }
