@@ -67,6 +67,7 @@ extension AppDependency {
             "XMLCoder": .framework,
             "SnapKit": .framework,
             "ReactorKit": .framework,
+            "WeakMapTable": .framework,
         ]
     )
     
