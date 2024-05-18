@@ -5,6 +5,7 @@ import Domain
 import DesignSystem
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class FavoritesViewController: UIViewController, View {

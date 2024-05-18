@@ -4,6 +4,7 @@ import Domain
 import DesignSystem
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class BalanceViewController: UIViewController, View {
@@ -106,11 +107,11 @@ final class BalanceViewController: UIViewController, View {
             .bindSnapshot(to: updateSnapshot)
             .disposed(by: disposeBag)
         
-        state.map { $0.collateralRatio }
+        state.map { $0.collateralRatioMsg }
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
-            .subscribe { vc, ratio in
-                vc.ratioLabel.text = "담보 유지 비율: \(String(Int(ratio)))%"
+            .subscribe { vc, message in
+                vc.ratioLabel.text = message
             }
             .disposed(by: disposeBag)
     }

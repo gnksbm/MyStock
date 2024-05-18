@@ -3,6 +3,7 @@ import UIKit
 import DesignSystem
 
 import ReactorKit
+import RxCocoa
 import SnapKit
 
 final class ChartViewController: UIViewController, View {
