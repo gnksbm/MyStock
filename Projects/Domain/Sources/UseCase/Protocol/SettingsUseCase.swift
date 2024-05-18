@@ -11,9 +11,6 @@ import Foundation
 import RxSwift
 
 public protocol SettingsUseCase {
-    func fetchAPIInfo(
-    ) -> Observable<KISUserInfo>
-    func saveAPIInfo(
-        userInfo: KISUserInfo
-    )
+    func fetchAPIInfo() -> Observable<KISUserInfo>
+    func saveAPIInfo(userInfo: KISUserInfo) -> Observable<KISUserInfo>
 }
