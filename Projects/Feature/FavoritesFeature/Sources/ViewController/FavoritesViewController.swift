@@ -4,14 +4,12 @@ import Core
 import Domain
 import DesignSystem
 
-import RxSwift
+import ReactorKit
 import SnapKit
 
-public final class FavoritesViewController: UIViewController {
-    private let viewModel: FavoritesViewModel
-    
+final class FavoritesViewController: UIViewController, View {
     private let stockCellTapEvent = PublishSubject<SearchStocksResponse>()
-    private let disposeBag = DisposeBag()
+    var disposeBag = DisposeBag()
     
     private var dataSource: FavoritesDataSource!
     private var snapshot: FavoritesSnapshot!
@@ -29,26 +27,56 @@ public final class FavoritesViewController: UIViewController {
         return button
     }()
     
-    private lazy var favoritesTableView: StockInfoTableView = {
-        let tableView = StockInfoTableView()
-        return tableView
-    }()
+    private let favoritesTableView = StockInfoTableView()
     
-    public init(viewModel: FavoritesViewModel) {
-        self.viewModel = viewModel
+    init() {
         super.init(nibName: nil, bundle: nil)
+        configureDataSource()
     }
-        
+    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
-        configureDataSource()
         configureNavigation()
+    }
+    
+    func bind(reactor: FavoritesReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    private func bindAction(reactor: FavoritesReactor) {
+        rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map { _ in
+                FavoritesReactor.Action.viewWillAppearEvent
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        addBtn.rx.tap
+            .map { _ in
+                FavoritesReactor.Action.addBtnTapEvent
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        stockCellTapEvent
+            .map { stockInfo in
+                FavoritesReactor.Action.stockCellTapEvent(stockInfo)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: FavoritesReactor) { 
+        reactor.state.map { $0.favoritesStocks }
+            .distinctUntilChanged()
+            .bindSnapshot(to: updateSnapshot)
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
@@ -61,23 +89,6 @@ public final class FavoritesViewController: UIViewController {
         favoritesTableView.snp.makeConstraints { make in
             make.edges.equalTo(safeArea)
         }
-    }
-    
-    private func bind() {
-        let output = viewModel.transform(
-            input: .init(
-                viewWillAppearEvent: rx.methodInvoked(
-                    #selector(UIViewController.viewWillAppear)
-                ).map { _ in },
-                addBtnTapEvent: addBtn.rx.tap.asObservable(),
-                stockCellTapEvent: stockCellTapEvent.asObservable()
-            )
-        )
-        
-        output.favoritesStocks
-            .distinctUntilChanged()
-            .bindSnapshot(to: updateSnapshot)
-            .disposed(by: disposeBag)
     }
     
     private func configureDataSource() {

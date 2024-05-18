@@ -18,11 +18,10 @@ public final class DefaultFavoritesCoordinator: FavoritesCoordinator {
     }
     
     public func start() {
-        let favoritesViewController = FavoritesViewController(
-            viewModel: FavoritesViewModel(
-                useCase: DefaultFavoritesUseCase(),
-                coordinator: self
-            )
+        let favoritesViewController = FavoritesViewController()
+        favoritesViewController.reactor = FavoritesReactor(
+            useCase: DefaultFavoritesUseCase(),
+            coordinator: self
         )
         navigationController.setViewControllers(
             [favoritesViewController],
