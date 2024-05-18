@@ -5,12 +5,13 @@ import Domain
 import FeatureDependency
 import DesignSystem
 
+import ReactorKit
 import RxSwift
 import RxCocoa
 import SnapKit
 
-public final class BalanceViewController: BaseViewController {
-    private let viewModel: BalanceViewModel
+final class BalanceViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
     
     private var dataSource: PortfolioDataSource!
     
@@ -43,21 +44,12 @@ public final class BalanceViewController: BaseViewController {
         return button
     }()
     
-    public init(viewModel: BalanceViewModel) {
-        self.viewModel = viewModel
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     public override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureNavigation()
         configureTableView()
-        bind()
+//        bind()
     }
     
     private func configureNavigation() {
@@ -84,37 +76,47 @@ public final class BalanceViewController: BaseViewController {
         }
     }
     
-    private func bind() {
-        let output = viewModel.transform(
-            input: .init(
-                viewWillAppear: self.rx.methodInvoked(
-                    #selector(UIViewController.viewWillAppear)
-                )
-                .map { _ in },
-                stockCellTapEvent: portfolioTableView.rx.itemSelected
-                    .map { $0.row },
-                searchBtnTapEvent: searchBtn.rx.tap.asObservable()
-            )
-        )
-        
-        output.balanceList
-            .observe(on: MainScheduler.asyncInstance)
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vc, responses in
-                    vc.updateSnapshot(items: responses)
-                }
-            )
+    func bind(reactor: BalanceReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    private func bindAction(reactor: BalanceReactor) {
+        rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map { _ in BalanceReactor.Action.viewWillAppear }
+            .bind(to: reactor.action)
             .disposed(by: disposeBag)
         
-        output.collateralRatio
-            .withUnretained(self)
+        portfolioTableView.rx.itemSelected
+            .map { indexPath in
+                BalanceReactor.Action.stockCellTapEvent(index: indexPath.row)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        searchBtn.rx.tap
+            .map { _ in
+                BalanceReactor.Action.searchBtnTapEvent
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: BalanceReactor) {
+        let state = reactor.state
+            .share()
+        
+        state.map { $0.balanceList }
             .observe(on: MainScheduler.asyncInstance)
-            .subscribe(
-                onNext: { vc, ratio in
-                    vc.ratioLabel.text = "담보 유지 비율: \(String(Int(ratio)))%"
-                }
-            )
+            .bindSnapshot(to: updateSnapshot)
+            .disposed(by: disposeBag)
+        
+        state.map { $0.collateralRatio }
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe { vc, ratio in
+                vc.ratioLabel.text = "담보 유지 비율: \(String(Int(ratio)))%"
+            }
             .disposed(by: disposeBag)
     }
     

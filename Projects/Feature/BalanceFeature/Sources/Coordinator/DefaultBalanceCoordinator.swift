@@ -26,11 +26,10 @@ public final class DefaultBalanceCoordinator: BalanceCoordinator {
     }
     
     public func start() {
-        let homeViewController = BalanceViewController(
-            viewModel: BalanceViewModel(
-                useCase: DefaultBalanceUseCase(),
-                coordinator: self
-            )
+        let homeViewController = BalanceViewController()
+        homeViewController.reactor = BalanceReactor(
+            useCase: DefaultBalanceUseCase(),
+            coordinator: self
         )
         navigationController.setViewControllers(
             [homeViewController],
