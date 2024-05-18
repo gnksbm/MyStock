@@ -1,13 +1,9 @@
 import UIKit
 
-import Networks
 import Domain
-import FeatureDependency
 import DesignSystem
 
 import ReactorKit
-import RxSwift
-import RxCocoa
 import SnapKit
 
 final class BalanceViewController: UIViewController, View {
@@ -49,7 +45,6 @@ final class BalanceViewController: UIViewController, View {
         configureUI()
         configureNavigation()
         configureTableView()
-//        bind()
     }
     
     private func configureNavigation() {
