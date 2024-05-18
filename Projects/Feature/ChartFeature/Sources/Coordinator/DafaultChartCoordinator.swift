@@ -24,14 +24,13 @@ public final class DefaultChartCoordinator: ChartCoordinator {
     }
     
     public func start() {
-        let chartViewController = ChartViewController(
-            viewModel: ChartViewModel(
-                useCase: DefaultChartPriceUseCase(),
-                title: title,
-                ticker: ticker,
-                marketType: marketType,
-                coordinator: self
-            )
+        let chartViewController = ChartViewController()
+        chartViewController.reactor = ChartReactor(
+            useCase: DefaultChartPriceUseCase(),
+            title: title,
+            ticker: ticker,
+            marketType: marketType,
+            coordinator: self
         )
         navigationController.pushViewController(
             chartViewController,

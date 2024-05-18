@@ -1,14 +1,12 @@
 import UIKit
-import Core
-import FeatureDependency
+
 import DesignSystem
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 import SnapKit
 
-final class ChartViewController: BaseViewController {
-    private var viewModel: ChartViewModel
+final class ChartViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
     
     private let searchBtn: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -32,18 +30,9 @@ final class ChartViewController: BaseViewController {
         return candleChartView
     }()
     
-    init(viewModel: ChartViewModel) {
-        self.viewModel = viewModel
-        super.init()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
     override func viewDidLoad() {
+        super.viewDidLoad()
         configureUI()
-        bind()
     }
     
     private func configureUI() {
@@ -63,24 +52,32 @@ final class ChartViewController: BaseViewController {
         }
     }
     
-    private func bind() {
-        let output = viewModel.transform(
-            input: .init(
-                viewWillAppearEvent: self.rx.methodInvoked(
-                    #selector(UIViewController.viewWillAppear)
-                ).map { _ in }
-            )
-        )
-        
-        output.candleDatas
-            .withUnretained(self)
+    func bind(reactor: ChartReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    private func bindAction(reactor: ChartReactor) { 
+        rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .map { _ in
+                ChartReactor.Action.viewWillAppearEvent
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: ChartReactor) {
+        reactor.state
             .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
             .subscribe(
-                onNext: { vc, responses in
-                    vc.candleChartView.updateChart(dataSource: responses)
-                    if let candleData = responses.last {
-                        let closingPrice = candleData.closingPrice.removeDecimal
-                        vc.title = "\(output.title) \(closingPrice)"
+                onNext: { vc, state in
+                    vc.candleChartView.updateChart(
+                        dataSource: state.candleDatas
+                    )
+                    if let closingPrice = state.candleDatas.last?
+                        .closingPrice.removeDecimal {
+                        vc.title = "\(state.title) \(closingPrice)"
                     }
                 }
             )
