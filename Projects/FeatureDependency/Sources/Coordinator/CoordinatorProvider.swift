@@ -22,4 +22,9 @@ public protocol CoordinatorProvider {
         marketType: MarketType,
         navigationController: UINavigationController
     ) -> ChartCoordinator
+    
+    func makeApiSettingsCoordinator(
+        parent: Coordinator?,
+        navigationController: UINavigationController
+    ) -> APISettingsCoordinator
 }

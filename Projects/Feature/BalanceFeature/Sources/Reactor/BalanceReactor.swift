@@ -20,7 +20,7 @@ final class BalanceReactor: Reactor {
     
     struct State {
         var balanceList: [KISCheckBalanceResponse] = []
-        var collateralRatio: Double = 0
+        var collateralRatioMsg: String = ""
     }
     
     enum Action {
@@ -33,15 +33,15 @@ final class BalanceReactor: Reactor {
         case fetchedBalanceInfo((Double, [KISCheckBalanceResponse]))
         case startChartFlow(index: Int)
         case startSearchFlow
+        case failToLogin
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppear:
             useCase.fetchBalance()
-                .map { tuple in
-                        .fetchedBalanceInfo(tuple)
-                }
+                .map { .fetchedBalanceInfo($0) }
+                .catchAndReturn(.failToLogin)
         case .stockCellTapEvent(let index):
                 .just(.startChartFlow(index: index))
         case .searchBtnTapEvent:
@@ -55,13 +55,32 @@ final class BalanceReactor: Reactor {
     ) -> State {
         var newState = state
         switch mutation {
-        case .fetchedBalanceInfo(let (collateralRatio, balances)):
+        case .fetchedBalanceInfo(let (ratio, balances)):
             newState.balanceList = balances
-            newState.collateralRatio = collateralRatio
+            newState.collateralRatioMsg = "담보 유지 비율: \(String(Int(ratio)))%"
         case .startChartFlow(let index):
             coordinator.startChartFlow(with: newState.balanceList[index])
         case .startSearchFlow:
             coordinator.startSearchStocksFlow()
+        case .failToLogin:
+            newState.collateralRatioMsg = "계좌 정보를 확인하려면 로그인 해주세요"
+            coordinator.showAlert(
+                title: "로그인에 실패했습니다.",
+                message: "로그인 정보를 수정해주세요",
+                alertAction: [
+                    .init(
+                        title: "설정하러 가기",
+                        style: .destructive,
+                        handler: { [weak self] _ in
+                            self?.coordinator.startApiSettingsFlow()
+                        }
+                    ),
+                    .init(
+                        title: "확인",
+                        style: .cancel
+                    )
+                ]
+            )
         }
         return newState
     }

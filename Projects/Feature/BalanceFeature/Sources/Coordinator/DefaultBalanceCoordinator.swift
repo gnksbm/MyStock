@@ -57,4 +57,13 @@ public extension DefaultBalanceCoordinator {
             )
         startChildCoordinator(searchStockCoordinator)
     }
+    
+    func startApiSettingsFlow() {
+        let apiSettingsCoordinator = coordinatorProvider
+            .makeApiSettingsCoordinator(
+                parent: self,
+                navigationController: navigationController
+            )
+        startChildCoordinator(apiSettingsCoordinator)
+    }
 }
