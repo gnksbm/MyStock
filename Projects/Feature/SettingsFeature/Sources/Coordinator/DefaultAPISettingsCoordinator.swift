@@ -40,15 +40,3 @@ public final class DefaultAPISettingsCoordinator: APISettingsCoordinator {
         )
     }
 }
-
-extension DefaultAPISettingsCoordinator {
-    public func startQRCodeReaderFlow() {
-        let qrCodeReaderCoordinator = DefaultQRCodeReaderCoordinator(
-            parent: self,
-            delegate: qrDelegate,
-            navigationController: navigationController
-        )
-        childs.append(qrCodeReaderCoordinator)
-        qrCodeReaderCoordinator.presentViewController()
-    }
-}

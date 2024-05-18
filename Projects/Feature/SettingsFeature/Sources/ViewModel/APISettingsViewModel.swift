@@ -54,28 +54,6 @@ final class APISettingsViewModel: ViewModel {
             )
             .disposed(by: disposeBag)
         
-        input.qrGenerateBtnEvent
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vm, apiKey in
-                    guard let data = apiKey.encode()
-                    else { return }
-                    vm.coordinator.presentWithImg(
-                        img: .generateQRImg(data: data)
-                    )
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        input.qrReaderBtnEvent
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vm, _ in
-                    vm.coordinator.startQRCodeReaderFlow()
-                }
-            )
-            .disposed(by: disposeBag)
-        
         input.saveBtnTapEvent
             .throttle(
                 .seconds(1),
@@ -134,8 +112,6 @@ final class APISettingsViewModel: ViewModel {
 extension APISettingsViewModel {
     struct Input { 
         let viewWillAppearEvent: Observable<Void>
-        let qrReaderBtnEvent: Observable<Void>
-        let qrGenerateBtnEvent: Observable<KISUserInfo>
         let saveBtnTapEvent: Observable<KISUserInfo>
     }
     struct Output { 

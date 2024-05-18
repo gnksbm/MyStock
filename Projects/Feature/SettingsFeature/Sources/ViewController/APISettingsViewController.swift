@@ -23,24 +23,6 @@ final class APISettingsViewController: BaseViewController {
     
     let apiKeyCaptureEvent = PublishSubject<KISUserInfo>()
     
-    private let qrReaderBtn: UIButton = {
-        let btn = UIButton()
-        btn.setImage(
-            .init(systemName: "qrcode.viewfinder"),
-            for: .normal
-        )
-        return btn
-    }()
-    
-    private let qrGenerateBtn: UIButton = {
-        let btn = UIButton()
-        btn.setImage(
-            .init(systemName: "qrcode"),
-            for: .normal
-        )
-        return btn
-    }()
-    
     private let saveBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         var titleContainer = AttributeContainer()
@@ -102,8 +84,6 @@ final class APISettingsViewController: BaseViewController {
         navigationItem.setRightBarButtonItems(
             [
                 .init(customView: saveBtn),
-                .init(customView: qrGenerateBtn),
-                .init(customView: qrReaderBtn),
             ],
             animated: false
         )
@@ -124,23 +104,6 @@ final class APISettingsViewController: BaseViewController {
                 viewWillAppearEvent: rx.methodInvoked(
                     #selector(UIViewController.viewWillAppear)
                 ).map { _ in },
-                qrReaderBtnEvent: qrReaderBtn.rx.tap.asObservable(),
-                qrGenerateBtnEvent: qrGenerateBtn.rx.tap
-                    .flatMap { _ in
-                        Observable.combineLatest(
-                            accountNumTextEvent,
-                            appKeyTextEvent,
-                            secretKeyTextEvent
-                        )
-                    }
-                    .map { tuple in
-                        let (accountNum, appKey, secretKey) = tuple
-                        return .init(
-                            accountNum: accountNum,
-                            appKey: appKey,
-                            secretKey: secretKey
-                        )
-                    },
                 saveBtnTapEvent: saveBtn.rx.tap
                     .flatMap { _ in
                         Observable.combineLatest(
