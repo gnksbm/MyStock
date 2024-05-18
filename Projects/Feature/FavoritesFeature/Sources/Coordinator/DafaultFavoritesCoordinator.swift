@@ -33,7 +33,7 @@ public final class DefaultFavoritesCoordinator: FavoritesCoordinator {
 public extension DefaultFavoritesCoordinator {
     func startSearchFlow() {
         let searchCoordinator = coordinatorProvider.makeSearchStockCoordinator(
-            searchResult: .stockInfo, 
+            searchFlow: .stockInfo, 
             navigationController: navigationController
         )
         startChildCoordinator(searchCoordinator)

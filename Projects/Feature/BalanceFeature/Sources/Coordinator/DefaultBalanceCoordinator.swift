@@ -52,7 +52,7 @@ public extension DefaultBalanceCoordinator {
     func startSearchStocksFlow() {
         let searchStockCoordinator = coordinatorProvider
             .makeSearchStockCoordinator(
-                searchResult: .chart, 
+                searchFlow: .chart, 
                 navigationController: navigationController
             )
         startChildCoordinator(searchStockCoordinator)

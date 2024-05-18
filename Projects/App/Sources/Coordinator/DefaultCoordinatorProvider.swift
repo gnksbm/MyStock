@@ -15,11 +15,11 @@ import SearchStockFeature
 
 final class DefaultCoordinatorProvider: CoordinatorProvider {
     func makeSearchStockCoordinator(
-        searchResult: SearchFlow,
+        searchFlow: SearchFlow,
         navigationController: UINavigationController
     ) -> SearchStockCoordinator {
         DefaultSearchStockCoordinator(
-            searchResult: searchResult,
+            searchFlow: searchFlow,
             navigationController: navigationController,
             coordinatorProvider: self
         )

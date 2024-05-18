@@ -8,21 +8,20 @@
 
 import UIKit
 
-import FeatureDependency
 import DesignSystem
 import Domain
+import FeatureDependency
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 import SnapKit
 
-final class SearchStockViewController: BaseViewController {
-    private let viewModel: SearchStockViewModel
+final class SearchStockViewController: UIViewController, View {
     private var dataSource: DataSource!
     
     private let stockCellTapEvent = PublishSubject<SearchStocksResponse>()
+    var disposeBag = DisposeBag()
     
-    private let searchTextField: UITextField = {
+    private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "종목명, 종목코드를 입력하세요."
         return textField
@@ -30,9 +29,9 @@ final class SearchStockViewController: BaseViewController {
     
     private let searchStocksTableView = StockInfoTableView()
     
-    init(viewModel: SearchStockViewModel) {
-        self.viewModel = viewModel
-        super.init()
+    init() {
+        super.init(nibName: nil, bundle: nil)
+        configureDataSource()
     }
     
     required init?(coder: NSCoder) {
@@ -43,9 +42,48 @@ final class SearchStockViewController: BaseViewController {
         super.viewDidLoad()
         configureUI()
         configureNavigation()
-        configureTableView()
-        bind()
         hideKeyboardOnTapAndOrDrag()
+    }
+    
+    func bind(reactor: SearchStockReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    private func bindAction(reactor: SearchStockReactor) {
+        searchTextField.rx.text.orEmpty.asObservable()
+            .distinctUntilChanged()
+            .filter { !$0.isEmpty }
+            .debounce(
+                .milliseconds(500),
+                scheduler: MainScheduler.asyncInstance
+            )
+            .map {
+                SearchStockReactor.Action.searchTermChangeEvent(searchTerm: $0)
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        stockCellTapEvent
+            .map { SearchStockReactor.Action.stockCellTapEvent($0) }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: SearchStockReactor) { 
+        reactor.state.map { $0.searchResult }
+            .bindSnapshot(to: updateSnapshot)
+            .disposed(by: disposeBag)
+        
+        reactor.state.map { $0.isSearching }
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe(
+                onNext: { _, _ in
+                    // TODO: Loading 화면 노출
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
@@ -58,33 +96,6 @@ final class SearchStockViewController: BaseViewController {
         searchStocksTableView.snp.makeConstraints { make in
             make.edges.equalTo(safeArea)
         }
-    }
-    
-    private func bind() {
-        let output = viewModel.transform(
-            input: .init(
-                searchTerm: searchTextField.rx
-                    .text
-                    .orEmpty
-                    .skip(1)
-                    .asObservable(),
-                stockCellTapEvent: stockCellTapEvent
-            )
-        )
-        
-        output.searchResult
-            .bindSnapshot(to: updateSnapshot)
-            .disposed(by: disposeBag)
-        
-        rx.methodInvoked(#selector(UIViewController.viewDidAppear))
-            .withUnretained(self)
-            .take(1)
-            .subscribe(
-                onNext: { viewController, _ in
-                    viewController.searchTextField.becomeFirstResponder()
-                }
-            )
-            .disposed(by: disposeBag)
     }
     
     private func configureNavigation() {
@@ -106,7 +117,7 @@ final class SearchStockViewController: BaseViewController {
         searchStocksTableView.keyboardDismissMode = .onDrag
     }
     
-    private func configureTableView() {
+    private func configureDataSource() {
         dataSource = DataSource(
             tableView: searchStocksTableView
         ) { [weak self] tableView, indexPath, item in

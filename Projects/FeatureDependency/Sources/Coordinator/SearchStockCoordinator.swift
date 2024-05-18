@@ -3,7 +3,7 @@ import Foundation
 import Domain
 
 public protocol SearchStockCoordinator: Coordinator {
-    var searchResult: SearchFlow { get }
+    var searchFlow: SearchFlow { get }
     
     func startChartFlow(with response: SearchStocksResponse)
     func updateFavoritesFinished()
