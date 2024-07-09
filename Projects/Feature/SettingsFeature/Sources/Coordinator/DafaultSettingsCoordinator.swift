@@ -12,9 +12,8 @@ public final class DefaultSettingsCoordinator: SettingsCoordinator {
     }
     
     public func start() {
-        let settingsViewController = SettingsViewController(
-            viewModel: SettingsViewModel(coordinator: self)
-        )
+        let settingsViewController = SettingsViewController()
+        settingsViewController.reactor = SettingsReactor(coordinator: self)
         navigationController.setViewControllers(
             [settingsViewController],
             animated: false

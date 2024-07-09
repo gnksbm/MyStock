@@ -24,6 +24,13 @@ public struct AppDependency {
     
     private static func getDependency(name: String) -> TargetDependency {
         .project(
+            target: "\(name)",
+            path: .relativeToRoot("Projects/\(name)")
+        )
+    }
+    
+    private static func getFeatureDependency(name: String) -> TargetDependency {
+        .project(
             target: "\(name)Feature",
             path: .relativeToRoot("Projects/Feature/\(name)Feature")
         )
@@ -40,7 +47,7 @@ extension AppDependency {
             var name = rawValue.map { $0 }
             name.removeFirst()
             name.insert(Character(rawValue.first!.uppercased()), at: 0)
-            return getDependency(name: String(name))
+            return getFeatureDependency(name: String(name))
         }
     }
 }
@@ -59,11 +66,13 @@ extension AppDependency {
             "CryptoSwift": .framework,
             "XMLCoder": .framework,
             "SnapKit": .framework,
+            "ReactorKit": .framework,
+            "WeakMapTable": .framework,
         ]
     )
     
     enum ThirdParty: CaseIterable {
-        case rxCocoa, cryptoSwift, xmlCoder, snapKit
+        case rxCocoa, cryptoSwift, xmlCoder, snapKit, reactorKit
         
         public var dependencyName: String {
             switch self {
@@ -75,6 +84,8 @@ extension AppDependency {
                 return "XMLCoder"
             case .snapKit:
                 return "SnapKit"
+            case .reactorKit:
+                return "ReactorKit"
             }
         }
         
@@ -88,6 +99,8 @@ extension AppDependency {
                 return "https://github.com/CoreOffice/XMLCoder.git"
             case .snapKit:
                 return "https://github.com/SnapKit/SnapKit.git"
+            case .reactorKit:
+                return "https://github.com/ReactorKit/ReactorKit.git"
             }
         }
         
@@ -101,6 +114,8 @@ extension AppDependency {
                 return "0.17.1"
             case .snapKit:
                 return "5.7.1"
+            case .reactorKit:
+                return "3.2.0"
             }
         }
     }

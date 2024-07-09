@@ -2,13 +2,11 @@ import UIKit
 
 import DesignSystem
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 import SnapKit
 
-public final class SettingsViewController: UIViewController {
-    private let viewModel: SettingsViewModel
-    
+final class SettingsViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
     private let editAPIKeyBtn = SettingsButton(
         title: "API Key 설정하기",
         icon: UIImage(systemName: "key"),
@@ -24,20 +22,24 @@ public final class SettingsViewController: UIViewController {
         return stackView
     }()
     
-    public init(viewModel: SettingsViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-        
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    public override func viewDidLoad() {
+    override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        bind()
     }
+    
+    func bind(reactor: SettingsReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
+    }
+    
+    private func bindAction(reactor: SettingsReactor) {
+        editAPIKeyBtn.rx.tap
+            .map { _ in SettingsReactor.Action.apiBtnTapEvent }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: SettingsReactor) { }
     
     private func configureUI() {
         [stackView].forEach {
@@ -49,13 +51,5 @@ public final class SettingsViewController: UIViewController {
         stackView.snp.makeConstraints { make in
             make.top.width.centerX.equalTo(safeArea)
         }
-    }
-    
-    private func bind() {
-        _ = viewModel.transform(
-            input: .init(
-                apiBtnTapEvent: editAPIKeyBtn.rx.tap.asObservable()
-            )
-        )
     }
 }

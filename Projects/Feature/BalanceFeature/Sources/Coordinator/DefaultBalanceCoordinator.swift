@@ -26,11 +26,10 @@ public final class DefaultBalanceCoordinator: BalanceCoordinator {
     }
     
     public func start() {
-        let homeViewController = BalanceViewController(
-            viewModel: BalanceViewModel(
-                useCase: DefaultBalanceUseCase(),
-                coordinator: self
-            )
+        let homeViewController = BalanceViewController()
+        homeViewController.reactor = BalanceReactor(
+            useCase: DefaultBalanceUseCase(),
+            coordinator: self
         )
         navigationController.setViewControllers(
             [homeViewController],
@@ -53,9 +52,18 @@ public extension DefaultBalanceCoordinator {
     func startSearchStocksFlow() {
         let searchStockCoordinator = coordinatorProvider
             .makeSearchStockCoordinator(
-                searchResult: .chart, 
+                searchFlow: .chart, 
                 navigationController: navigationController
             )
         startChildCoordinator(searchStockCoordinator)
+    }
+    
+    func startApiSettingsFlow() {
+        let apiSettingsCoordinator = coordinatorProvider
+            .makeApiSettingsCoordinator(
+                parent: self,
+                navigationController: navigationController
+            )
+        startChildCoordinator(apiSettingsCoordinator)
     }
 }

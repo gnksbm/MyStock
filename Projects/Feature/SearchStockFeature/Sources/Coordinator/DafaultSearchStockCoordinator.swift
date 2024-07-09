@@ -12,7 +12,7 @@ import Domain
 import FeatureDependency
 
 public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
-    public var searchResult: SearchFlow
+    public var searchFlow: SearchFlow
     
     public var parent: Coordinator?
     public var childs: [Coordinator] = []
@@ -20,22 +20,21 @@ public final class DefaultSearchStockCoordinator: SearchStockCoordinator {
     public var coordinatorProvider: CoordinatorProvider
     
     public init(
-        searchResult: SearchFlow,
+        searchFlow: SearchFlow,
         navigationController: UINavigationController,
         coordinatorProvider: CoordinatorProvider
     ) {
-        self.searchResult = searchResult
+        self.searchFlow = searchFlow
         self.navigationController = navigationController
         self.coordinatorProvider = coordinatorProvider
     }
     
     public func start() {
-        let searchStocksViewController = SearchStockViewController(
-            viewModel: SearchStockViewModel(
-                useCase: DefaultSearchStocksUseCase(),
-                searchResult: searchResult,
-                coordinator: self
-            )
+        let searchStocksViewController = SearchStockViewController()
+        searchStocksViewController.reactor = SearchStockReactor(
+            useCase: DefaultSearchStocksUseCase(),
+            searchFlow: searchFlow,
+            coordinator: self
         )
         navigationController.pushViewController(
             searchStocksViewController,

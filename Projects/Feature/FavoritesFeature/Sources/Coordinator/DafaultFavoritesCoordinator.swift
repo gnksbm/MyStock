@@ -18,11 +18,10 @@ public final class DefaultFavoritesCoordinator: FavoritesCoordinator {
     }
     
     public func start() {
-        let favoritesViewController = FavoritesViewController(
-            viewModel: FavoritesViewModel(
-                useCase: DefaultFavoritesUseCase(),
-                coordinator: self
-            )
+        let favoritesViewController = FavoritesViewController()
+        favoritesViewController.reactor = FavoritesReactor(
+            useCase: DefaultFavoritesUseCase(),
+            coordinator: self
         )
         navigationController.setViewControllers(
             [favoritesViewController],
@@ -34,7 +33,7 @@ public final class DefaultFavoritesCoordinator: FavoritesCoordinator {
 public extension DefaultFavoritesCoordinator {
     func startSearchFlow() {
         let searchCoordinator = coordinatorProvider.makeSearchStockCoordinator(
-            searchResult: .stockInfo, 
+            searchFlow: .stockInfo, 
             navigationController: navigationController
         )
         startChildCoordinator(searchCoordinator)

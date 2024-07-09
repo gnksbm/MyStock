@@ -12,14 +12,15 @@ import ChartFeature
 import Domain
 import FeatureDependency
 import SearchStockFeature
+import SettingsFeature
 
 final class DefaultCoordinatorProvider: CoordinatorProvider {
     func makeSearchStockCoordinator(
-        searchResult: SearchFlow,
+        searchFlow: SearchFlow,
         navigationController: UINavigationController
     ) -> SearchStockCoordinator {
         DefaultSearchStockCoordinator(
-            searchResult: searchResult,
+            searchFlow: searchFlow,
             navigationController: navigationController,
             coordinatorProvider: self
         )
@@ -35,6 +36,16 @@ final class DefaultCoordinatorProvider: CoordinatorProvider {
             title: title,
             ticker: ticker,
             marketType: marketType,
+            navigationController: navigationController
+        )
+    }
+    
+    func makeApiSettingsCoordinator(
+        parent: Coordinator?,
+        navigationController: UINavigationController
+    ) -> APISettingsCoordinator {
+        DefaultAPISettingsCoordinator(
+            parent: parent,
             navigationController: navigationController
         )
     }

@@ -6,40 +6,16 @@
 //  Copyright © 2024 GeonSeobKim. All rights reserved.
 //
 
-import AVFoundation
 import UIKit
-import Vision
 
 import Core
 import Domain
-import FeatureDependency
 
-import RxSwift
-import RxCocoa
+import ReactorKit
 import SnapKit
 
-final class APISettingsViewController: BaseViewController {
-    private let viewModel: APISettingsViewModel
-    
-    let apiKeyCaptureEvent = PublishSubject<KISUserInfo>()
-    
-    private let qrReaderBtn: UIButton = {
-        let btn = UIButton()
-        btn.setImage(
-            .init(systemName: "qrcode.viewfinder"),
-            for: .normal
-        )
-        return btn
-    }()
-    
-    private let qrGenerateBtn: UIButton = {
-        let btn = UIButton()
-        btn.setImage(
-            .init(systemName: "qrcode"),
-            for: .normal
-        )
-        return btn
-    }()
+final class APISettingsViewController: UIViewController, View {
+    var disposeBag = DisposeBag()
     
     private let saveBtn: UIButton = {
         var config = UIButton.Configuration.plain()
@@ -69,20 +45,68 @@ final class APISettingsViewController: BaseViewController {
         stackView.axis = .vertical
         return stackView
     }()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
         configureNavigation()
-        bind()
+        hideKeyboardOnTap()
     }
     
-    init(viewModel: APISettingsViewModel) {
-        self.viewModel = viewModel
-        super.init()
+    func bind(reactor: APISettingsReactor) {
+        bindAction(reactor: reactor)
+        bindState(reactor: reactor)
     }
     
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    private func bindAction(reactor: APISettingsReactor) { 
+        rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            .take(1)
+            .map { _ in APISettingsReactor.Action.viewWillAppearEvent }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+        
+        saveBtn.rx.tap
+            .withUnretained(self)
+            .flatMap { vc, _ in
+                Observable.combineLatest(
+                    vc.accountNumTextField.textField.rx.text.orEmpty,
+                    vc.appKeyTextField.textField.rx.text.orEmpty,
+                    vc.secretKeyTextField.textField.rx.text.orEmpty
+                )
+            }
+            .map { tuple in
+                let (accountNum, appKey, secretKey) = tuple
+                let userInfo = KISUserInfo(
+                    accountNum: accountNum,
+                    appKey: appKey,
+                    secretKey: secretKey
+                )
+                return APISettingsReactor.Action.saveBtnTapEvent(
+                    userInfo: userInfo
+                )
+            }
+            .bind(to: reactor.action)
+            .disposed(by: disposeBag)
+    }
+    
+    private func bindState(reactor: APISettingsReactor) { 
+        reactor.state.map { $0.userInfo }
+            .observe(on: MainScheduler.asyncInstance)
+            .withUnretained(self)
+            .subscribe(
+                onNext: { vc, userInfo in
+                    vc.accountNumTextField.textField.rx.text.onNext(
+                        userInfo.accountNum
+                    )
+                    vc.appKeyTextField.textField.rx.text.onNext(
+                        userInfo.appKey
+                    )
+                    vc.secretKeyTextField.textField.rx.text.onNext(
+                        userInfo.secretKey
+                    )
+                }
+            )
+            .disposed(by: disposeBag)
     }
     
     private func configureUI() {
@@ -102,92 +126,9 @@ final class APISettingsViewController: BaseViewController {
         navigationItem.setRightBarButtonItems(
             [
                 .init(customView: saveBtn),
-                .init(customView: qrGenerateBtn),
-                .init(customView: qrReaderBtn),
             ],
             animated: false
         )
-    }
-    
-    private func bind() {
-        let accountNumTextEvent = accountNumTextField.textField.rx.text
-            .orEmpty
-            .asObservable()
-        let appKeyTextEvent = appKeyTextField.textField.rx.text
-            .orEmpty
-            .asObservable()
-        let secretKeyTextEvent = secretKeyTextField.textField.rx.text
-            .orEmpty
-            .asObservable()
-        let output = viewModel.transform(
-            input: .init(
-                viewWillAppearEvent: rx.methodInvoked(
-                    #selector(UIViewController.viewWillAppear)
-                ).map { _ in },
-                qrReaderBtnEvent: qrReaderBtn.rx.tap.asObservable(),
-                qrGenerateBtnEvent: qrGenerateBtn.rx.tap
-                    .flatMap { _ in
-                        Observable.combineLatest(
-                            accountNumTextEvent,
-                            appKeyTextEvent,
-                            secretKeyTextEvent
-                        )
-                    }
-                    .map { tuple in
-                        let (accountNum, appKey, secretKey) = tuple
-                        return .init(
-                            accountNum: accountNum,
-                            appKey: appKey,
-                            secretKey: secretKey
-                        )
-                    },
-                saveBtnTapEvent: saveBtn.rx.tap
-                    .flatMap { _ in
-                        Observable.combineLatest(
-                            accountNumTextEvent,
-                            appKeyTextEvent,
-                            secretKeyTextEvent
-                        )
-                    }
-                    .map { tuple in
-                        let (accountNum, appKey, secretKey) = tuple
-                        return .init(
-                            accountNum: accountNum,
-                            appKey: appKey,
-                            secretKey: secretKey
-                        )
-                    }
-            )
-        )
-        
-        output.accountNum
-            .bind(to: accountNumTextField.textField.rx.text)
-            .disposed(by: disposeBag)
-        output.appKey
-            .bind(to: appKeyTextField.textField.rx.text)
-            .disposed(by: disposeBag)
-        output.secretKey
-            .bind(to: secretKeyTextField.textField.rx.text)
-            .disposed(by: disposeBag)
-        
-        apiKeyCaptureEvent
-            .withUnretained(self)
-            .subscribe(
-                onNext: { vc, apiKey in
-                    vc.accountNumTextField.textField.rx
-                        .text
-                        .onNext(apiKey.accountNum)
-                    vc.appKeyTextField.textField.rx
-                        .text
-                        .onNext(apiKey.appKey)
-                    vc.secretKeyTextField.textField.rx
-                        .text
-                        .onNext(apiKey.secretKey)
-                }
-            )
-            .disposed(by: disposeBag)
-        
-        hideKeyboardOnTap()
     }
     
     private func hideKeyboardOnTap() {

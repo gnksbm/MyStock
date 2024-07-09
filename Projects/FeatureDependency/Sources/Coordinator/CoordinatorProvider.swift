@@ -12,7 +12,7 @@ import Domain
 
 public protocol CoordinatorProvider {
     func makeSearchStockCoordinator(
-        searchResult: SearchFlow,
+        searchFlow: SearchFlow,
         navigationController: UINavigationController
     ) -> SearchStockCoordinator
     
@@ -22,4 +22,9 @@ public protocol CoordinatorProvider {
         marketType: MarketType,
         navigationController: UINavigationController
     ) -> ChartCoordinator
+    
+    func makeApiSettingsCoordinator(
+        parent: Coordinator?,
+        navigationController: UINavigationController
+    ) -> APISettingsCoordinator
 }

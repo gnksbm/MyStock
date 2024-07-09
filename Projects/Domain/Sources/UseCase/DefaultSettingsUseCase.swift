@@ -25,8 +25,7 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
     
     public init() { }
     
-    public func fetchAPIInfo(
-    ) -> Observable<KISUserInfo> {
+    public func fetchAPIInfo() -> Observable<KISUserInfo> {
         .create { [weak self] observer in
             let disposable = Disposables.create()
             guard let self else { return disposable }
@@ -36,9 +35,12 @@ public final class DefaultSettingsUseCase: SettingsUseCase {
         }
     }
     
-    public func saveAPIInfo(
-        userInfo: KISUserInfo
-    ) {
-        self.userInfo = userInfo
+    public func saveAPIInfo(userInfo: KISUserInfo) -> Observable<KISUserInfo> {
+        .create { [weak self] observer in
+            self?.userInfo = userInfo
+            observer.onNext(userInfo)
+            observer.onCompleted()
+            return Disposables.create()
+        }
     }
 }
