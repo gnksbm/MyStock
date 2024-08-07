@@ -13,7 +13,7 @@ protocol ModernCollectionViewType:
 
 open class ModernCollectionView<Section: Hashable, Item: Hashable>:
     UICollectionView, ModernCollectionViewType {
-    public class func createLayout() -> UICollectionViewCompositionalLayout {
+    open class func createLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout.list(
             using: UICollectionLayoutListConfiguration(appearance: .plain)
         )
