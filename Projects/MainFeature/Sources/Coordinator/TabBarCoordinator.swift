@@ -9,7 +9,7 @@
 import UIKit
 
 import FeatureDependency
-import BalanceFeature
+import SummaryFeature
 import FavoritesFeature
 import SettingsFeature
 
@@ -64,7 +64,7 @@ public final class TabBarCoordinator: Coordinator {
         var coordinator: Coordinator
         switch tabKind {
         case .home:
-            coordinator = DefaultBalanceCoordinator(
+            coordinator = DefaultSummaryCoordinator(
                 navigationController: navigationController, 
                 coordinatorProvider: coordinatorProvider
             )

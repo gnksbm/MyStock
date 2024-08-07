@@ -41,7 +41,7 @@ extension AppDependency {
     public static let features = Feature.allCases.map { $0.dependency }
     
     enum Feature: String, CaseIterable {
-        case balance, favorites, settings, searchStock, chart
+        case balance, favorites, settings, searchStock, chart, summary
         
         public var dependency: TargetDependency {
             var name = rawValue.map { $0 }
