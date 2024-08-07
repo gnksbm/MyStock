@@ -24,6 +24,8 @@ regenerate:
 	rm -rf **/**/*.xcodeproj
 	rm -rf **/*.xcodeproj
 	rm -rf *.xcworkspace
+	tuist clean
+	tuist fetch
 	tuist generate
 
 cleancache:
