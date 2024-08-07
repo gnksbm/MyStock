@@ -29,4 +29,21 @@ public final class DefaultLogoRepository: LogoRepository {
                 )
             }
     }
+    
+    public func updateLogo<T>(
+        from dataWillChange: T,
+        request: LogoRequest
+    ) -> Observable<T> where T : LogoRequestable {
+        networkService.requestWithCache(
+            endPoint: LogoEndPoint(
+                request: request
+            )
+        )
+        .map { data in
+            var copy = dataWillChange
+            copy.image = UIImage(data: data)
+            return copy
+        }
+        .catchAndReturn(dataWillChange)
+    }
 }

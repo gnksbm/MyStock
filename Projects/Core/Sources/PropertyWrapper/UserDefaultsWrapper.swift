@@ -8,15 +8,19 @@
 
 import Foundation
 
+public enum UserDefaultsKey: String {
+    case userInfo
+}
+
 @propertyWrapper
 public struct UserDefaultsWrapper<T: Codable> {
-    private let key: String
+    private let key: UserDefaultsKey
     private let defaultValue: T
     private let dataBase: UserDefaults
     
     public var wrappedValue: T {
         get {
-            guard let data = dataBase.value(forKey: key) as? Data,
+            guard let data = dataBase.value(forKey: key.rawValue) as? Data,
                   let value = try? data.decode(type: T.self)
             else { return defaultValue }
             return value
@@ -24,12 +28,12 @@ public struct UserDefaultsWrapper<T: Codable> {
         set {
             guard let data = newValue.encode()
             else { return }
-            dataBase.setValue(data, forKey: key)
+            dataBase.setValue(data, forKey: key.rawValue)
         }
     }
     
     public init(
-        key: String,
+        key: UserDefaultsKey,
         defaultValue: T,
         kind: UserDefaultsKind = .appGroup
     ) {

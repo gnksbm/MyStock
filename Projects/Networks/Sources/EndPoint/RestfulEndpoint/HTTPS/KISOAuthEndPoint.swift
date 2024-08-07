@@ -13,7 +13,7 @@ import Core
 
 public struct KISOAuthEndPoint: KISEndPoint {
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",

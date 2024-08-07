@@ -14,7 +14,7 @@ import RxSwift
 
 public final class DefaultSettingsUseCase: SettingsUseCase {
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",

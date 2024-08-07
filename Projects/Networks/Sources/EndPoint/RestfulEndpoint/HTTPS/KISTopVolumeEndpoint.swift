@@ -28,7 +28,7 @@ public struct KISTopVolumeEndpoint: KISEndPoint {
     public var header: [String : String] {
         [
             "content-type": "application/json",
-            "authorization": request.token,
+            "authorization": "Bearer \(request.token)", // "Bearer ..."
             "appkey": request.userInfo.appKey,
             "appsecret": request.userInfo.secretKey,
             "tr_id": "FHPST01710000",

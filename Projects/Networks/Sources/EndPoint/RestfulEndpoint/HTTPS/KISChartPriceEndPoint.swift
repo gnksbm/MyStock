@@ -13,7 +13,7 @@ import Domain
 
 public struct KISChartPriceEndPoint: KISEndPoint {
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",

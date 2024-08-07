@@ -14,10 +14,12 @@ import Networks
 
 import RxSwift
 
-final class DefaultKISTopVolumeRepository: KISTopVolumeRepository {
+public final class DefualtKISTopVolumeRepository: KISTopVolumeRepository {
     @Injected private var networkService: NetworkService
     
-    func fetchTopVolumeItems(
+    public init() { }
+    
+    public func fetchTopVolumeItems(
         request: KISTopVolumeRequest
     ) -> Observable<[KISTopVolumeResponse]> {
         networkService.request(
@@ -25,7 +27,9 @@ final class DefaultKISTopVolumeRepository: KISTopVolumeRepository {
                 request: request
             )
         )
-        .decode(type: KISTopVolumeDTO.self, decoder: JSONDecoder())
-        .map { $0.toResponse() }
+        .map { data in
+            let dto = try data.decode(type: KISTopVolumeDTO.self)
+            return dto.toResponse()
+        }
     }
 }

@@ -13,7 +13,7 @@ import Core
 
 public struct KISCheckBalanceEndPoint: KISEndPoint {
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",

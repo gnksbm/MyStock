@@ -14,4 +14,9 @@ public protocol LogoRepository {
     func fetchLogo(
         request: LogoRequest
     ) -> Observable<LogoResponse>
+    
+    func updateLogo<T: LogoRequestable>(
+        from: T,
+        request: LogoRequest
+    ) -> Observable<T>
 }

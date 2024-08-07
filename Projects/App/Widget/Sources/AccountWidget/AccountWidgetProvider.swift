@@ -19,7 +19,7 @@ struct AccountWidgetProvider: TimelineProvider {
     @Injected private var oAuthRepository: KISOAuthRepository
     @Injected private var checkBalanceRepository: KISBalanceRepository
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",

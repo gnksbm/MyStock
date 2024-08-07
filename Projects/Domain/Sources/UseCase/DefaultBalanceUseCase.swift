@@ -18,7 +18,7 @@ public final class DefaultBalanceUseCase: BalanceUseCase {
     @Injected private var logoRepository: LogoRepository
     
     @UserDefaultsWrapper(
-        key: "kisUserInfo",
+        key: .userInfo,
         defaultValue: KISUserInfo(
             accountNum: "",
             appKey: "",
