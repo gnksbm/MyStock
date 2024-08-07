@@ -20,7 +20,6 @@ open class ModernCollectionView<Section: Hashable, Item: Hashable>:
     }
     
     public var diffableDataSource: DiffableDataSource<Section, Item>!
-    open var cellProvider: CellProvider { { _, _, _ in nil } }
     
     public init() {
         super.init(
@@ -28,12 +27,24 @@ open class ModernCollectionView<Section: Hashable, Item: Hashable>:
             collectionViewLayout: Self.createLayout()
         )
         configureDataSource()
+        configureUI()
     }
     
     @available(*, unavailable)
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
+    open func createCellProvider() -> CellProvider { { _, _, _ in nil } }
+    
+    open func configureDataSource() {
+        diffableDataSource = DiffableDataSource(
+            collectionView: self,
+            cellProvider: createCellProvider()
+        )
+    }
+    
+    open func configureUI() { }
     
     public func getItem(
         for indexPath: IndexPath
@@ -42,10 +53,19 @@ open class ModernCollectionView<Section: Hashable, Item: Hashable>:
         return diffableDataSource.snapshot(for: section).items[indexPath.row]
     }
     
-    open func configureDataSource() {
-        diffableDataSource = DiffableDataSource(
-            collectionView: self,
-            cellProvider: cellProvider
+    public func applyItem(
+        for section: Section,
+        items: [Item],
+        withAnimating: Bool = true
+    ) {
+        var snapshot = Snapshot()
+        if !snapshot.sectionIdentifiers.contains(section) {
+            snapshot.appendSections([section])
+        }
+        snapshot.appendItems(items, toSection: section)
+        diffableDataSource.apply(
+            snapshot,
+            animatingDifferences: withAnimating
         )
     }
     

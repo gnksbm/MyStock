@@ -16,14 +16,15 @@ import SnapKit
 
 final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
     static func makeRegistration() -> Registration<KISTopVolumeResponse> {
-        Registration { cell, indexPath, item in
+        Registration { cell, _, item in
             cell.rankLabel.text = item.rank
             cell.iconImageView.image = item.image
             cell.nameLabel.text = item.name
             cell.tickerLabel.text = item.ticker
-            cell.priceLabel.text = item.price
-            cell.rateLabel.text = item.fluctuationRate
-            cell.rateLabel.textColor = item.fluctuationRate.toColorForNumeric
+            cell.priceLabel.text = item.price.toCurrency(style: .currency)
+            cell.rateLabel.text = item.fluctuationRate.toPercent()
+            cell.rateLabel.textColor =
+            item.fluctuationRate.toColorForNumeric
         }
     }
     
@@ -32,7 +33,13 @@ final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
         label.font = .boldSystemFont(ofSize: 20)
         return label
     }()
-    private let iconImageView = UIImageView()
+    private let iconImageView = {
+        let imageView = UIImageView()
+        imageView.backgroundColor = DesignSystemAsset.accentColor.color
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
+        return imageView
+    }()
     private let nameLabel = {
         let label = UILabel()
         label.font = .boldSystemFont(ofSize: 15)
@@ -40,21 +47,35 @@ final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
     }()
     private let tickerLabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11)
+        label.font = .systemFont(ofSize: 12)
         return label
     }()
     private let priceLabel = {
         let label = UILabel()
         label.font = .systemFont(ofSize: 13)
         label.textAlignment = .right
+        label.setContentCompressionResistancePriority(
+            .required,
+            for: .horizontal
+        )
         return label
     }()
     private let rateLabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 11)
+        label.font = .boldSystemFont(ofSize: 11)
         label.textAlignment = .right
         return label
     }()
+    private let dividerView = {
+        let label = UIView()
+        label.backgroundColor = DesignSystemAsset.accentColor.color
+        return label
+    }()
+    
+    override func draw(_ rect: CGRect) {
+        super.draw(rect)
+        iconImageView.layer.cornerRadius = iconImageView.bounds.width / 2
+    }
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -68,6 +89,10 @@ final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
         iconImageView.image = nil
     }
     
+    override func configureUI() {
+        contentView.backgroundColor = DesignSystemAsset.chartBackground.color
+    }
+    
     override func configureLayout() {
         [
             rankLabel,
@@ -75,43 +100,50 @@ final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
             nameLabel,
             tickerLabel,
             priceLabel,
-            rateLabel
+            rateLabel,
+            dividerView
         ].forEach { contentView.addSubview($0) }
         
         let padding = 20.f
         
         rankLabel.snp.makeConstraints { make in
-            make.leading.equalTo(contentView).inset(padding)
+            make.leading.equalTo(contentView).inset(padding / 2)
             make.centerY.equalTo(contentView)
+            make.width.equalTo(contentView).multipliedBy(0.1)
         }
         
         iconImageView.snp.makeConstraints { make in
-            make.leading.equalTo(rankLabel.snp.trailing).offset(padding)
-            make.size.equalTo(contentView.snp.height).multipliedBy(0.5)
+            make.leading.equalTo(rankLabel.snp.trailing).offset(padding / 3)
+            make.size.equalTo(40)
             make.centerY.equalTo(contentView)
         }
         
         nameLabel.snp.makeConstraints { make in
             make.leading.equalTo(iconImageView.snp.trailing).offset(padding)
-            make.top.equalTo(contentView).inset(padding)
+            make.top.equalTo(contentView).inset(padding).priority(.required)
         }
         
         tickerLabel.snp.makeConstraints { make in
             make.leading.equalTo(nameLabel)
-            make.top.equalTo(nameLabel.snp.bottom)
-            make.bottom.equalTo(contentView).inset(padding)
+            make.top.equalTo(nameLabel.snp.bottom).priority(.required)
+            make.bottom.equalTo(contentView).inset(padding).priority(.required)
         }
         
         priceLabel.snp.makeConstraints { make in
-            make.leading.greaterThanOrEqualTo(nameLabel.snp.trailing)
-                .offset(padding)
+            make.leading.equalTo(nameLabel.snp.trailing).offset(padding)
             make.top.trailing.equalTo(contentView).inset(padding)
         }
         
         rateLabel.snp.makeConstraints { make in
             make.trailing.equalTo(priceLabel)
+            make.leading.equalTo(nameLabel.snp.trailing).offset(padding)
             make.top.equalTo(priceLabel.snp.bottom)
             make.bottom.equalTo(tickerLabel)
+        }
+        
+        dividerView.snp.makeConstraints { make in
+            make.height.equalTo(1)
+            make.bottom.horizontalEdges.equalTo(contentView)
         }
     }
 }

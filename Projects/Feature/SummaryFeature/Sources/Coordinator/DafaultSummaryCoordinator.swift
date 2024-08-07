@@ -1,5 +1,6 @@
 import UIKit
 
+import Domain
 import FeatureDependency
 
 public final class DefaultSummaryCoordinator: SummaryCoordinator {
@@ -19,7 +20,10 @@ public final class DefaultSummaryCoordinator: SummaryCoordinator {
     
     public func start() {
         let summaryViewController = SummaryViewController()
-        summaryViewController.reactor = SummaryReactor(coordinator: self)
+        summaryViewController.reactor = SummaryReactor(
+            coordinator: self,
+            useCase: DefaultSummaryUseCase()
+        )
         navigationController.setViewControllers(
             [summaryViewController],
             animated: false

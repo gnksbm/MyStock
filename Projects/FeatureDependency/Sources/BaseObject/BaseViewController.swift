@@ -17,6 +17,8 @@ open class BaseViewController
     
     public init() {
         super.init(nibName: nil, bundle: nil)
+        configureUI()
+        configureLayout()
     }
     
     @available(*, unavailable)
@@ -31,4 +33,7 @@ open class BaseViewController
     
     open func bindAction(reactor: ReactorType) { }
     open func bindState(reactor: ReactorType) { }
+    
+    open func configureUI() { }
+    open func configureLayout() { }
 }

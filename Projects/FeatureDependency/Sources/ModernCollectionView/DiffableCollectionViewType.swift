@@ -22,5 +22,5 @@ public protocol DiffableCollectionViewType: AnyObject {
     NSDiffableDataSourceSnapshot<Section, Item>
     
     var diffableDataSource: DiffableDataSource<Section, Item>! { get set }
-    var cellProvider: CellProvider { get }
+    func createCellProvider() -> CellProvider
 }

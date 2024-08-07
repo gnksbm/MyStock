@@ -31,6 +31,15 @@ public extension String {
         return formatter.string(from: number as NSNumber) ?? self
     }
     
+    func toPercent() -> Self {
+        guard let rate = Double(self) else { return self }
+        if rate > 0 {
+            return "+ \(String(format: "%.2f", rate))%"
+        } else {
+            return "\(String(format: "%.2f", rate))%"
+        }
+    }
+    
     static var seibroKey: Self {
         guard let seibroKey = Bundle.main.object(
             forInfoDictionaryKey: "SEIBRO_APP_KEY"
