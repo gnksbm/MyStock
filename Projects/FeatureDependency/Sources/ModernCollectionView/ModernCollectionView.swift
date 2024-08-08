@@ -69,6 +69,39 @@ open class ModernCollectionView<Section: Hashable, Item: Hashable>:
         )
     }
     
+    public func appendItem(
+        for section: Section,
+        items: [Item],
+        withAnimating: Bool = true
+    ) {
+        var snapshot = diffableDataSource.snapshot()
+        if !snapshot.sectionIdentifiers.contains(section) {
+            snapshot.appendSections([section])
+        }
+        snapshot.appendItems(items, toSection: section)
+        diffableDataSource.apply(
+            snapshot,
+            animatingDifferences: withAnimating
+        )
+    }
+    
+    public func replaceItem(
+        for section: Section,
+        items: [Item],
+        withAnimating: Bool = true
+    ) {
+        var snapshot = diffableDataSource.snapshot()
+        if !snapshot.sectionIdentifiers.contains(section) {
+            snapshot.appendSections([section])
+        }
+        snapshot.deleteItems(snapshot.itemIdentifiers(inSection: section))
+        snapshot.appendItems(items, toSection: section)
+        diffableDataSource.apply(
+            snapshot,
+            animatingDifferences: withAnimating
+        )
+    }
+    
     public func applyItem(
         _ sectionHandler: (Section) -> [Item],
         withAnimating: Bool = true

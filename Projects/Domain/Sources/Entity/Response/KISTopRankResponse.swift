@@ -8,7 +8,8 @@
 
 import UIKit
 
-public struct KISTopRankResponse: Hashable {
+public struct KISTopRankResponse {
+    public let id: UUID
     public let rank: String
     public var image: UIImage?
     public let name: String
@@ -17,6 +18,7 @@ public struct KISTopRankResponse: Hashable {
     public let fluctuationRate: String
     
     public init(
+        id: UUID = UUID(),
         rank: String,
         image: UIImage? = nil,
         name: String,
@@ -24,6 +26,7 @@ public struct KISTopRankResponse: Hashable {
         price: String,
         fluctuationRate: String
     ) {
+        self.id = id
         self.rank = rank
         self.image = image
         self.name = name
@@ -32,3 +35,5 @@ public struct KISTopRankResponse: Hashable {
         self.fluctuationRate = fluctuationRate
     }
 }
+
+extension KISTopRankResponse: Identifiable, Hashable {}

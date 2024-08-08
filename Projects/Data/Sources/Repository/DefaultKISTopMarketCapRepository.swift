@@ -19,7 +19,7 @@ public final class DefaultKISTopMarketCapRepository: KISTopMarketCapRepository {
     
     public init() { }
     
-    public func fetchTopVolumeItems(
+    public func fetchTopMarketCapItems(
         request: KISTopMarketCapRequest
     ) -> Observable<[KISTopRankResponse]> {
         networkService.request(

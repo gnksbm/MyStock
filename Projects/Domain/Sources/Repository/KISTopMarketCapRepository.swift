@@ -11,7 +11,7 @@ import Foundation
 import RxSwift
 
 public protocol KISTopMarketCapRepository {
-    func fetchTopVolumeItems(
+    func fetchTopMarketCapItems(
         request: KISTopMarketCapRequest
     ) -> Observable<[KISTopRankResponse]>
 }

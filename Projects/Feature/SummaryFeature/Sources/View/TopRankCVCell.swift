@@ -1,5 +1,5 @@
 //
-//  TopVolumeCVCell.swift
+//  TopRankCVCell.swift
 //  SummaryFeature
 //
 //  Created by gnksbm on 8/7/24.
@@ -14,7 +14,7 @@ import FeatureDependency
 
 import SnapKit
 
-final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
+final class TopRankCVCell: BaseCVCell, RegistrableCellType {
     static func makeRegistration() -> Registration<KISTopRankResponse> {
         Registration { cell, _, item in
             cell.rankLabel.text = item.rank

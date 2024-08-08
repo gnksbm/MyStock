@@ -23,8 +23,12 @@ public final class SummaryReactor: Reactor {
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppear:
-            useCase.fetchTopVolumeItems()
-                .map { .fetchVolumeItems($0) }
+            Observable.merge(
+                useCase.fetchTopVolumeItems()
+                    .map { .fetchVolumeItems($0) },
+                useCase.fetchTopMarketCapItems()
+                    .map { .fetchMarketCapItems($0) }
+            )
         }
     }
     
@@ -33,6 +37,8 @@ public final class SummaryReactor: Reactor {
         switch mutation {
         case .fetchVolumeItems(let items):
             newState.topVolumeItems = items
+        case .fetchMarketCapItems(let items):
+            newState.topMarketCapItems = items
         }
         return newState
     }
@@ -41,6 +47,7 @@ public final class SummaryReactor: Reactor {
 extension SummaryReactor {
     public struct State { 
         var topVolumeItems: [KISTopRankResponse] = []
+        var topMarketCapItems: [KISTopRankResponse] = []
     }
     
     public enum Action {
@@ -49,5 +56,6 @@ extension SummaryReactor {
     
     public enum Mutation {
         case fetchVolumeItems([KISTopRankResponse])
+        case fetchMarketCapItems([KISTopRankResponse])
     }
 }

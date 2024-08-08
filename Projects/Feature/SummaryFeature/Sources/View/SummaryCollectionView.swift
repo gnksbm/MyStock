@@ -17,7 +17,7 @@ final class SummaryCollectionView:
     override class func createLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
             switch SummarySection.allCases[sectionIndex] {
-            case .topVolume:
+            case .topVolume, .topMarketCap:
                 let item = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .fractionalWidth(1),
@@ -42,7 +42,7 @@ final class SummaryCollectionView:
                 section.contentInsets = NSDirectionalEdgeInsets(
                     top: 0,
                     leading: 30,
-                    bottom: 0,
+                    bottom: 30,
                     trailing: 30
                 )
                 section.boundarySupplementaryItems = [
@@ -73,11 +73,11 @@ final class SummaryCollectionView:
     }
     
     override func createCellProvider() -> CellProvider {
-        let topVolumeRegistration = TopVolumeCVCell.makeRegistration()
+        let topVolumeRegistration = TopRankCVCell.makeRegistration()
         return { collectionView, indexPath, item in
             switch Section.allCases[indexPath.section] {
-            case .topVolume:
-                if case .topVolume(let response) = item {
+            case .topVolume, .topMarketCap:
+                if case .topRank(let response) = item {
                     collectionView.dequeueConfiguredReusableCell(
                         using: topVolumeRegistration,
                         for: indexPath,
@@ -107,16 +107,18 @@ final class SummaryCollectionView:
 }
 
 enum SummarySection: CaseIterable {
-    case topVolume
+    case topVolume, topMarketCap
     
     var title: String {
         switch self {
         case .topVolume:
             "거래량 상위 30"
+        case .topMarketCap:
+            "시가총액 상위 30"
         }
     }
 }
 
 enum SummaryItem: Hashable {
-    case topVolume(KISTopRankResponse)
+    case topRank(KISTopRankResponse)
 }

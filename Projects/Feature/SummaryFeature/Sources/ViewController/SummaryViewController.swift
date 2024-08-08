@@ -20,9 +20,21 @@ public final class SummaryViewController: BaseViewController<SummaryReactor> {
                 .withUnretained(self)
                 .subscribe(
                     onNext: { vc, items in
-                        vc.collectionView.applyItem(
+                        vc.collectionView.replaceItem(
                             for: .topVolume,
-                            items: items.map { .topVolume($0) }
+                            items: items.map { .topRank($0) }
+                        )
+                    }
+                )
+            
+            state.map { $0.topMarketCapItems }
+                .observe(on: MainScheduler.instance)
+                .withUnretained(self)
+                .subscribe(
+                    onNext: { vc, items in
+                        vc.collectionView.replaceItem(
+                            for: .topMarketCap,
+                            items: items.map { .topRank($0) }
                         )
                     }
                 )
