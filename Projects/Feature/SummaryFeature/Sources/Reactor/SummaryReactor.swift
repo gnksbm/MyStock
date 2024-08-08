@@ -40,7 +40,7 @@ public final class SummaryReactor: Reactor {
 
 extension SummaryReactor {
     public struct State { 
-        var topVolumeItems: [KISTopVolumeResponse] = []
+        var topVolumeItems: [KISTopRankResponse] = []
     }
     
     public enum Action {
@@ -48,6 +48,6 @@ extension SummaryReactor {
     }
     
     public enum Mutation {
-        case fetchVolumeItems([KISTopVolumeResponse])
+        case fetchVolumeItems([KISTopRankResponse])
     }
 }

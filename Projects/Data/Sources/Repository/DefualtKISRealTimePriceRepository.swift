@@ -1,5 +1,5 @@
 //
-//  DefualtKISRealTimePriceRepository.swift
+//  DefaultKISRealTimePriceRepository.swift
 //  Data
 //
 //  Created by gnksbm on 2024/01/04.
@@ -14,7 +14,7 @@ import Networks
 
 import RxSwift
 
-public final class DefualtKISRealTimePriceRepository
+public final class DefaultKISRealTimePriceRepository
 : KISRealTimePriceRepository {
     @Injected private var wsService: WebSocketService
     private let disposeBag = DisposeBag()

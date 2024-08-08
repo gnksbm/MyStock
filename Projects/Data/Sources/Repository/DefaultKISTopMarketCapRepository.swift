@@ -1,8 +1,8 @@
 //
-//  DefaultKISTopVolumeRepository.swift
+//  DefaultKISTopMarketCapRepository.swift
 //  Data
 //
-//  Created by gnksbm on 8/7/24.
+//  Created by gnksbm on 8/8/24.
 //  Copyright © 2024 GeonSeobKim. All rights reserved.
 //
 
@@ -14,21 +14,21 @@ import Networks
 
 import RxSwift
 
-public final class DefaultKISTopVolumeRepository: KISTopVolumeRepository {
+public final class DefaultKISTopMarketCapRepository: KISTopMarketCapRepository {
     @Injected private var networkService: NetworkService
     
     public init() { }
     
     public func fetchTopVolumeItems(
-        request: KISTopVolumeRequest
+        request: KISTopMarketCapRequest
     ) -> Observable<[KISTopRankResponse]> {
         networkService.request(
-            endPoint: KISTopVolumeEndpoint(
+            endPoint: KISTopMarketCapEndpoint(
                 request: request
             )
         )
         .map { data in
-            let dto = try data.decode(type: KISTopVolumeDTO.self)
+            let dto = try data.decode(type: KISTopMarketCapDTO.self)
             return dto.toResponse()
         }
     }

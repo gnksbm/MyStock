@@ -118,5 +118,5 @@ enum SummarySection: CaseIterable {
 }
 
 enum SummaryItem: Hashable {
-    case topVolume(KISTopVolumeResponse)
+    case topVolume(KISTopRankResponse)
 }

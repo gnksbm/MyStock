@@ -29,7 +29,7 @@ public final class DefaultSummaryUseCase: SummaryUseCase {
     
     public init() { }
     
-    public func fetchTopVolumeItems() -> Observable<[KISTopVolumeResponse]> {
+    public func fetchTopVolumeItems() -> Observable<[KISTopRankResponse]> {
         oAuthRepository.fetchToken(
             request: .init(
                 oAuthType: .access,

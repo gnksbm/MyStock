@@ -1,5 +1,5 @@
 //
-//  KISTopVolumeResponse.swift
+//  KISTopRankResponse.swift
 //  Domain
 //
 //  Created by gnksbm on 8/7/24.
@@ -8,7 +8,7 @@
 
 import UIKit
 
-public struct KISTopVolumeResponse: Hashable {
+public struct KISTopRankResponse: Hashable {
     public let rank: String
     public var image: UIImage?
     public let name: String

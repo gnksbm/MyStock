@@ -15,7 +15,7 @@ import FeatureDependency
 import SnapKit
 
 final class TopVolumeCVCell: BaseCVCell, RegistrableCellType {
-    static func makeRegistration() -> Registration<KISTopVolumeResponse> {
+    static func makeRegistration() -> Registration<KISTopRankResponse> {
         Registration { cell, _, item in
             cell.rankLabel.text = item.rank
             cell.iconImageView.image = item.image

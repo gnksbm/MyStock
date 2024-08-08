@@ -12,6 +12,6 @@ public protocol LogoRequestable {
     var image: UIImage? { get set }
 }
 
-extension KISTopVolumeResponse: LogoRequestable { }
+extension KISTopRankResponse: LogoRequestable { }
 extension KISCheckBalanceResponse: LogoRequestable { }
 extension SearchStocksResponse: LogoRequestable { }

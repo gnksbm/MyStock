@@ -1,8 +1,8 @@
 //
-//  KISTopVolumeRepository.swift
+//  KISTopMarketCapRepository.swift
 //  Domain
 //
-//  Created by gnksbm on 8/7/24.
+//  Created by gnksbm on 8/8/24.
 //  Copyright © 2024 GeonSeobKim. All rights reserved.
 //
 
@@ -10,8 +10,8 @@ import Foundation
 
 import RxSwift
 
-public protocol KISTopVolumeRepository {
+public protocol KISTopMarketCapRepository {
     func fetchTopVolumeItems(
-        request: KISTopVolumeRequest
+        request: KISTopMarketCapRequest
     ) -> Observable<[KISTopRankResponse]>
 }

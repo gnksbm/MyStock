@@ -12,5 +12,5 @@ import RxSwift
 
 public protocol SummaryUseCase {
     func fetchTopVolumeItems(
-    ) -> Observable<[KISTopVolumeResponse]>
+    ) -> Observable<[KISTopRankResponse]>
 }

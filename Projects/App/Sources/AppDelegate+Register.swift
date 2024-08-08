@@ -58,11 +58,15 @@ extension AppDelegate {
         )
         DIContainer.register(
             type: KISRealTimePriceRepository.self,
-            DefualtKISRealTimePriceRepository()
+            DefaultKISRealTimePriceRepository()
         )
         DIContainer.register(
             type: KISTopVolumeRepository.self,
-            DefualtKISTopVolumeRepository()
+            DefaultKISTopVolumeRepository()
+        )
+        DIContainer.register(
+            type: KISTopMarketCapRepository.self,
+            DefaultKISTopMarketCapRepository()
         )
     }
 }
