@@ -12,45 +12,6 @@ public protocol KISQueryRepresentable {
     var httpQuery: [String: String] { get }
 }
 
-/// 입력 종목코드
-public enum KISInputISCode: KISQueryRepresentable {
-    case all
-    
-    public var httpQuery: [String: String] {
-        switch self {
-        case .all:
-            ["FID_INPUT_ISCD": "0000"]
-        }
-    }
-    
-    var description: String {
-        switch self {
-        case .all:
-            "전체"
-        }
-    }
-}
-
-/// 분류 구분 코드
-public enum KISDivisionCode: Int, KISQueryRepresentable {
-    case all, common, preferred
-    
-    public var httpQuery: [String: String] {
-        ["FID_DIV_CLS_CODE": "\(rawValue)"]
-    }
-    
-    var description: String {
-        switch self {
-        case .all:
-            "전체"
-        case .common:
-            "보통주"
-        case .preferred:
-            "우선주"
-        }
-    }
-}
-
 /// 소속 구분 코드
 public enum KISBelongingClassCode: Int, KISQueryRepresentable {
     case averageVolume
@@ -81,8 +42,8 @@ public enum KISBelongingClassCode: Int, KISQueryRepresentable {
 
 /// 대상 구분 코드
 public enum KISTargetClassCode: String, KISQueryRepresentable {
-    case margin = "111111111"
-    case credit = "000000000"
+    case topVolume = "111111111"
+    case topMarketCap = "0"
     
     public var httpQuery: [String: String] {
         ["FID_TRGT_CLS_CODE": rawValue]
@@ -90,10 +51,10 @@ public enum KISTargetClassCode: String, KISQueryRepresentable {
     
     var description: String {
         switch self {
-        case .margin:
-            "증거금"
-        case .credit:
-            "신용보증금"
+        case .topVolume:
+            "거래량 순위"
+        case .topMarketCap:
+            "시가총액 순위"
         }
     }
 }
@@ -111,6 +72,7 @@ public enum KISTargetExcludeClassCode: String, KISQueryRepresentable {
     case etn = "0010000000"
     case creditOrderNotAllowed = "0100000000"
     case spac = "1000000000"
+    case topMarketCap
     
     public var httpQuery: [String: String] {
         ["FID_TRGT_EXLS_CLS_CODE": rawValue]
@@ -119,28 +81,135 @@ public enum KISTargetExcludeClassCode: String, KISQueryRepresentable {
     var description: String {
         switch self {
         case .investmentRisk:
-            return "투자위험"
+            "투자위험"
         case .warning:
-            return "경고"
+            "경고"
         case .management:
-            return "관리종목"
+            "관리종목"
         case .liquidation:
-            return "정리매매"
+            "정리매매"
         case .unfaithfulDisclosure:
-            return "불성실공시"
+            "불성실공시"
         case .preferredStock:
-            return "우선주"
+            "우선주"
         case .tradingSuspension:
-            return "거래정지"
+            "거래정지"
         case .etf:
-            return "ETF"
+            "ETF"
         case .etn:
-            return "ETN"
+            "ETN"
         case .creditOrderNotAllowed:
-            return "신용주문불가"
+            "신용주문불가"
         case .spac:
-            return "SPAC"
+            "SPAC"
+        case .topMarketCap:
+            "거래량 순위"
         }
+    }
+}
+
+/// 거래량 수
+public enum KISVolumeCount: KISQueryRepresentable {
+    case all
+    case over(String)
+    
+    public var httpQuery: [String: String] {
+        var result = ["FID_VOL_CNT": ""]
+        switch self {
+        case .all:
+            break
+        case .over(let volume):
+            result["FID_VOL_CNT"] = volume
+        }
+        return result
+    }
+    
+    var description: String {
+        switch self {
+        case .all:
+            "특정 거래량"
+        case .over:
+            "전체 거래량"
+        }
+    }
+}
+
+/// 입력 종목코드
+public enum KISInputISCode: KISQueryRepresentable {
+    case all, exchange, kosdaq, kospi200
+    
+    public var httpQuery: [String: String] {
+        switch self {
+        case .all:
+            return ["FID_INPUT_ISCD": "0000"]
+        case .exchange:
+            return ["FID_INPUT_ISCD": "0001"]
+        case .kosdaq:
+            return ["FID_INPUT_ISCD": "1001"]
+        case .kospi200:
+            return ["FID_INPUT_ISCD": "2001"]
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .all:
+            return "전체"
+        case .exchange:
+            return "거래소"
+        case .kosdaq:
+            return "코스닥"
+        case .kospi200:
+            return "코스피200"
+        }
+    }
+}
+
+/// 분류 구분 코드
+public enum KISDivisionCode: Int, KISQueryRepresentable {
+    case all = 0
+    case common = 1
+    case preferred = 2
+    
+    public var httpQuery: [String: String] {
+        ["FID_DIV_CLS_CODE": "\(rawValue)"]
+    }
+    
+    var description: String {
+        switch self {
+        case .all:
+            return "전체"
+        case .common:
+            return "보통주"
+        case .preferred:
+            return "우선주"
+        }
+    }
+}
+
+/// 대상 구분 코드
+public enum KISMarketCapTargetClassCode: Int, KISQueryRepresentable {
+    case all = 0
+    
+    public var httpQuery: [String: String] {
+        ["FID_TRGT_CLS_CODE": "\(rawValue)"]
+    }
+    
+    var description: String {
+        return "전체"
+    }
+}
+
+/// 대상 제외 구분 코드
+public enum KISMarketCapTargetExcludeClassCode: Int, KISQueryRepresentable {
+    case all = 0
+    
+    public var httpQuery: [String: String] {
+        ["FID_TRGT_EXLS_CLS_CODE": "\(rawValue)"]
+    }
+    
+    var description: String {
+        return "전체"
     }
 }
 
@@ -170,32 +239,6 @@ public enum KISInputPrice: KISQueryRepresentable {
             return (from, to)
         case .all:
             return ("", "")
-        }
-    }
-}
-
-/// 거래량 수
-public enum KISVolumeCount: KISQueryRepresentable {
-    case all
-    case over(String)
-    
-    public var httpQuery: [String: String] {
-        var result = ["FID_VOL_CNT": ""]
-        switch self {
-        case .all:
-            break
-        case .over(let volume):
-            result["FID_VOL_CNT"] = volume
-        }
-        return result
-    }
-    
-    var description: String {
-        switch self {
-        case .all:
-            "특정 거래량"
-        case .over(let volume):
-            "전체 거래량"
         }
     }
 }
