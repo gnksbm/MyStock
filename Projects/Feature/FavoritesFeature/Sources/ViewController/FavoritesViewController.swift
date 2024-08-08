@@ -121,20 +121,20 @@ final class FavoritesViewController: UIViewController, View {
     }
     
     private func updateSnapshot(responses: [SearchStocksResponse]) {
-        snapshot = .init()
-        snapshot.appendSections(MarketType.allCases.map { $0.toString })
-        MarketType.allCases.forEach { marketType in
-            snapshot.appendItems(
-                responses.filter { response in
-                    response.marketType == marketType
-                },
-                toSection: marketType.toString
-            )
-        }
-        dataSource.apply(
-            snapshot,
-            animatingDifferences: false
-        )
+//        snapshot = .init()
+//        snapshot.appendSections(MarketType.allCases.map { $0.toString })
+//        MarketType.allCases.forEach { marketType in
+//            snapshot.appendItems(
+//                responses.filter { response in
+//                    response.marketType == marketType
+//                },
+//                toSection: marketType.toString
+//            )
+//        }
+//        dataSource.apply(
+//            snapshot,
+//            animatingDifferences: false
+//        )
     }
     
     private func configureNavigation() {

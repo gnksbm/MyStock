@@ -20,7 +20,6 @@ import SnapKit
 final class SearchStockViewController: UIViewController, View {
     private var dataSource: DataSource!
     
-    private let stockCellTapEvent = PublishSubject<SearchStocksResponse>()
     var disposeBag = DisposeBag()
     
     private lazy var searchTextField: UITextField = {
@@ -44,43 +43,48 @@ final class SearchStockViewController: UIViewController, View {
     }
     
     private func bindAction(reactor: SearchStockReactor) {
-        searchTextField.rx.text.orEmpty.asObservable()
-            .distinctUntilChanged()
-            .filter { !$0.isEmpty }
-            .debounce(
-                .milliseconds(500),
-                scheduler: MainScheduler.asyncInstance
-            )
-            .map {
-                SearchStockReactor.Action.searchTermChangeEvent(searchTerm: $0)
-            }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
-        
-        stockCellTapEvent
-            .map { SearchStockReactor.Action.stockCellTapEvent($0) }
-            .bind(to: reactor.action)
-            .disposed(by: disposeBag)
+        disposeBag.insert {
+            searchTextField.rx.text.orEmpty.asObservable()
+                .distinctUntilChanged()
+                .filter { !$0.isEmpty }
+                .debounce(
+                    .milliseconds(500),
+                    scheduler: MainScheduler.asyncInstance
+                )
+                .map {
+                    SearchStockReactor.Action
+                        .searchTermChangeEvent(searchTerm: $0)
+                }
+                .bind(to: reactor.action)
+            
+            searchCollectionView.cellTapEvent
+                .map { SearchStockReactor.Action.stockCellTapEvent($0) }
+                .bind(to: reactor.action)
+            
+            searchCollectionView.likeButtonTapEvent
+                .map { SearchStockReactor.Action.likeButtonTapEvent($0) }
+                .bind(to: reactor.action)
+        }
     }
     
     private func bindState(reactor: SearchStockReactor) { 
-        reactor.state.map { $0.searchResult }
-            .observe(on: MainScheduler.instance)
-            .withUnretained(self)
-            .bind { vc, items in
-                vc.searchCollectionView.applyItem(items: items)
-            }
-            .disposed(by: disposeBag)
-        
-        reactor.state.map { $0.isSearching }
-            .observe(on: MainScheduler.asyncInstance)
-            .withUnretained(self)
-            .subscribe(
-                onNext: { _, _ in
-                    // TODO: Loading 화면 노출
+        disposeBag.insert {
+            reactor.state.map { $0.searchResult }
+                .observe(on: MainScheduler.instance)
+                .withUnretained(self)
+                .bind { vc, items in
+                    vc.searchCollectionView.applyItem(items: items)
                 }
-            )
-            .disposed(by: disposeBag)
+            
+            reactor.state.map { $0.isSearching }
+                .observe(on: MainScheduler.asyncInstance)
+                .withUnretained(self)
+                .subscribe(
+                    onNext: { _, _ in
+                        // TODO: Loading 화면 노출
+                    }
+                )
+        }
     }
     
     private func configureUI() {

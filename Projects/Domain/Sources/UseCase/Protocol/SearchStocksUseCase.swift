@@ -12,5 +12,7 @@ import RxSwift
 
 public protocol SearchStocksUseCase {
     func searchStocks(searchTerm: String) -> Observable<[SearchStocksResponse]>
-    func addFavorites(ticker: String) -> Observable<FavoritesTicker>
+    func updateFavorites(
+        item: SearchStocksResponse
+    ) -> Observable<SearchStocksResponse>
 }

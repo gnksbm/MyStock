@@ -21,13 +21,13 @@ final class SearchCollectionView:
             let item = NSCollectionLayoutItem(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(40)
+                    heightDimension: .estimated(50)
                 )
             )
             let group = NSCollectionLayoutGroup.vertical(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .estimated(40)
+                    heightDimension: .estimated(50)
                 ),
                 subitems: [item]
             )
@@ -36,6 +36,7 @@ final class SearchCollectionView:
         }
     }
     
+    let cellTapEvent = PublishSubject<SearchStocksResponse>()
     let likeButtonTapEvent = PublishSubject<SearchStocksResponse>()
     
     override func createCellProvider() -> CellProvider {
@@ -50,6 +51,13 @@ final class SearchCollectionView:
                 cell.starButton.rx.tap
                     .map { _ in item }
                     .bind(to: collectionView.likeButtonTapEvent)
+                    .disposed(by: cell.disposeBag)
+                
+                let tapGesture = UITapGestureRecognizer()
+                cell.addGestureRecognizer(tapGesture)
+                tapGesture.rx.event
+                    .map { _ in item }
+                    .bind(to: collectionView.cellTapEvent)
                     .disposed(by: cell.disposeBag)
             }
             return cell

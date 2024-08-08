@@ -22,9 +22,34 @@ public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
         searchTerm: String
     ) -> Observable<[SearchStocksResponse]> {
         searchStocksRepository.searchStocks(searchTerm: searchTerm)
+            .withLatestFrom(
+                favoritesStockRepository.fetchFavorites()
+            ) { searchResults, favoriteList in
+                searchResults.map { item in
+                    var copy = item
+                    copy.isLiked = favoriteList.contains {
+                        item.ticker == $0.ticker
+                    }
+                    return copy
+                }
+            }
     }
     
-    public func addFavorites(ticker: String) -> Observable<FavoritesTicker> {
-        favoritesStockRepository.addFavorites(ticker: ticker)
+    public func updateFavorites(
+        item: SearchStocksResponse
+    ) -> Observable<SearchStocksResponse> {
+        var result: Observable<FavoritesTicker>
+        if item.isLiked {
+            result = favoritesStockRepository.removeFavorites(
+                ticker: item.ticker
+            )
+        } else {
+            result = favoritesStockRepository.addFavorites(ticker: item.ticker)
+        }
+        return result.map { _ in
+            var copy = item
+            copy.isLiked.toggle()
+            return copy
+        }
     }
 }

@@ -21,23 +21,6 @@ final class SearchStockReactor: Reactor {
     
     var initialState = State()
     
-    struct State { 
-        var searchResult: [SearchStocksResponse] = []
-        var isSearching = false
-    }
-    
-    enum Action {
-        case searchTermChangeEvent(searchTerm: String)
-        case stockCellTapEvent(SearchStocksResponse)
-    }
-    
-    enum Mutation {
-        case setSearching(Bool)
-        case search(searchResult: [SearchStocksResponse])
-        case startChartFlow(SearchStocksResponse)
-        case addFavorites
-    }
-    
     init(
         useCase: SearchStocksUseCase,
         searchFlow: SearchFlow,
@@ -59,13 +42,11 @@ final class SearchStockReactor: Reactor {
                 .just(.setSearching(false))
             )
         case .stockCellTapEvent(let searchResult):
-            switch searchFlow {
-            case .chart:
-                return .just(.startChartFlow(searchResult))
-            case .stockInfo:
-                return useCase.addFavorites(ticker: searchResult.ticker)
-                    .map { _ in .addFavorites }
-            }
+            return .just(.startChartFlow(searchResult))
+        case .likeButtonTapEvent(let item):
+            return useCase.updateFavorites(item: item)
+                .map { .addFavorites($0) }
+                .catchAndReturn(.addFavorites(item))
         }
     }
     
@@ -78,9 +59,37 @@ final class SearchStockReactor: Reactor {
             newState.isSearching = isSearching
         case .startChartFlow(let searchResult):
             coordinator.startChartFlow(with: searchResult)
-        case .addFavorites:
-            coordinator.updateFavoritesFinished()
+        case .addFavorites(let item):
+            if let index = newState.searchResult.firstIndex(
+                where: { item.ticker == $0.ticker }
+            ) {
+                var newResult = newState.searchResult
+                newResult.remove(at: index)
+                newResult.insert(item, at: index)
+                newState.searchResult = newResult
+            }
         }
         return newState
     }
 }
+
+extension SearchStockReactor {
+    struct State {
+        var searchResult: [SearchStocksResponse] = []
+        var isSearching = false
+    }
+    
+    enum Action {
+        case searchTermChangeEvent(searchTerm: String)
+        case stockCellTapEvent(SearchStocksResponse)
+        case likeButtonTapEvent(SearchStocksResponse)
+    }
+    
+    enum Mutation {
+        case setSearching(Bool)
+        case search(searchResult: [SearchStocksResponse])
+        case startChartFlow(SearchStocksResponse)
+        case addFavorites(SearchStocksResponse)
+    }
+}
+    

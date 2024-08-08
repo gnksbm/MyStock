@@ -21,6 +21,10 @@ final class SearchCVCell: BaseCVCell, RegistrableCellType {
             cell.logoImageView.image = item.image
             cell.nameLabel.text = item.name
             cell.tickerLabel.text = item.ticker
+            cell.starButton.setImage(
+                UIImage(systemName: item.isLiked ? "star.fill" : "star"),
+                for: .normal
+            )
         }
     }
     

@@ -13,6 +13,7 @@ public struct SearchStocksResponse: Hashable, LogoNecessary {
     public let ticker: String
     public let name: String
     public let marketType: MarketType
+    public var isLiked = false
     
     public init(
         ticker: String,
