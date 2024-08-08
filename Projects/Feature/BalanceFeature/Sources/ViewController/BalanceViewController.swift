@@ -21,7 +21,7 @@ final class BalanceViewController: UIViewController, View {
     
     private lazy var portfolioTableView: UITableView = {
         let tableView = UITableView()
-        tableView.register(StockInfoTVCell.self)
+//        tableView.register(StockInfoTVCell.self)
         tableView.separatorStyle = .none
         tableView.backgroundColor = DesignSystemAsset.chartBackground.color
         tableView.separatorColor = DesignSystemAsset.chartForeground.color
@@ -117,17 +117,17 @@ final class BalanceViewController: UIViewController, View {
     }
     
     private func configureTableView() {
-        dataSource = PortfolioDataSource(
-            tableView: portfolioTableView,
-            cellProvider: { tableView, indexPath, item in
-                let cell = tableView.dequeueReusableCell(
-                    withIdentifier: StockInfoTVCell.identifier,
-                    for: indexPath
-                ) as? StockInfoTVCell
-                cell?.updateUI(item: item)
-                return cell
-            }
-        )
+//        dataSource = PortfolioDataSource(
+//            tableView: portfolioTableView,
+//            cellProvider: { tableView, indexPath, item in
+//                let cell = tableView.dequeueReusableCell(
+//                    withIdentifier: StockInfoTVCell.identifier,
+//                    for: indexPath
+//                ) as? StockInfoTVCell
+//                cell?.updateUI(item: item)
+//                return cell
+//            }
+//        )
     }
     
     private func updateSnapshot(items: [KISCheckBalanceResponse]) {

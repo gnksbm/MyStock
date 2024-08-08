@@ -11,6 +11,7 @@ import UIKit
 import DesignSystem
 import Domain
 import FeatureDependency
+import ThirdPartyLibs
 
 import ReactorKit
 import RxCocoa
@@ -28,16 +29,7 @@ final class SearchStockViewController: UIViewController, View {
         return textField
     }()
     
-    private let searchStocksTableView = StockInfoTableView()
-    
-    init() {
-        super.init(nibName: nil, bundle: nil)
-        configureDataSource()
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+    private let searchCollectionView = SearchCollectionView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,7 +65,11 @@ final class SearchStockViewController: UIViewController, View {
     
     private func bindState(reactor: SearchStockReactor) { 
         reactor.state.map { $0.searchResult }
-            .bindSnapshot(to: updateSnapshot)
+            .observe(on: MainScheduler.instance)
+            .withUnretained(self)
+            .bind { vc, items in
+                vc.searchCollectionView.applyItem(items: items)
+            }
             .disposed(by: disposeBag)
         
         reactor.state.map { $0.isSearching }
@@ -88,15 +84,11 @@ final class SearchStockViewController: UIViewController, View {
     }
     
     private func configureUI() {
-        [searchTextField, searchStocksTableView].forEach {
+        [searchTextField, searchCollectionView].forEach {
             view.addSubview($0)
         }
         
-        let safeArea = view.safeAreaLayoutGuide
-        
-        searchStocksTableView.snp.makeConstraints { make in
-            make.edges.equalTo(safeArea)
-        }
+        searchCollectionView.snp.equalToSafeArea(view)
     }
     
     private func configureNavigation() {
@@ -115,44 +107,7 @@ final class SearchStockViewController: UIViewController, View {
             )
             .disposed(by: disposeBag)
         
-        searchStocksTableView.keyboardDismissMode = .onDrag
-    }
-    
-    private func configureDataSource() {
-        dataSource = DataSource(
-            tableView: searchStocksTableView
-        ) { [weak self] tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: StockInfoTVCell.identifier,
-                for: indexPath
-            ) as? StockInfoTVCell else { return .init() }
-            cell.updateUI(
-                image: item.image,
-                ticker: item.ticker,
-                name: item.name
-            )
-            let tapGesture = UITapGestureRecognizer()
-            cell.addGestureRecognizer(tapGesture)
-            tapGesture.rx.event
-                .map { _ in item }
-                .subscribe(
-                    onNext: { response in
-                        self?.stockCellTapEvent.onNext(response)
-                    }
-                )
-                .disposed(by: cell.disposeBag)
-            return cell
-        }
-    }
-    
-    private func updateSnapshot(items: [SearchStocksResponse]) {
-        var snapshot = Snapshot()
-        snapshot.appendSections([0])
-        snapshot.appendItems(items)
-        dataSource.apply(
-            snapshot,
-            animatingDifferences: false
-        )
+        searchCollectionView.keyboardDismissMode = .onDrag
     }
 }
 

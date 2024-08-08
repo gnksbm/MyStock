@@ -28,7 +28,7 @@ final class FavoritesViewController: UIViewController, View {
         return button
     }()
     
-    private let favoritesTableView = StockInfoTableView()
+//    private let favoritesTableView = StockInfoTableView()
     
     init() {
         super.init(nibName: nil, bundle: nil)
@@ -81,43 +81,43 @@ final class FavoritesViewController: UIViewController, View {
     }
     
     private func configureUI() {
-        [favoritesTableView].forEach {
-            view.addSubview($0)
-        }
-        
-        let safeArea = view.safeAreaLayoutGuide
-        
-        favoritesTableView.snp.makeConstraints { make in
-            make.edges.equalTo(safeArea)
-        }
+//        [favoritesTableView].forEach {
+//            view.addSubview($0)
+//        }
+//        
+//        let safeArea = view.safeAreaLayoutGuide
+//        
+//        favoritesTableView.snp.makeConstraints { make in
+//            make.edges.equalTo(safeArea)
+//        }
     }
     
     private func configureDataSource() {
-        dataSource = .init(
-            tableView: favoritesTableView
-        ) { [weak self] tableView, indexPath, item in
-            guard let cell = tableView.dequeueReusableCell(
-                withIdentifier: StockInfoTVCell.identifier,
-                for: indexPath
-            ) as? StockInfoTVCell,
-                  let self
-            else { return .init() }
-            cell.updateUI(
-                image: item.image,
-                ticker: item.ticker,
-                name: item.name
-            )
-            let tapGesture = UITapGestureRecognizer()
-            cell.contentView.addGestureRecognizer(tapGesture)
-            tapGesture.rx.event
-                .map { _ in item }
-                .bind(to: self.stockCellTapEvent)
-                .disposed(by: cell.disposeBag)
-            return cell
-        }
-        snapshot = .init()
-        snapshot.appendSections(MarketType.allCases.map { $0.toString })
-        dataSource.apply(snapshot)
+//        dataSource = .init(
+//            tableView: favoritesTableView
+//        ) { [weak self] tableView, indexPath, item in
+//            guard let cell = tableView.dequeueReusableCell(
+//                withIdentifier: StockInfoTVCell.identifier,
+//                for: indexPath
+//            ) as? StockInfoTVCell,
+//                  let self
+//            else { return .init() }
+//            cell.updateUI(
+//                image: item.image,
+//                ticker: item.ticker,
+//                name: item.name
+//            )
+//            let tapGesture = UITapGestureRecognizer()
+//            cell.contentView.addGestureRecognizer(tapGesture)
+//            tapGesture.rx.event
+//                .map { _ in item }
+//                .bind(to: self.stockCellTapEvent)
+//                .disposed(by: cell.disposeBag)
+//            return cell
+//        }
+//        snapshot = .init()
+//        snapshot.appendSections(MarketType.allCases.map { $0.toString })
+//        dataSource.apply(snapshot)
     }
     
     private func updateSnapshot(responses: [SearchStocksResponse]) {

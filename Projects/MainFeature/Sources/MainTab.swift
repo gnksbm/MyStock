@@ -9,24 +9,30 @@
 import UIKit
 
 enum MainTab: Int, CaseIterable {
-    case home, favorites, setting
+    case home, search, favorites, setting
     
     var tabItem: UITabBarItem {
         switch self {
         case .home:
-            return .init(
+            .init(
                 title: "홈",
                 image: .init(systemName: "house"),
                 tag: rawValue
             )
+        case .search:
+            .init(
+                title: "검색",
+                image: .init(systemName: "magnifyingglass"),
+                tag: rawValue
+            )
         case .favorites:
-            return .init(
+            .init(
                 title: "즐겨찾기",
                 image: .init(systemName: "star"),
                 tag: rawValue
             )
         case .setting:
-            return .init(
+            .init(
                 title: "설정",
                 image: .init(systemName: "gearshape"),
                 tag: rawValue

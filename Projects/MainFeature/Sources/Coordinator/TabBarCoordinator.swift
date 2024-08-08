@@ -10,6 +10,7 @@ import UIKit
 
 import FeatureDependency
 import SummaryFeature
+import SearchStockFeature
 import FavoritesFeature
 import SettingsFeature
 
@@ -66,6 +67,12 @@ public final class TabBarCoordinator: Coordinator {
         case .home:
             coordinator = DefaultSummaryCoordinator(
                 navigationController: navigationController, 
+                coordinatorProvider: coordinatorProvider
+            )
+        case .search:
+            coordinator = DefaultSearchStockCoordinator(
+                searchFlow: .chart,
+                navigationController: navigationController,
                 coordinatorProvider: coordinatorProvider
             )
         case .favorites:
