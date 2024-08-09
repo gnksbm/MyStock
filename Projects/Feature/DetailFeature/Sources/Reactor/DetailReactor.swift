@@ -7,9 +7,13 @@ import RxSwift
 import ReactorKit
 
 public final class DetailReactor: Reactor {
+    private let ticker: String
+    
     public var initialState = State()
     
-    public init() { }
+    public init(ticker: String) {
+        self.ticker = ticker
+    }
 }
 
 extension DetailReactor {

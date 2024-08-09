@@ -40,6 +40,10 @@ public extension CandlestickRepresentable {
 }
 
 public extension Array<CandlestickRepresentable> {
+    var chartOpeingPrice: Element.Price? {
+        self.first?.openingPrice
+    }
+    
     var chartHighest: Element.Price? {
         self.lazy.map { $0.highestPrice }.max()
     }

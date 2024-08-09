@@ -21,7 +21,7 @@ public final class DefaultKISChartPriceRepository: KISChartPriceRepository {
     
     public func fetchChartData(
         request: KISChartPriceRequest
-    ) -> Observable<[KISChartPriceResponse]> {
+    ) -> Observable<[CandleData]> {
         networkService.request(
             endPoint: KISChartPriceEndPoint(
                 request: request

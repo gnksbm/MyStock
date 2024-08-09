@@ -8,4 +8,6 @@
 
 import Foundation
 
-public protocol DetailCoordinator: Coordinator { }
+public protocol DetailCoordinator: Coordinator { 
+    func startDetailFlow(ticker: String)
+}

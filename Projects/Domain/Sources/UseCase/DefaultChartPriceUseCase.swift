@@ -25,7 +25,7 @@ public final class DefaultChartPriceUseCase: ChartUseCase {
         ticker: String,
         startDate: String,
         endDate: String
-    ) -> Observable<[KISChartPriceResponse]> {
+    ) -> Observable<[CandleData]> {
         oAuthRepository.fetchToken(
             request: .init(
                 oAuthType: .access,
@@ -74,7 +74,7 @@ public final class DefaultChartPriceUseCase: ChartUseCase {
                     if let lastChart = sortedChartList.last,
                        let closingPrice = Double(realtimePrice) {
                         sortedChartList.removeLast()
-                        let realtimeChart = KISChartPriceResponse(
+                        let realtimeChart = CandleData(
                             date: lastChart.date,
                             openingPrice: lastChart.openingPrice,
                             highestPrice: lastChart.highestPrice,

@@ -16,7 +16,7 @@ struct KISOverseasChartPriceDTO: Codable {
 }
 
 extension KISOverseasChartPriceDTO {
-    var toDomain: [KISChartPriceResponse] {
+    var toDomain: [CandleData] {
         output2.compactMap {
             .init(
                 date: $0.stckBsopDate,

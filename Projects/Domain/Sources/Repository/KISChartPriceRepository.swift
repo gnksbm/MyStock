@@ -15,5 +15,5 @@ import RxSwift
 public protocol KISChartPriceRepository {
     func fetchChartData(
         request: KISChartPriceRequest
-    ) -> Observable<[KISChartPriceResponse]>
+    ) -> Observable<[CandleData]>
 }

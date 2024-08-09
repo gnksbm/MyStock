@@ -1,5 +1,5 @@
 //
-//  KISChartPriceResponse.swift
+//  CandleData.swift
 //  Domain
 //
 //  Created by gnksbm on 2023/12/31.
@@ -10,7 +10,7 @@ import Foundation
 
 import Core
 
-public struct KISChartPriceResponse: CandlestickRepresentable, Equatable {
+public struct CandleData: CandlestickRepresentable, Equatable {
     public let date: Date
     public let openingPrice: Price
     public let highestPrice: Price

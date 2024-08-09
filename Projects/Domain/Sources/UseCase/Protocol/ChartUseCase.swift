@@ -19,5 +19,5 @@ public protocol ChartUseCase {
         ticker: String,
         startDate: String,
         endDate: String
-    ) -> Observable<[KISChartPriceResponse]>
+    ) -> Observable<[CandleData]>
 }

@@ -15,12 +15,12 @@ final class ChartReactor: Reactor {
     private let marketType: MarketType
     
     struct State {
-        var candleDatas: [KISChartPriceResponse] = []
+        var candleDatas: [CandleData] = []
         var title: String = ""
     }
     
     enum Mutation {
-        case fetchResult([KISChartPriceResponse])
+        case fetchResult([CandleData])
     }
     
     enum Action {
