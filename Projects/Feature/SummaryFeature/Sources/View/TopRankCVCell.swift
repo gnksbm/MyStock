@@ -38,6 +38,7 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
         imageView.backgroundColor = DesignSystemAsset.accentColor.color
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = DesignSystemAsset.Radius.logoImage
         return imageView
     }()
     private let nameLabel = {
@@ -71,11 +72,6 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
         label.backgroundColor = DesignSystemAsset.accentColor.color
         return label
     }()
-    
-    override func draw(_ rect: CGRect) {
-        super.draw(rect)
-        iconImageView.layer.cornerRadius = iconImageView.bounds.width / 2
-    }
     
     override func prepareForReuse() {
         super.prepareForReuse()
@@ -114,7 +110,7 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
         
         iconImageView.snp.makeConstraints { make in
             make.leading.equalTo(rankLabel.snp.trailing).offset(padding / 3)
-            make.size.equalTo(40)
+            make.size.equalTo(DesignSystemAsset.Demension.logoImage)
             make.centerY.equalTo(contentView)
         }
         

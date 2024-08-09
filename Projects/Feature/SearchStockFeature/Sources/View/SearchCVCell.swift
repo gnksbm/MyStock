@@ -32,7 +32,7 @@ final class SearchCVCell: BaseCVCell, RegistrableCellType {
     
     private let logoImageView: UIImageView = {
         let imgView = UIImageView()
-        imgView.layer.cornerRadius = 20
+        imgView.layer.cornerRadius = DesignSystemAsset.Radius.logoImage
         imgView.contentMode = .scaleAspectFit
         imgView.backgroundColor = DesignSystemAsset.lightBlack.color
         imgView.clipsToBounds = true
@@ -79,7 +79,7 @@ final class SearchCVCell: BaseCVCell, RegistrableCellType {
         logoImageView.snp.makeConstraints { make in
             make.leading.equalTo(contentView).inset(padding)
             make.centerY.equalTo(contentView)
-            make.size.equalTo(40)
+            make.size.equalTo(DesignSystemAsset.Demension.logoImage)
         }
         
         nameLabel.snp.makeConstraints { make in

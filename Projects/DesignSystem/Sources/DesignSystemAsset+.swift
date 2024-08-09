@@ -22,3 +22,17 @@ public extension String {
         }
     }
 }
+
+public extension DesignSystemAsset {
+    enum Padding {
+        public static let regular: CGFloat = 20
+    }
+    
+    enum Demension {
+        public static let logoImage: CGFloat = 40
+    }
+    
+    enum Radius {
+        public static let logoImage: CGFloat = Demension.logoImage / 2
+    }
+}
