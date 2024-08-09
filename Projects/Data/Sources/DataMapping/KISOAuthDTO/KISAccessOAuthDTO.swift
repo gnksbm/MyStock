@@ -27,11 +27,11 @@ struct KISAccessOAuthDTO: Codable, KISOAuthDTO {
 
 extension KISAccessOAuthDTO {
     var toDomain: KISOAuthToken {
-        .init(
+        guard let expireDate = accessTokenTokenExpired
+            .formatted(dateFormat: .accessToken) else { fatalError() }
+        return .init(
             token: accessToken,
-            expireDate: accessTokenTokenExpired.toDate(
-                dateFormat: "yyyy-MM-dd HH:mm:ss"
-            )
+            expireDate: expireDate
         )
     }
 }

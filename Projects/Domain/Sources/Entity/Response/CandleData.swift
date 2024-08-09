@@ -41,9 +41,10 @@ public struct CandleData: CandlestickRepresentable, Equatable {
         guard let openingPrice = Double(openingPrice),
               let highestPrice = Double(highestPrice),
               let lowestPrice = Double(lowestPrice),
-              let closingPrice = Double(closingPrice)
+              let closingPrice = Double(closingPrice),
+              let date = date.formatted(dateFormat: .dailyChartInput)
         else { return nil }
-        self.date = date.toDate(dateFormat: "yyyyMMdd")
+        self.date = date
         self.openingPrice = openingPrice
         self.highestPrice = highestPrice
         self.lowestPrice = lowestPrice

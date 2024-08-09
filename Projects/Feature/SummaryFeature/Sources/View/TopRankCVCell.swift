@@ -13,6 +13,7 @@ import DesignSystem
 import Domain
 import FeatureDependency
 
+import RxSwift
 import SnapKit
 
 final class TopRankCVCell: BaseCVCell, RegistrableCellType {
@@ -22,12 +23,14 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
             cell.iconImageView.image = item.image
             cell.nameLabel.text = item.name
             cell.tickerLabel.text = item.ticker
-            cell.priceLabel.text = item.price.toCurrency(style: .currency)
+            cell.priceLabel.text = item.price.formatted(style: .currency)
             cell.rateLabel.text = item.fluctuationRate.toPercent()
             cell.rateLabel.textColor =
             item.fluctuationRate.toForegroundColorForNumeric
         }
     }
+    
+    var disposeBag = DisposeBag()
     
     private let rankLabel = {
         let label = UILabel()
@@ -76,6 +79,7 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
     
     override func prepareForReuse() {
         super.prepareForReuse()
+        disposeBag = DisposeBag()
         [
             rankLabel,
             nameLabel,

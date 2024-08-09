@@ -12,6 +12,8 @@ import DesignSystem
 import Domain
 import FeatureDependency
 
+import RxSwift
+
 final class SummaryCollectionView:
     ModernCollectionView<SummarySection, SummaryItem> {
     override class func createLayout() -> UICollectionViewCompositionalLayout {
@@ -60,6 +62,8 @@ final class SummaryCollectionView:
         }
     }
     
+    let cellTapEvent = PublishSubject<SummaryItem>()
+    
     override func configureDataSource() {
         super.configureDataSource()
         let headerRegistration = makeHeaderRegistration()
@@ -78,12 +82,21 @@ final class SummaryCollectionView:
             switch Section.allCases[indexPath.section] {
             case .topVolume, .topMarketCap:
                 if case .topRank(let response) = item {
-                    collectionView.dequeueConfiguredReusableCell(
+                    let cell = collectionView.dequeueConfiguredReusableCell(
                         using: topVolumeRegistration,
                         for: indexPath,
                         item: response
                     )
-                } else { nil }
+                    if let collectionView = collectionView as? Self {
+                        let tapGesture = UITapGestureRecognizer()
+                        cell.addGestureRecognizer(tapGesture)
+                        tapGesture.rx.event
+                            .map { _ in item }
+                            .bind(to: collectionView.cellTapEvent)
+                            .disposed(by: cell.disposeBag)
+                    }
+                    return cell
+                } else { return nil }
             }
         }
     }

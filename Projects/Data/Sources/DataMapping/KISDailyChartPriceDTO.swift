@@ -33,7 +33,7 @@ extension KISDailyChartPriceDTO {
             volume: output1.acmlVol,
             candles: output2.compactMap {
                 CandleData(
-                    date: $0.stckCntgHour,
+                    date: $0.stckBsopDate + $0.stckCntgHour,
                     openingPrice: $0.stckOprc,
                     highestPrice: $0.stckHgpr,
                     lowestPrice: $0.stckLwpr,

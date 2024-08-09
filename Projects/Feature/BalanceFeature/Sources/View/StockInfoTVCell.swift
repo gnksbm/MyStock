@@ -118,10 +118,10 @@ final class StockInfoTVCell: UITableViewCell {
         }
         titleLabel.text = item.name
         amountLabel.attributedText = amountMutableString
-        valueLabel.text = item.value.toCurrency(style: .decimal) + "원"
+        valueLabel.text = item.value.formatted(style: .decimal) + "원"
         plAmoutLabel.text
-        = item.plAmount.toCurrency(style: .decimal) + "원"
-        var priceText = item.price.toCurrency(style: .decimal) + "원"
+        = item.plAmount.formatted(style: .decimal) + "원"
+        var priceText = item.price.formatted(style: .decimal) + "원"
         let fluctuationRate = "\(item.rateToDoubleDigits) %"
         guard let rate = Double(item.fluctuationRate) else { return }
         switch rate {

@@ -9,6 +9,7 @@
 import UIKit
 
 import ChartFeature
+import DetailFeature
 import Domain
 import FeatureDependency
 import SearchStockFeature
@@ -45,6 +46,18 @@ final class DefaultCoordinatorProvider: CoordinatorProvider {
         navigationController: UINavigationController
     ) -> APISettingsCoordinator {
         DefaultAPISettingsCoordinator(
+            parent: parent,
+            navigationController: navigationController
+        )
+    }
+    
+    func makeDetailCoordinator(
+        ticker: String,
+        parent: (any Coordinator)?,
+        navigationController: UINavigationController
+    ) -> any DetailCoordinator {
+        DefaultDetailCoordinator(
+            ticker: ticker,
             parent: parent,
             navigationController: navigationController
         )

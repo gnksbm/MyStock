@@ -3,16 +3,19 @@ import UIKit
 import Domain
 import FeatureDependency
 
-public final class DefaultDetailCoordinator {
-    public var navigationController: UINavigationController
+public final class DefaultDetailCoordinator: DetailCoordinator {
+    public let ticker: String
     
+    public let navigationController: UINavigationController
     public var parent: Coordinator?
     public var childs = [Coordinator]()
     
     public init(
+        ticker: String,
         parent: Coordinator? = nil,
         navigationController: UINavigationController
     ) {
+        self.ticker = ticker
         self.parent = parent
         self.navigationController = navigationController
     }
@@ -20,26 +23,13 @@ public final class DefaultDetailCoordinator {
     public func start() {
         let detailViewController = DetailViewController()
         detailViewController.reactor = DetailReactor(
-            ticker: "",
-            useCase: DefaultDetailUseCase()
-        )
-        navigationController.setViewControllers(
-            [detailViewController],
-            animated: false
-        )
-    }
-}
-
-extension DefaultDetailCoordinator: DetailCoordinator {
-    public func startDetailFlow(ticker: String) {
-        let detailViewController = DetailViewController()
-        detailViewController.reactor = DetailReactor(
             ticker: ticker,
+            coordinator: self,
             useCase: DefaultDetailUseCase()
         )
-        navigationController.setViewControllers(
-            [detailViewController],
-            animated: false
+        navigationController.pushViewController(
+            detailViewController,
+            animated: true
         )
     }
 }

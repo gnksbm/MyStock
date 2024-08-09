@@ -27,4 +27,10 @@ public protocol CoordinatorProvider {
         parent: Coordinator?,
         navigationController: UINavigationController
     ) -> APISettingsCoordinator
+    
+    func makeDetailCoordinator(
+        ticker: String,
+        parent: Coordinator?,
+        navigationController: UINavigationController
+    ) -> DetailCoordinator
 }

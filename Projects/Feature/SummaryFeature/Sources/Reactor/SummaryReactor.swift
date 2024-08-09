@@ -29,6 +29,8 @@ public final class SummaryReactor: Reactor {
                 useCase.fetchTopMarketCapItems()
                     .map { .fetchMarketCapItems($0) }
             )
+        case .itemSelected(let ticker):
+            Observable.just(.startDetailFlow(ticker: ticker))
         }
     }
     
@@ -39,6 +41,8 @@ public final class SummaryReactor: Reactor {
             newState.topVolumeItems = items
         case .fetchMarketCapItems(let items):
             newState.topMarketCapItems = items
+        case .startDetailFlow(let ticker):
+            coordinator.startDetailFlow(ticker: ticker)
         }
         return newState
     }
@@ -52,10 +56,12 @@ extension SummaryReactor {
     
     public enum Action {
         case viewWillAppear
+        case itemSelected(ticker: String)
     }
     
     public enum Mutation {
         case fetchVolumeItems([KISTopRankResponse])
         case fetchMarketCapItems([KISTopRankResponse])
+        case startDetailFlow(ticker: String)
     }
 }

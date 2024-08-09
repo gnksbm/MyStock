@@ -19,6 +19,7 @@ open class BaseViewController
         super.init(nibName: nil, bundle: nil)
         configureUI()
         configureLayout()
+        configureDefailtUI()
     }
     
     @available(*, unavailable)
@@ -36,4 +37,8 @@ open class BaseViewController
     
     open func configureUI() { }
     open func configureLayout() { }
+    
+    private func configureDefailtUI() {
+        view.backgroundColor = .white
+    }
 }

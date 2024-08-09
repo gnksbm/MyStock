@@ -8,15 +8,18 @@ import ReactorKit
 
 public final class DetailReactor: Reactor {
     private let useCase: DetailUseCase
+    private let coordinator: DetailCoordinator
     private let ticker: String
     
     public var initialState = State()
     
     public init(
         ticker: String,
+        coordinator: DetailCoordinator,
         useCase: DetailUseCase
     ) {
         self.ticker = ticker
+        self.coordinator = coordinator
         self.useCase = useCase
     }
     

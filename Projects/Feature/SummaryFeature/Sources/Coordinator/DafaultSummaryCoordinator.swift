@@ -30,3 +30,14 @@ public final class DefaultSummaryCoordinator: SummaryCoordinator {
         )
     }
 }
+
+extension DefaultSummaryCoordinator {
+    public func startDetailFlow(ticker: String) {
+        let detailCoordinator = coordinatorProvider.makeDetailCoordinator(
+            ticker: ticker,
+            parent: self,
+            navigationController: navigationController
+        )
+        startChildCoordinator(detailCoordinator)
+    }
+}

@@ -9,6 +9,9 @@ import RxCocoa
 public final class DetailViewController: BaseViewController<DetailReactor> {
     private let logoImageView = {
         let imageView = UIImageView()
+        imageView.backgroundColor = DesignSystemAsset.accentColor.color
+        imageView.contentMode = .scaleAspectFill
+        imageView.clipsToBounds = true
         imageView.layer.cornerRadius = DesignSystemAsset.Radius.logoImage
         return imageView
     }()
@@ -19,7 +22,7 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
     }()
     private let priceLabel = {
         let label = UILabel()
-        label.font = .boldSystemFont(ofSize: 20)
+        label.font = .boldSystemFont(ofSize: 30)
         return label
     }()
     private let rateLabel = {
@@ -70,23 +73,33 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
         
         disposeBag.insert {
             state.compactMap { $0.dailyPriceInfo }
+                .observe(on: MainScheduler.instance)
                 .bind(with: self) { vc, item in
                     vc.logoImageView.image = item.image
                     vc.nameLabel.text = item.name
-                    vc.priceLabel.text = item.price
+                    vc.priceLabel.text = item.price.formatted(style: .currency)
+                    vc.rateLabel.text = item.fluctuationRate.toPercent()
                     vc.rateLabel.textColor =
                     item.fluctuationRate.toForegroundColorForNumeric
-                    vc.openingPriceView.updateValue(item.openingPrice)
-                    vc.volumeView.updateValue(item.volume)
-                    vc.highPriceView.updateValue(item.highPrice)
-                    vc.lowPriceView.updateValue(item.lowPrice)
+                    vc.openingPriceView.updateValue(
+                        item.openingPrice?.formatted(style: .currency)
+                    )
+                    vc.volumeView.updateValue(
+                        item.volume.formatted(style: .decimal)
+                    )
+                    vc.highPriceView.updateValue(
+                        item.highPrice?.formatted(style: .currency)
+                    )
+                    vc.lowPriceView.updateValue(
+                        item.lowPrice?.formatted(style: .currency)
+                    )
                 }
         }
     }
     
     public override func bindAction(reactor: DetailReactor) {
         disposeBag.insert {
-            rx.methodInvoked(#selector(Self.viewDidLoad))
+            rx.methodInvoked(#selector(Self.viewWillAppear))
                 .map { _ in DetailReactor.Action.viewWillAppearEvent }
                 .bind(to: reactor.action)
         }
@@ -105,14 +118,14 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
         let padding = DesignSystemAsset.Padding.regular
         
         logoImageView.snp.makeConstraints { make in
-            make.top.leading.equalTo(safeArea).inset(padding / 2)
+            make.top.leading.equalTo(safeArea).inset(padding)
             make.size.equalTo(DesignSystemAsset.Demension.logoImage)
         }
         
         nameLabel.snp.makeConstraints { make in
             make.centerY.equalTo(logoImageView)
             make.leading.equalTo(logoImageView.snp.trailing).offset(padding / 2)
-            make.trailing.equalTo(safeArea).inset(padding / 2)
+            make.trailing.equalTo(safeArea).inset(padding)
         }
         
         priceLabel.snp.makeConstraints { make in
@@ -128,7 +141,7 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
         
         dateLabel.snp.makeConstraints { make in
             make.top.equalTo(rateLabel)
-            make.leading.equalTo(rateLabel.snp.trailing)
+            make.leading.equalTo(rateLabel.snp.trailing).offset(padding / 2)
             make.trailing.equalTo(nameLabel)
         }
         

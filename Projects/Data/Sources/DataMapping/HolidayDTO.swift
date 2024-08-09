@@ -18,12 +18,14 @@ struct HolidayDTO: Codable {
  
 extension HolidayDTO {
     var toDomain: [HolidayResponse] {
-        body.items.item.map { item in
-                .init(
-                    date: item.locdate.toDate(dateFormat: "yyyyMMdd"),
-                    isHoliday: item.isHoliday == "Y",
-                    dateName: item.dateName
-                )
+        body.items.item.compactMap { item in
+            guard let date = item.locdate
+                .formatted(dateFormat: .dailyChartInput) else { return nil }
+            return HolidayResponse(
+                date: date,
+                isHoliday: item.isHoliday == "Y",
+                dateName: item.dateName
+            )
         }
     }
 }

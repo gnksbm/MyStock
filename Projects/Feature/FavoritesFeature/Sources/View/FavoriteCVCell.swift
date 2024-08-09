@@ -22,7 +22,7 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
             cell.iconImageView.image = item.image
             cell.nameLabel.text = item.name
             cell.tickerLabel.text = item.ticker
-            cell.priceLabel.text = item.price.toCurrency(style: .currency)
+            cell.priceLabel.text = item.price.formatted(style: .currency)
             cell.rateLabel.text = item.fluctuationRate.toPercent()
             cell.rateLabel.textColor =
             item.fluctuationRate.toForegroundColorForNumeric
