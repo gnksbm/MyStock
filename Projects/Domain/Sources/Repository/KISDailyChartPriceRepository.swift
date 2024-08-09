@@ -11,7 +11,7 @@ import Foundation
 import RxSwift
 
 public protocol KISDailyChartPriceRepository {
-    func fetchToken(
+    func fetchDailyChart(
         request: KISDailyChartPriceRequest
     ) -> Observable<KISDailyChartPriceResponse>
 }

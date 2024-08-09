@@ -72,5 +72,9 @@ extension AppDelegate {
             type: KISDomesticCurrentPriceRepository.self,
             DefaultKISDomesticCurrentPriceRepository()
         )
+        DIContainer.register(
+            type: KISDailyChartPriceRepository.self,
+            DefaultKISDailyChartPriceRepository()
+        )
     }
 }
