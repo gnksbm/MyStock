@@ -9,6 +9,10 @@
 import UIKit
 
 public extension UIViewController {
+    var safeArea: UILayoutGuide {
+        view.safeAreaLayoutGuide
+    }
+    
     func presentImg(img: UIImage?) {
         let vc = UIViewController()
         vc.view.backgroundColor = .white

@@ -9,6 +9,21 @@
 import UIKit
 
 public extension UIStackView {
+    convenience init(
+        spacing: CGFloat = 20,
+        axis: NSLayoutConstraint.Axis = .horizontal,
+        distribution: Distribution = .fill,
+        alignment: Alignment = .fill,
+        @TypeBuilder<UIView> views: () -> [UIView]
+    ) {
+        self.init()
+        views().forEach { addArrangedSubview($0) }
+        self.axis = axis
+        self.spacing = spacing
+        self.distribution = distribution
+        self.alignment = alignment
+    }
+    
     func addDivider(
         color: UIColor,
         hasPadding: Bool = false,
