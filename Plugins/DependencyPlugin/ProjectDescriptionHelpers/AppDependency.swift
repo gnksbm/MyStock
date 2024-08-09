@@ -107,7 +107,7 @@ extension AppDependency {
         public var version: Version {
             switch self {
             case .rxCocoa:
-                return "6.0.0"
+                return "6.7.1"
             case .cryptoSwift:
                 return "1.8.0"
             case .xmlCoder:
