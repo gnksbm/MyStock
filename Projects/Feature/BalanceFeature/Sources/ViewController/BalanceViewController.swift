@@ -1,5 +1,6 @@
 import UIKit
 
+import Core
 import Domain
 import DesignSystem
 
@@ -7,9 +8,7 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
-final class BalanceViewController: UIViewController, View {
-    var disposeBag = DisposeBag()
-    
+final class BalanceViewController: BaseViewController<BalanceReactor> {
     private var dataSource: PortfolioDataSource!
     
     private lazy var ratioLabel: UILabel = {
@@ -54,7 +53,7 @@ final class BalanceViewController: UIViewController, View {
         )
     }
     
-    private func configureUI() {
+    override func configureUI() {
         [ratioLabel, portfolioTableView].forEach {
             view.addSubview($0)
         }
@@ -72,12 +71,7 @@ final class BalanceViewController: UIViewController, View {
         }
     }
     
-    func bind(reactor: BalanceReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
-    
-    private func bindAction(reactor: BalanceReactor) {
+    override func bindAction(reactor: BalanceReactor) {
         rx.methodInvoked(#selector(UIViewController.viewWillAppear))
             .map { _ in BalanceReactor.Action.viewWillAppear }
             .bind(to: reactor.action)
@@ -98,7 +92,7 @@ final class BalanceViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func bindState(reactor: BalanceReactor) {
+    override func bindState(reactor: BalanceReactor) {
         let state = reactor.state
             .share()
         

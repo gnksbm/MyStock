@@ -44,7 +44,7 @@ public final class SummaryViewController: BaseViewController<SummaryReactor> {
     
     public override func bindAction(reactor: SummaryReactor) {
         disposeBag.insert {
-            rx.methodInvoked(#selector(UIViewController.viewWillAppear))
+            rx.methodInvoked(#selector(Self.viewWillAppear))
                 .withLatestFrom(reactor.state.map { $0.topVolumeItems.isEmpty })
                 .skip { !$0 }
                 .map { _ in SummaryReactor.Action.viewWillAppear }

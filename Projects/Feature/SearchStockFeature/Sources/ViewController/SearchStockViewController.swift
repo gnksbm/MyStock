@@ -8,6 +8,7 @@
 
 import UIKit
 
+import Core
 import DesignSystem
 import Domain
 import FeatureDependency
@@ -17,11 +18,7 @@ import ReactorKit
 import RxCocoa
 import SnapKit
 
-final class SearchStockViewController: UIViewController, View {
-    private var dataSource: DataSource!
-    
-    var disposeBag = DisposeBag()
-    
+final class SearchStockViewController: BaseViewController<SearchStockReactor> {
     private lazy var searchTextField: UITextField = {
         let textField = UITextField()
         textField.placeholder = "종목명, 종목코드를 입력하세요."
@@ -37,12 +34,7 @@ final class SearchStockViewController: UIViewController, View {
         hideKeyboardOnTapAndOrDrag()
     }
     
-    func bind(reactor: SearchStockReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
-    
-    private func bindAction(reactor: SearchStockReactor) {
+    override func bindAction(reactor: SearchStockReactor) {
         disposeBag.insert {
             searchTextField.rx.controlEvent(.editingDidEndOnExit)
                 .withLatestFrom(searchTextField.rx.text.orEmpty) { $1 }
@@ -63,7 +55,7 @@ final class SearchStockViewController: UIViewController, View {
         }
     }
     
-    private func bindState(reactor: SearchStockReactor) {
+    override func bindState(reactor: SearchStockReactor) {
         let state = reactor.state
         disposeBag.insert {
             state.map { $0.searchResult }
@@ -84,7 +76,7 @@ final class SearchStockViewController: UIViewController, View {
         }
     }
     
-    private func configureUI() {
+    override func configureLayout() {
         [searchTextField, searchCollectionView].forEach {
             view.addSubview($0)
         }

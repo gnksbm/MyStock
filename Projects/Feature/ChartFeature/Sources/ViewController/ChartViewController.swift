@@ -1,14 +1,13 @@
 import UIKit
 
+import Core
 import DesignSystem
 
 import ReactorKit
 import RxCocoa
 import SnapKit
 
-final class ChartViewController: UIViewController, View {
-    var disposeBag = DisposeBag()
-    
+final class ChartViewController: BaseViewController<ChartReactor> {
     private let searchBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         let image = UIImage(systemName: "magnifyingglass")
@@ -31,34 +30,7 @@ final class ChartViewController: UIViewController, View {
         return candleChartView
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        configureUI()
-    }
-    
-    private func configureUI() {
-        let foregrondColor = DesignSystemAsset.chartForeground.color
-        navigationController?.navigationBar.titleTextAttributes = [
-            NSAttributedString.Key.foregroundColor: foregrondColor
-        ]
-
-        [candleChartView].forEach {
-            view.addSubview($0)
-        }
-        
-        let safeArea = view.safeAreaLayoutGuide
-        
-        candleChartView.snp.makeConstraints { make in
-            make.edges.equalTo(safeArea)
-        }
-    }
-    
-    func bind(reactor: ChartReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
-    
-    private func bindAction(reactor: ChartReactor) { 
+    override func bindAction(reactor: ChartReactor) {
         rx.methodInvoked(#selector(UIViewController.viewWillAppear))
             .map { _ in
                 ChartReactor.Action.viewWillAppearEvent
@@ -67,7 +39,7 @@ final class ChartViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func bindState(reactor: ChartReactor) {
+    override func bindState(reactor: ChartReactor) {
         reactor.state
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -83,5 +55,21 @@ final class ChartViewController: UIViewController, View {
                 }
             )
             .disposed(by: disposeBag)
+    }
+    override func configureUI() {
+        let foregrondColor = DesignSystemAsset.chartForeground.color
+        navigationController?.navigationBar.titleTextAttributes = [
+            NSAttributedString.Key.foregroundColor: foregrondColor
+        ]
+    }
+    
+    override func configureLayout() {
+        [candleChartView].forEach {
+            view.addSubview($0)
+        }
+        
+        candleChartView.snp.makeConstraints { make in
+            make.edges.equalTo(safeArea)
+        }
     }
 }

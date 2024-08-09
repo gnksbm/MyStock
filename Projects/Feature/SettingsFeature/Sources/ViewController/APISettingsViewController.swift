@@ -14,9 +14,7 @@ import Domain
 import ReactorKit
 import SnapKit
 
-final class APISettingsViewController: UIViewController, View {
-    var disposeBag = DisposeBag()
-    
+final class APISettingsViewController: BaseViewController<APISettingsReactor> {
     private let saveBtn: UIButton = {
         var config = UIButton.Configuration.plain()
         var titleContainer = AttributeContainer()
@@ -53,12 +51,7 @@ final class APISettingsViewController: UIViewController, View {
         hideKeyboardOnTap()
     }
     
-    func bind(reactor: APISettingsReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
-    
-    private func bindAction(reactor: APISettingsReactor) { 
+    override func bindAction(reactor: APISettingsReactor) {
         rx.methodInvoked(#selector(UIViewController.viewWillAppear))
             .take(1)
             .map { _ in APISettingsReactor.Action.viewWillAppearEvent }
@@ -89,7 +82,7 @@ final class APISettingsViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func bindState(reactor: APISettingsReactor) { 
+    override func bindState(reactor: APISettingsReactor) {
         reactor.state.map { $0.userInfo }
             .observe(on: MainScheduler.asyncInstance)
             .withUnretained(self)
@@ -109,12 +102,10 @@ final class APISettingsViewController: UIViewController, View {
             .disposed(by: disposeBag)
     }
     
-    private func configureUI() {
+    override func configureLayout() {
         [stackView].forEach {
             view.addSubview($0)
         }
-        
-        let safeArea = view.safeAreaLayoutGuide
         
         stackView.snp.makeConstraints { make in
             make.centerX.centerY.equalTo(safeArea)

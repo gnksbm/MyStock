@@ -1,12 +1,12 @@
 import UIKit
 
+import Core
 import DesignSystem
 
 import ReactorKit
 import SnapKit
 
-final class SettingsViewController: UIViewController, View {
-    var disposeBag = DisposeBag()
+final class SettingsViewController: BaseViewController<SettingsReactor> {
     private let editAPIKeyBtn = SettingsButton(
         title: "API Key 설정하기",
         icon: UIImage(systemName: "key"),
@@ -27,21 +27,16 @@ final class SettingsViewController: UIViewController, View {
         configureUI()
     }
     
-    func bind(reactor: SettingsReactor) {
-        bindAction(reactor: reactor)
-        bindState(reactor: reactor)
-    }
-    
-    private func bindAction(reactor: SettingsReactor) {
+    override func bindAction(reactor: SettingsReactor) {
         editAPIKeyBtn.rx.tap
             .map { _ in SettingsReactor.Action.apiBtnTapEvent }
             .bind(to: reactor.action)
             .disposed(by: disposeBag)
     }
     
-    private func bindState(reactor: SettingsReactor) { }
+    override func bindState(reactor: SettingsReactor) { }
     
-    private func configureUI() {
+    override func configureLayout() {
         [stackView].forEach {
             view.addSubview($0)
         }
