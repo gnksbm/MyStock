@@ -30,7 +30,7 @@ public struct KISDailyChartPriceEndPoint: KISEndPoint {
     public var header: [String : String] {
         [
             "content-type": "application/json",
-            "authorization": "Bearer \(request.authorization)",
+            "authorization": "Bearer \(request.token)",
             "appkey": request.userInfo.appKey,
             "appsecret": request.userInfo.secretKey,
             "tr_id": "FHKST03010200",

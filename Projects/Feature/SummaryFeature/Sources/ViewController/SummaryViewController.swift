@@ -1,5 +1,6 @@
 import UIKit
 
+import Core
 import Domain
 import FeatureDependency
 import ThirdPartyLibs

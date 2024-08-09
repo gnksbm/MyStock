@@ -1,5 +1,6 @@
 import UIKit
 
+import Domain
 import FeatureDependency
 
 public final class DefaultDetailCoordinator {
@@ -18,7 +19,10 @@ public final class DefaultDetailCoordinator {
     
     public func start() {
         let detailViewController = DetailViewController()
-        detailViewController.reactor = DetailReactor(ticker: "")
+        detailViewController.reactor = DetailReactor(
+            ticker: "",
+            useCase: DefaultDetailUseCase()
+        )
         navigationController.setViewControllers(
             [detailViewController],
             animated: false
@@ -29,7 +33,10 @@ public final class DefaultDetailCoordinator {
 extension DefaultDetailCoordinator: DetailCoordinator {
     public func startDetailFlow(ticker: String) {
         let detailViewController = DetailViewController()
-        detailViewController.reactor = DetailReactor(ticker: ticker)
+        detailViewController.reactor = DetailReactor(
+            ticker: ticker,
+            useCase: DefaultDetailUseCase()
+        )
         navigationController.setViewControllers(
             [detailViewController],
             animated: false

@@ -8,7 +8,7 @@
 
 import UIKit
 
-import FeatureDependency
+import Core
 
 public final class DescriptionView: BaseView {
     private let titleLabel = {
