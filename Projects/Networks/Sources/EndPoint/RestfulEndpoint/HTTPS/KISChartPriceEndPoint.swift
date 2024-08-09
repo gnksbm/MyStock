@@ -25,7 +25,19 @@ public struct KISChartPriceEndPoint: KISEndPoint {
     let request: KISChartPriceRequest
     
     public var path: String {
-        return request.marketType.chartPricePath
+        let path1 = "/uapi/"
+        var path2: String
+        let path3 = "/v1/quotations/inquire-daily-"
+        var path4: String
+        switch request.marketType {
+        case .overseas:
+            path2 = "overseas-price"
+            path4 = "chartprice"
+        case .domestic:
+            path2 = "domestic-stock"
+            path4 = "itemchartprice"
+        }
+        return path1 + path2 + path3 + path4
     }
     
     public var query: [String : String] {
