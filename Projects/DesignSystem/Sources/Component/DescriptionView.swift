@@ -28,7 +28,7 @@ public final class DescriptionView: BaseView {
         titleLabel.textColor = titleColor
     }
     
-    public func updateValue(_ value: String) {
+    public func updateValue(_ value: String?) {
         valueLabel.text = value
     }
     

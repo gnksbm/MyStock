@@ -4,6 +4,7 @@ import Core
 import DesignSystem
 
 import RxSwift
+import RxCocoa
 
 public final class DetailViewController: BaseViewController<DetailReactor> {
     private let logoImageView = {
@@ -28,6 +29,7 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
     }()
     private let dateLabel = {
         let label = UILabel()
+        label.text = "Today"
         label.font = .systemFont(ofSize: 13)
         label.textColor = DesignSystemAsset.accentColor.color
         return label
@@ -65,9 +67,29 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
     
     public override func bindState(reactor: DetailReactor) {
         let state = reactor.state.share()
+        
+        disposeBag.insert {
+            state.compactMap { $0.dailyPriceInfo }
+                .bind(with: self) { vc, item in
+                    vc.logoImageView.image = item.image
+                    vc.nameLabel.text = item.name
+                    vc.priceLabel.text = item.price
+                    vc.rateLabel.textColor =
+                    item.fluctuationRate.toForegroundColorForNumeric
+                    vc.openingPriceView.updateValue(item.openingPrice)
+                    vc.volumeView.updateValue(item.volume)
+                    vc.highPriceView.updateValue(item.highPrice)
+                    vc.lowPriceView.updateValue(item.lowPrice)
+                }
+        }
     }
     
     public override func bindAction(reactor: DetailReactor) {
+        disposeBag.insert {
+            rx.methodInvoked(#selector(Self.viewDidLoad))
+                .map { _ in DetailReactor.Action.viewWillAppearEvent }
+                .bind(to: reactor.action)
+        }
     }
     
     public override func configureLayout() {
