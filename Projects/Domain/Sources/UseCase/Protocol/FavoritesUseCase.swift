@@ -11,5 +11,5 @@ import Foundation
 import RxSwift
 
 public protocol FavoritesUseCase {
-    func fetchFavorites() -> Observable<[SearchStocksResponse]>
+    func fetchFavorites() -> Observable<[KISCurrentPriceResponse]>
 }

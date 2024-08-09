@@ -1,5 +1,5 @@
 //
-//  FavoritesTickerMO+CoreDataClass.swift
+//  FavoritesTickerCoreDataModelMO+CoreDataClass.swift
 //  
 //
 //  Created by gnksbm on 2/26/24.
@@ -12,12 +12,14 @@ import CoreData
 import Core
 import Domain
 
-@objc(FavoritesTickerMO)
-public class FavoritesTickerMO: NSManagedObject, CoreDataModelObject {
+@objc(FavoritesTickerCoreDataModelMO)
+public class FavoritesTickerCoreDataModelMO:
+    NSManagedObject, CoreDataModelObject {
     public var toDomain: CoreDataStorable {
         guard let ticker
         else { fatalError("Ticker is non-optional") }
-        return FavoritesTicker(
+        return FavoritesTickerCoreDataModel(
+            marketType: marketType,
             ticker: ticker
         )
     }

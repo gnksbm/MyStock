@@ -21,7 +21,9 @@ public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
     public init() { }
     
     public func fetchFavorites() -> Observable<[FavoritesTicker]> {
-        coreDataService.fetch(type: FavoritesTicker.self)
+        coreDataService.fetch(type: FavoritesTickerCoreDataModel.self)
+            .map { 
+                $0.map { $0.toDomain() } }
             .withUnretained(self)
             .map { repository, favoritesList in
                 var deduplicateDic = [String: Int]()
@@ -41,19 +43,31 @@ public final class DefaultFavoritesStockRepository: FavoritesStockRepository {
             }
     }
     
-    public func addFavorites(ticker: String) -> Observable<FavoritesTicker> {
-        let newFavorites = FavoritesTicker(ticker: ticker)
+    public func addFavorites(
+        marketType: MarketType,
+        ticker: String
+    ) -> Observable<FavoritesTicker> {
+        let newFavorites = FavoritesTicker(
+            marketType: marketType,
+            ticker: ticker
+        ).toCoreDataObject()
         return coreDataService.saveUniqueData(
             data: newFavorites,
             uniqueKeyPath: \.ticker
-        )
+        ).map { $0.toDomain() }
     }
     
-    public func removeFavorites(ticker: String) -> Observable<FavoritesTicker> {
-        let favoritesToRemove = FavoritesTicker(ticker: ticker)
+    public func removeFavorites(
+        marketType: MarketType,
+        ticker: String
+    ) -> Observable<FavoritesTicker> {
+        let favoritesToRemove = FavoritesTicker(
+            marketType: marketType,
+            ticker: ticker
+        ).toCoreDataObject()
         return coreDataService.delete(
             data: favoritesToRemove,
             uniqueKeyPath: \.ticker
-        )
+        ).map { $0.toDomain() }
     }
 }

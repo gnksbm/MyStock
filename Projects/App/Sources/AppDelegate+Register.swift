@@ -68,5 +68,9 @@ extension AppDelegate {
             type: KISTopMarketCapRepository.self,
             DefaultKISTopMarketCapRepository()
         )
+        DIContainer.register(
+            type: KISDomesticCurrentPriceRepository.self,
+            DefaultKISDomesticCurrentPriceRepository()
+        )
     }
 }

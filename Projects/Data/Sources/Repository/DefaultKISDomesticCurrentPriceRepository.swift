@@ -14,13 +14,13 @@ import Networks
 
 import RxSwift
 
-final class DefaultKISDomesticCurrentPriceRepository: 
+public final class DefaultKISDomesticCurrentPriceRepository: 
     KISDomesticCurrentPriceRepository {
     @Injected private var networkService: NetworkService
 
     public init() { }
 
-    func fetchCurrentPriceItem(
+    public func fetchCurrentPriceItem(
         request: KISDomesticCurrentPriceRequest
     ) -> Observable<KISCurrentPriceResponse> {
         networkService.request(

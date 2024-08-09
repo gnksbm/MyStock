@@ -44,13 +44,9 @@ final class SearchStockViewController: UIViewController, View {
     
     private func bindAction(reactor: SearchStockReactor) {
         disposeBag.insert {
-            searchTextField.rx.text.orEmpty.asObservable()
-                .distinctUntilChanged()
-                .filter { !$0.isEmpty }
-                .debounce(
-                    .milliseconds(500),
-                    scheduler: MainScheduler.asyncInstance
-                )
+            searchTextField.rx.controlEvent(.editingDidEndOnExit)
+                .withLatestFrom(searchTextField.rx.text.orEmpty) { $1 }
+                .asObservable()
                 .map {
                     SearchStockReactor.Action
                         .searchTermChangeEvent(searchTerm: $0)
@@ -67,16 +63,17 @@ final class SearchStockViewController: UIViewController, View {
         }
     }
     
-    private func bindState(reactor: SearchStockReactor) { 
+    private func bindState(reactor: SearchStockReactor) {
+        let state = reactor.state
         disposeBag.insert {
-            reactor.state.map { $0.searchResult }
+            state.map { $0.searchResult }
                 .observe(on: MainScheduler.instance)
                 .withUnretained(self)
                 .bind { vc, items in
                     vc.searchCollectionView.applyItem(items: items)
                 }
             
-            reactor.state.map { $0.isSearching }
+            state.map { $0.isSearching }
                 .observe(on: MainScheduler.asyncInstance)
                 .withUnretained(self)
                 .subscribe(

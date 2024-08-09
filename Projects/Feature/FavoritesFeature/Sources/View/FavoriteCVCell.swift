@@ -13,6 +13,7 @@ import Domain
 import FeatureDependency
 
 import SnapKit
+import RxSwift
 
 final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
     static func makeRegistration() -> Registration<KISCurrentPriceResponse> {
@@ -26,6 +27,8 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
             item.fluctuationRate.toColorForNumeric
         }
     }
+    
+    var disposeBag = DisposeBag()
     
     private let iconImageView = {
         let imageView = UIImageView()
@@ -62,6 +65,25 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         return label
     }()
     
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        disposeBag = DisposeBag()
+        iconImageView.image = nil
+        [
+            nameLabel,
+            tickerLabel,
+            priceLabel,
+            rateLabel
+        ].forEach { $0.text = nil }
+    }
+    
+    override func configureUI() {
+        clipsToBounds = true
+        layer.cornerRadius = DesignSystemAsset.Radius.medium
+        layer.borderWidth = 1
+        layer.borderColor = DesignSystemAsset.accentColor.color.cgColor
+    }
+    
     override func configureLayout() {
         [
             iconImageView,
@@ -75,12 +97,12 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         
         iconImageView.snp.makeConstraints { make in
             make.top.leading.equalTo(contentView).inset(padding)
-            make.height.equalTo(DesignSystemAsset.Demension.logoImage)
+            make.size.equalTo(DesignSystemAsset.Demension.logoImage)
         }
         
         nameLabel.snp.makeConstraints { make in
             make.top.trailing.equalTo(contentView).inset(padding)
-            make.leading.equalTo(iconImageView.snp.trailing).offset(padding)
+            make.leading.equalTo(iconImageView.snp.trailing).offset(padding / 2)
             make.bottom.equalTo(iconImageView.snp.centerY)
         }
         

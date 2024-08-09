@@ -27,10 +27,10 @@ struct KISDomesticCurrentPriceDTO: Decodable {
 extension KISDomesticCurrentPriceDTO {
     func toResponse() -> KISCurrentPriceResponse {
         KISCurrentPriceResponse(
-            name: output.rprsMrktKorName,
             ticker: output.stckShrnIscd,
             price: output.stckPrpr,
-            fluctuationRate: output.prdyCtrt
+            fluctuationRate: output.prdyCtrt,
+            marketType: .domestic
         )
     }
 }

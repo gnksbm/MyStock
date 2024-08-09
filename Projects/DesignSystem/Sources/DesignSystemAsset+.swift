@@ -33,6 +33,8 @@ public extension DesignSystemAsset {
     }
     
     enum Radius {
+        public static let regular: CGFloat = 8
+        public static let medium: CGFloat = 15
         public static let logoImage: CGFloat = Demension.logoImage / 2
     }
 }

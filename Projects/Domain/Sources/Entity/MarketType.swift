@@ -8,7 +8,7 @@
 
 import Foundation
 
-public enum MarketType: Int, CaseIterable {
+public enum MarketType: Int64, CaseIterable {
     case overseas, domestic
     
     public var toString: String {

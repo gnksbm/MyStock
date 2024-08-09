@@ -5,26 +5,10 @@ import FeatureDependency
 
 import ReactorKit
 
-final class FavoritesReactor: Reactor {
-    var initialState = State()
+public final class FavoritesReactor: Reactor {
+    public var initialState = State()
     private let coordinator: FavoritesCoordinator
     private let useCase: FavoritesUseCase
-    
-    struct State { 
-        var favoritesStocks: [SearchStocksResponse] = []
-    }
-    
-    enum Mutation { 
-        case fetchFavorites([SearchStocksResponse])
-        case startSearchFlow
-        case startChartFlow(SearchStocksResponse)
-    }
-    
-    enum Action { 
-        case viewWillAppearEvent
-        case addBtnTapEvent
-        case stockCellTapEvent(SearchStocksResponse)
-    }
     
     init(
         useCase: FavoritesUseCase,
@@ -38,7 +22,7 @@ final class FavoritesReactor: Reactor {
         coordinator.finish()
     }
     
-    func mutate(action: Action) -> Observable<Mutation> {
+    public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppearEvent:
             useCase.fetchFavorites()
@@ -52,7 +36,7 @@ final class FavoritesReactor: Reactor {
         }
     }
     
-    func reduce(state: State, mutation: Mutation) -> State {
+    public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
         case .fetchFavorites(let fetchResult):
@@ -63,5 +47,23 @@ final class FavoritesReactor: Reactor {
             coordinator.startChartFlow(with: stockInfo)
         }
         return newState
+    }
+}
+
+extension FavoritesReactor {
+    public struct State {
+        var favoritesStocks: [KISCurrentPriceResponse] = []
+    }
+    
+    public enum Mutation {
+        case fetchFavorites([KISCurrentPriceResponse])
+        case startSearchFlow
+        case startChartFlow(KISCurrentPriceResponse)
+    }
+    
+    public enum Action {
+        case viewWillAppearEvent
+        case addBtnTapEvent
+        case stockCellTapEvent(KISCurrentPriceResponse)
     }
 }

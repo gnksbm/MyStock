@@ -26,7 +26,7 @@ public struct KISDomesticCurrentPriceEndPoint: KISEndPoint {
     public var header: [String : String] {
         [
             "content-type": "application/json",
-            "authorization": request.token,
+            "authorization": "Bearer \(request.token)",
             "appkey": request.userInfo.appKey,
             "appsecret": request.userInfo.secretKey,
             "tr_id": "FHKST01010100"

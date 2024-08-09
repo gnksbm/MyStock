@@ -13,6 +13,8 @@ import DesignSystem
 import Domain
 import FeatureDependency
 
+import RxSwift
+
 final class FavoriteCollectionView: 
     ModernCollectionView<MarketType, KISCurrentPriceResponse> {
     override class func createLayout() -> UICollectionViewCompositionalLayout {
@@ -27,7 +29,7 @@ final class FavoriteCollectionView:
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: NSCollectionLayoutSize(
                     widthDimension: .fractionalWidth(1),
-                    heightDimension: .fractionalWidth(1)
+                    heightDimension: .fractionalWidth(1/2)
                 ),
                 subitems: [item]
             )
@@ -36,6 +38,28 @@ final class FavoriteCollectionView:
             section.contentInsets = .same(inset: padding)
             section.interGroupSpacing = padding
             return section
+        }
+    }
+    
+    let cellTapEvent = PublishSubject<KISCurrentPriceResponse>()
+    
+    override func createCellProvider() -> CellProvider {
+        let cellRegistration = FavoriteCVCell.makeRegistration()
+        return { collectionView, indexPath, item in
+            let cell = collectionView.dequeueConfiguredReusableCell(
+                using: cellRegistration,
+                for: indexPath,
+                item: item
+            )
+            if let collectionView = collectionView as? Self {
+                let tapGesture = UITapGestureRecognizer()
+                cell.addGestureRecognizer(tapGesture)
+                tapGesture.rx.event
+                    .map { _ in item }
+                    .bind(to: collectionView.cellTapEvent)
+                    .disposed(by: cell.disposeBag)
+            }
+            return cell
         }
     }
 }

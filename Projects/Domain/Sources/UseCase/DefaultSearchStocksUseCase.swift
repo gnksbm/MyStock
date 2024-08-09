@@ -41,10 +41,14 @@ public final class DefaultSearchStocksUseCase: SearchStocksUseCase {
         var result: Observable<FavoritesTicker>
         if item.isLiked {
             result = favoritesStockRepository.removeFavorites(
+                marketType: item.marketType,
                 ticker: item.ticker
             )
         } else {
-            result = favoritesStockRepository.addFavorites(ticker: item.ticker)
+            result = favoritesStockRepository.addFavorites(
+                marketType: item.marketType,
+                ticker: item.ticker
+            )
         }
         return result.map { _ in
             var copy = item

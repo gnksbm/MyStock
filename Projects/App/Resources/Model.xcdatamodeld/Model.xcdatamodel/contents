@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22522" systemVersion="23C71" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
-    <entity name="FavoritesTickerMO" representedClassName="FavoritesTickerMO" syncable="YES">
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="22757" systemVersion="23E224" minimumToolsVersion="Automatic" sourceLanguage="Swift" usedWithCloudKit="YES" usedWithSwiftData="YES" userDefinedModelVersionIdentifier="">
+    <entity name="FavoritesTickerCoreDataModelMO" representedClassName="FavoritesTickerCoreDataModelMO" syncable="YES">
+        <attribute name="marketType" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES" customClassName="MarketType"/>
         <attribute name="ticker" optional="YES" attributeType="String"/>
     </entity>
     <entity name="KISOAuthTokenMO" representedClassName="KISOAuthTokenMO" syncable="YES">

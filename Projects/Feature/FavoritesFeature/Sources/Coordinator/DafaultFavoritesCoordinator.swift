@@ -48,4 +48,14 @@ public extension DefaultFavoritesCoordinator {
         )
         startChildCoordinator(chartCoordinator)
     }
+    
+    func startChartFlow(with response: KISCurrentPriceResponse) {
+        let chartCoordinator = coordinatorProvider.makeChartCoordinator(
+            title: response.name,
+            ticker: response.ticker,
+            marketType: response.marketType,
+            navigationController: navigationController
+        )
+        startChildCoordinator(chartCoordinator)
+    }
 }
