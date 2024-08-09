@@ -34,7 +34,7 @@ public final class DefaultChartCoordinator: ChartCoordinator {
         )
         navigationController.pushViewController(
             chartViewController,
-            animated: false
+            animated: true
         )
     }
 }

@@ -12,6 +12,14 @@ public protocol KISQueryRepresentable {
     var httpQuery: [String: String] { get }
 }
 
+public extension Array where Element == any KISQueryRepresentable {
+    var toHTTPQuery: [String: String] {
+        [:].merging {
+            map { $0.httpQuery }
+        }
+    }
+}
+
 /// 소속 구분 코드
 public enum KISBelongingClassCode: Int, KISQueryRepresentable {
     case averageVolume
@@ -136,31 +144,59 @@ public enum KISVolumeCount: KISQueryRepresentable {
 
 /// 입력 종목코드
 public enum KISInputISCode: KISQueryRepresentable {
-    case all, exchange, kosdaq, kospi200
+    case all, exchange, kosdaq, kospi200, ticker(String)
     
     public var httpQuery: [String: String] {
         switch self {
         case .all:
-            return ["FID_INPUT_ISCD": "0000"]
+            ["FID_INPUT_ISCD": "0000"]
         case .exchange:
-            return ["FID_INPUT_ISCD": "0001"]
+            ["FID_INPUT_ISCD": "0001"]
         case .kosdaq:
-            return ["FID_INPUT_ISCD": "1001"]
+            ["FID_INPUT_ISCD": "1001"]
         case .kospi200:
-            return ["FID_INPUT_ISCD": "2001"]
+            ["FID_INPUT_ISCD": "2001"]
+        case .ticker(let ticker):
+            ["FID_INPUT_ISCD": ticker]
         }
     }
     
     var description: String {
         switch self {
         case .all:
-            return "전체"
+            "전체"
         case .exchange:
-            return "거래소"
+            "거래소"
         case .kosdaq:
-            return "코스닥"
+            "코스닥"
         case .kospi200:
-            return "코스피200"
+            "코스피200"
+        case .ticker(let ticker):
+            "종목 - \(ticker)"
+        }
+    }
+}
+
+/// 조건 시장 분류 코드
+public enum KISMarketDivisionCode: KISQueryRepresentable {
+    case stockETFETN
+    case elw
+    
+    public var httpQuery: [String : String] {
+        switch self {
+        case .stockETFETN:
+            ["FID_COND_MRKT_DIV_CODE": "J"]
+        case .elw:
+            ["FID_COND_MRKT_DIV_CODE": "W"]
+        }
+    }
+    
+    var description: String {
+        switch self {
+        case .stockETFETN:
+            return "주식, ETF, ETN"
+        case .elw:
+            return "ELW"
         }
     }
 }
