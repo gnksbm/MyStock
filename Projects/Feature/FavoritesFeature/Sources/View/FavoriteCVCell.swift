@@ -24,7 +24,9 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
             cell.priceLabel.text = item.price.toCurrency(style: .currency)
             cell.rateLabel.text = item.fluctuationRate.toPercent()
             cell.rateLabel.textColor =
-            item.fluctuationRate.toColorForNumeric
+            item.fluctuationRate.toForegroundColorForNumeric
+            cell.rateLabel.backgroundColor =
+            item.fluctuationRate.toBackgroundColorForNumeric
         }
     }
     
@@ -50,18 +52,23 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
     }()
     private let priceLabel = {
         let label = UILabel()
-        label.font = .systemFont(ofSize: 13)
+        label.font = .boldSystemFont(ofSize: 15)
         label.textAlignment = .right
-        label.setContentCompressionResistancePriority(
-            .required,
-            for: .horizontal
-        )
         return label
     }()
     private let rateLabel = {
-        let label = UILabel()
+        let label = PaddingLabel(
+            inset: UIEdgeInsets(
+                top: 2,
+                left: 4,
+                bottom: 2,
+                right: 4
+            )
+        )
         label.font = .boldSystemFont(ofSize: 11)
         label.textAlignment = .right
+        label.clipsToBounds = true
+        label.layer.cornerRadius = DesignSystemAsset.Radius.small
         return label
     }()
     
@@ -72,9 +79,9 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         [
             nameLabel,
             tickerLabel,
-            priceLabel,
-            rateLabel
+            priceLabel
         ].forEach { $0.text = nil }
+        rateLabel.text = nil
     }
     
     override func configureUI() {

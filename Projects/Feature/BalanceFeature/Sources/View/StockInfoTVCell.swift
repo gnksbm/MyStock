@@ -133,8 +133,8 @@ final class StockInfoTVCell: UITableViewCell {
             priceText +=  "(+\(fluctuationRate))"
         }
         priceLabel.text = priceText
-        plAmoutLabel.textColor = item.plAmount.toColorForNumeric
-        priceLabel.textColor = item.fluctuationRate.toColorForNumeric
+        plAmoutLabel.textColor = item.plAmount.toForegroundColorForNumeric
+        priceLabel.textColor = item.fluctuationRate.toForegroundColorForNumeric
     }
     
     private func configureUI() {

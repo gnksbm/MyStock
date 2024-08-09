@@ -24,7 +24,7 @@ final class TopRankCVCell: BaseCVCell, RegistrableCellType {
             cell.priceLabel.text = item.price.toCurrency(style: .currency)
             cell.rateLabel.text = item.fluctuationRate.toPercent()
             cell.rateLabel.textColor =
-            item.fluctuationRate.toColorForNumeric
+            item.fluctuationRate.toForegroundColorForNumeric
         }
     }
     

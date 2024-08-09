@@ -9,7 +9,7 @@
 import UIKit
 
 public extension String {
-    var toColorForNumeric: UIColor {
+    var toForegroundColorForNumeric: UIColor {
         guard let num = Double(self)
         else { return DesignSystemAsset.chartForeground.color }
         switch num {
@@ -19,6 +19,19 @@ public extension String {
             return DesignSystemAsset.chartForeground.color
         default:
             return DesignSystemAsset.whiteCandle.color
+        }
+    }
+    
+    var toBackgroundColorForNumeric: UIColor {
+        guard let num = Double(self)
+        else { return DesignSystemAsset.chartForeground.color }
+        switch num {
+        case ..<0:
+            return DesignSystemAsset.blackCandleBackground.color
+        case 0:
+            return DesignSystemAsset.accentColor.color
+        default:
+            return DesignSystemAsset.whiteCandleBackground.color
         }
     }
 }
@@ -33,6 +46,7 @@ public extension DesignSystemAsset {
     }
     
     enum Radius {
+        public static let small: CGFloat = 4
         public static let regular: CGFloat = 8
         public static let medium: CGFloat = 15
         public static let logoImage: CGFloat = Demension.logoImage / 2
