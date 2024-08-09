@@ -20,8 +20,8 @@ private let template = Template(
         // MARK: DemoAppDelegate.swift, DemoSceneDelegate.swift
         .file(path: projectPath(with: "Demo/AppDelegate.swift"), templatePath: "appDelegate.stencil"),
         .file(path: projectPath(with: "Demo/SceneDelegate.swift"), templatePath: "sceneDelegate.stencil"),
-        // MARK: Coordinator, ViewController, ViewModel
-        .file(path: projectPath(with: "Sources/ViewModel/\(nameAttribute)ViewModel.swift"), templatePath: "viewModel.stencil"),
+        // MARK: Coordinator, ViewController, Reactor
+        .file(path: projectPath(with: "Sources/Reactor/\(nameAttribute)Reactor.swift"), templatePath: "reactor.stencil"),
         .file(path: projectPath(with: "Sources/ViewController/\(nameAttribute)ViewController.swift"), templatePath: "viewContoller.stencil"),
         .file(path: projectPath(with: "Sources/Coordinator/\(nameAttribute)Coordinator.swift"), templatePath: "coordinator.stencil"),
         .file(path: projectPath(with: "Sources/Coordinator/Dafault\(nameAttribute)Coordinator.swift"), templatePath: "defaultCoordinator.stencil"),

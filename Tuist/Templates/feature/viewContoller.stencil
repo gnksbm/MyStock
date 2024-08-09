@@ -1,34 +1,17 @@
 import UIKit
 
+import FeatureDependency
+
 import RxSwift
 
-public final class {{ name }}ViewController: UIViewController {
-    private let viewModel: {{ name }}ViewModel
-    
-    public init(viewModel: {{ name }}ViewModel) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-        
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+public final class {{ name }}ViewController: BaseViewController<{{ name }}Reactor> {
+    public override func bindState(reactor: {{ name }}Reactor) {
+        let state = reactor.state.share()
     }
     
-    public override func viewDidLoad() {
-        super.viewDidLoad()
+    public override func bindAction(reactor: {{ name }}Reactor) {
+    }
+    
+    public override func configureLayout() {
     }
 }
-
-#if DEBUG
-import SwiftUI
-import FeatureDependency
-struct {{ name }}ViewController_Preview: PreviewProvider {
-    static var previews: some View {
-        UIKitPreview(
-            {{ name }}ViewController(
-                viewModel: {{ name }}ViewModel()
-            )
-        )
-    }
-}
-#endif
