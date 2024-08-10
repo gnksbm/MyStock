@@ -2,11 +2,14 @@ import UIKit
 
 import Core
 import DesignSystem
+import Domain
 
 import RxSwift
 import RxCocoa
 
 public final class DetailViewController: BaseViewController<DetailReactor> {
+    private let chartViewModel = DetailChartViewModel()
+    
     private let logoImageView = {
         let imageView = UIImageView()
         imageView.backgroundColor = DesignSystemAsset.accentColor.color
@@ -67,6 +70,7 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
             lowPriceView
         }
     }
+    private lazy var chartView = DetailChartView(viewModel: self.chartViewModel)
     
     public override func bindState(reactor: DetailReactor) {
         let state = reactor.state.share()
@@ -93,6 +97,9 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
                     vc.lowPriceView.updateValue(
                         item.lowPrice?.formatted(style: .currency)
                     )
+                    if let chartDatas = item.candles as? [CandleData] {
+                        vc.chartViewModel.chartDatas = chartDatas
+                    }
                 }
         }
     }
@@ -106,13 +113,17 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
     }
     
     public override func configureLayout() {
+        let chartVC = chartView.toUIKitVC
+        addChild(chartVC)
+        chartVC.didMove(toParent: self)
         [
             logoImageView,
             nameLabel,
             priceLabel,
             rateLabel,
             dateLabel,
-            stackView
+            stackView,
+            chartVC.view
         ].forEach { view.addSubview($0) }
         
         let padding = DesignSystemAsset.Padding.regular
@@ -149,6 +160,12 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
             make.top.equalTo(rateLabel.snp.bottom).offset(padding)
             make.leading.equalTo(logoImageView)
             make.trailing.equalTo(nameLabel)
+        }
+        
+        chartVC.view.snp.makeConstraints { make in
+            make.top.equalTo(stackView.snp.bottom).offset(padding)
+            make.horizontalEdges.equalTo(stackView)
+            make.height.equalTo(chartVC.view.snp.width)
         }
     }
 }
