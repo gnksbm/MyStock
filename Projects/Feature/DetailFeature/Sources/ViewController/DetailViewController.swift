@@ -71,6 +71,14 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
         }
     }
     private lazy var chartView = DetailChartView(viewModel: self.chartViewModel)
+    lazy var chartVC = chartView.toUIKitVC
+    private let updateDateLabel = {
+        let label = UILabel()
+        label.textAlignment = .right
+        label.font = .systemFont(ofSize: 12)
+        label.textColor = DesignSystemAsset.accentColor.color
+        return label
+    }()
     
     public override func bindState(reactor: DetailReactor) {
         let state = reactor.state.share()
@@ -100,20 +108,28 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
                     if let chartDatas = item.candles as? [CandleData] {
                         vc.chartViewModel.chartDatas = chartDatas
                     }
+                    vc.updateDateLabel.text = Date.now
+                        .formatted(dateFormat: .updatedDate)
                 }
         }
     }
     
     public override func bindAction(reactor: DetailReactor) {
+        let tapGesture = UITapGestureRecognizer()
+        chartVC.view.addGestureRecognizer(tapGesture)
+        
         disposeBag.insert {
             rx.methodInvoked(#selector(Self.viewWillAppear))
                 .map { _ in DetailReactor.Action.viewWillAppearEvent }
+                .bind(to: reactor.action)
+            
+            tapGesture.rx.event
+                .map { _ in DetailReactor.Action.chartTapEvent }
                 .bind(to: reactor.action)
         }
     }
     
     public override func configureLayout() {
-        let chartVC = chartView.toUIKitVC
         addChild(chartVC)
         chartVC.didMove(toParent: self)
         [
@@ -123,7 +139,8 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
             rateLabel,
             dateLabel,
             stackView,
-            chartVC.view
+            chartVC.view,
+            updateDateLabel
         ].forEach { view.addSubview($0) }
         
         let padding = DesignSystemAsset.Padding.regular
@@ -166,6 +183,11 @@ public final class DetailViewController: BaseViewController<DetailReactor> {
             make.top.equalTo(stackView.snp.bottom).offset(padding)
             make.horizontalEdges.equalTo(stackView)
             make.height.equalTo(chartVC.view.snp.width)
+        }
+        
+        updateDateLabel.snp.makeConstraints { make in
+            make.top.equalTo(chartVC.view.snp.bottom).offset(padding)
+            make.horizontalEdges.equalTo(stackView)
         }
     }
 }

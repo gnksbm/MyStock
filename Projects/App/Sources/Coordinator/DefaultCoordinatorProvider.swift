@@ -59,7 +59,8 @@ final class DefaultCoordinatorProvider: CoordinatorProvider {
         DefaultDetailCoordinator(
             ticker: ticker,
             parent: parent,
-            navigationController: navigationController
+            navigationController: navigationController, 
+            coordinatorProvider: self
         )
     }
 }

@@ -28,6 +28,8 @@ public final class DetailReactor: Reactor {
         case .viewWillAppearEvent:
             useCase.fetchDetailItem(ticker: ticker)
                 .map { .fetchedInfo($0) }
+        case .chartTapEvent:
+                .just(.startChartFlow)
         }
     }
     
@@ -36,6 +38,10 @@ public final class DetailReactor: Reactor {
         switch mutation {
         case .fetchedInfo(let response):
             newState.dailyPriceInfo = response
+        case .startChartFlow:
+            if let title = newState.dailyPriceInfo?.name {
+                coordinator.startChartFlow(title: title, ticker: ticker)
+            }
         }
         return newState
     }
@@ -48,9 +54,11 @@ extension DetailReactor {
     
     public enum Action {
         case viewWillAppearEvent
+        case chartTapEvent
     }
     
     public enum Mutation {
         case fetchedInfo(KISDailyChartPriceResponse)
+        case startChartFlow
     }
 }

@@ -46,20 +46,20 @@ public final class DefaultSummaryUseCase: SummaryUseCase {
                 )
             )
         }
-        .withUnretained(self)
-        .flatMap { useCase, items in
-            Observable.zip(
-                items.map { item in
-                    useCase.logoRepository.updateLogo(
-                        from: item,
-                        request: .init(
-                            ticker: item.ticker,
-                            marketType: .domestic
-                        )
-                    )
-                }
-            )
-        }
+//        .withUnretained(self)
+//        .flatMap { useCase, items in
+//            Observable.zip(
+//                items.map { item in
+//                    useCase.logoRepository.updateLogo(
+//                        from: item,
+//                        request: .init(
+//                            ticker: item.ticker,
+//                            marketType: .domestic
+//                        )
+//                    )
+//                }
+//            )
+//        }
     }
     
     public func fetchTopMarketCapItems() -> Observable<[KISTopRankResponse]> {
@@ -78,19 +78,19 @@ public final class DefaultSummaryUseCase: SummaryUseCase {
                 )
             )
         }
-        .withUnretained(self)
-        .flatMap { useCase, items in
-            Observable.zip(
-                items.map { item in
-                    useCase.logoRepository.updateLogo(
-                        from: item,
-                        request: .init(
-                            ticker: item.ticker,
-                            marketType: .domestic
-                        )
-                    )
-                }
-            )
-        }
+//        .withUnretained(self)
+//        .flatMap { useCase, items in
+//            Observable.zip(
+//                items.map { item in
+//                    useCase.logoRepository.updateLogo(
+//                        from: item,
+//                        request: .init(
+//                            ticker: item.ticker,
+//                            marketType: .domestic
+//                        )
+//                    )
+//                }
+//            )
+//        }
     }
 }

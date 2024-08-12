@@ -55,15 +55,15 @@ extension FavoritesReactor {
         var favoritesStocks: [KISCurrentPriceResponse] = []
     }
     
-    public enum Mutation {
-        case fetchFavorites([KISCurrentPriceResponse])
-        case startSearchFlow
-        case startChartFlow(KISCurrentPriceResponse)
-    }
-    
     public enum Action {
         case viewWillAppearEvent
         case addBtnTapEvent
         case stockCellTapEvent(KISCurrentPriceResponse)
+    }
+    
+    public enum Mutation {
+        case fetchFavorites([KISCurrentPriceResponse])
+        case startSearchFlow
+        case startChartFlow(KISCurrentPriceResponse)
     }
 }
