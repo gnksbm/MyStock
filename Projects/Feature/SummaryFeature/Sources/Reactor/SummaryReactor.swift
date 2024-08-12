@@ -7,26 +7,31 @@ import RxSwift
 import ReactorKit
 
 public final class SummaryReactor: Reactor {
-    private var coordinator: SummaryCoordinator
-    private var useCase: SummaryUseCase
+    private let coordinator: SummaryCoordinator
+    private let favoriteUseCase: FavoritesUseCase
+    private let summaryUseCase: SummaryUseCase
     
     public var initialState = State()
     
     public init(
         coordinator: SummaryCoordinator,
-        useCase: SummaryUseCase
+        favoriteUseCase: FavoritesUseCase,
+        summaryUseCase: SummaryUseCase
     ) {
         self.coordinator = coordinator
-        self.useCase = useCase
+        self.summaryUseCase = summaryUseCase
+        self.favoriteUseCase = favoriteUseCase
     }
     
     public func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .viewWillAppear:
             Observable.merge(
-                useCase.fetchTopVolumeItems()
+                favoriteUseCase.fetchFavorites()
+                    .map { .fetchFavoriteItems($0) },
+                summaryUseCase.fetchTopVolumeItems()
                     .map { .fetchVolumeItems($0) },
-                useCase.fetchTopMarketCapItems()
+                summaryUseCase.fetchTopMarketCapItems()
                     .map { .fetchMarketCapItems($0) }
             )
         case .itemSelected(let ticker):
@@ -37,6 +42,8 @@ public final class SummaryReactor: Reactor {
     public func reduce(state: State, mutation: Mutation) -> State {
         var newState = state
         switch mutation {
+        case .fetchFavoriteItems(let items):
+            newState.favoriteItems = items
         case .fetchVolumeItems(let items):
             newState.topVolumeItems = items
         case .fetchMarketCapItems(let items):
@@ -50,6 +57,7 @@ public final class SummaryReactor: Reactor {
 
 extension SummaryReactor {
     public struct State { 
+        var favoriteItems: [KISCurrentPriceResponse] = []
         var topVolumeItems: [KISTopRankResponse] = []
         var topMarketCapItems: [KISTopRankResponse] = []
     }
@@ -60,6 +68,7 @@ extension SummaryReactor {
     }
     
     public enum Mutation {
+        case fetchFavoriteItems([KISCurrentPriceResponse])
         case fetchVolumeItems([KISTopRankResponse])
         case fetchMarketCapItems([KISTopRankResponse])
         case startDetailFlow(ticker: String)

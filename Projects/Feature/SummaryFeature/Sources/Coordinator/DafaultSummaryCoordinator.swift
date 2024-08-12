@@ -22,7 +22,8 @@ public final class DefaultSummaryCoordinator: SummaryCoordinator {
         let summaryViewController = SummaryViewController()
         summaryViewController.reactor = SummaryReactor(
             coordinator: self,
-            useCase: DefaultSummaryUseCase()
+            favoriteUseCase: DefaultFavoritesUseCase(),
+            summaryUseCase: DefaultSummaryUseCase()
         )
         navigationController.setViewControllers(
             [summaryViewController],

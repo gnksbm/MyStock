@@ -8,9 +8,9 @@
 
 import UIKit
 
+import Core
 import DesignSystem
 import Domain
-import FeatureDependency
 
 import RxSwift
 
@@ -18,7 +18,29 @@ final class SummaryCollectionView:
     ModernCollectionView<SummarySection, SummaryItem> {
     override class func createLayout() -> UICollectionViewCompositionalLayout {
         UICollectionViewCompositionalLayout { sectionIndex, _ in
+            var section: NSCollectionLayoutSection
             switch SummarySection.allCases[sectionIndex] {
+            case .favorite:
+                let item = NSCollectionLayoutItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(40)
+                    )
+                )
+                let group = NSCollectionLayoutGroup.vertical(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(0.85/2),
+                        heightDimension: .estimated(40)
+                    ),
+                    subitems: [item, item, item]
+                )
+                group.contentInsets = NSDirectionalEdgeInsets(
+                    top: 0,
+                    leading: 0,
+                    bottom: 0,
+                    trailing: 30
+                )
+                section = NSCollectionLayoutSection(group: group)
             case .topVolume, .topMarketCap:
                 let item = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
@@ -39,26 +61,26 @@ final class SummaryCollectionView:
                     bottom: 0,
                     trailing: 30
                 )
-                let section = NSCollectionLayoutSection(group: group)
-                section.orthogonalScrollingBehavior = .groupPaging
-                section.contentInsets = NSDirectionalEdgeInsets(
-                    top: 0,
-                    leading: 30,
-                    bottom: 30,
-                    trailing: 30
-                )
-                section.boundarySupplementaryItems = [
-                    NSCollectionLayoutBoundarySupplementaryItem(
-                        layoutSize: NSCollectionLayoutSize(
-                            widthDimension: .fractionalWidth(1),
-                            heightDimension: .estimated(1)
-                        ),
-                        elementKind: UICollectionView.elementKindSectionHeader,
-                        alignment: .top
-                    )
-                ]
-                return section
+                section = NSCollectionLayoutSection(group: group)
             }
+            section.orthogonalScrollingBehavior = .groupPaging
+            section.contentInsets = NSDirectionalEdgeInsets(
+                top: 0,
+                leading: 30,
+                bottom: 30,
+                trailing: 30
+            )
+            section.boundarySupplementaryItems = [
+                NSCollectionLayoutBoundarySupplementaryItem(
+                    layoutSize: NSCollectionLayoutSize(
+                        widthDimension: .fractionalWidth(1),
+                        heightDimension: .estimated(1)
+                    ),
+                    elementKind: UICollectionView.elementKindSectionHeader,
+                    alignment: .top
+                )
+            ]
+            return section
         }
     }
     
@@ -80,6 +102,8 @@ final class SummaryCollectionView:
         let topVolumeRegistration = TopRankCVCell.makeRegistration()
         return { collectionView, indexPath, item in
             switch Section.allCases[indexPath.section] {
+            case .favorite:
+                return nil
             case .topVolume, .topMarketCap:
                 if case .topRank(let response) = item {
                     let cell = collectionView.dequeueConfiguredReusableCell(
@@ -120,10 +144,12 @@ final class SummaryCollectionView:
 }
 
 enum SummarySection: CaseIterable {
-    case topVolume, topMarketCap
+    case favorite, topVolume, topMarketCap
     
     var title: String {
         switch self {
+        case .favorite:
+            "나의 즐겨찾기"
         case .topVolume:
             "거래량 상위 30"
         case .topMarketCap:
@@ -133,5 +159,6 @@ enum SummarySection: CaseIterable {
 }
 
 enum SummaryItem: Hashable {
+    case favorite(KISCurrentPriceResponse)
     case topRank(KISTopRankResponse)
 }

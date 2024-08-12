@@ -53,6 +53,8 @@ public final class SummaryViewController: BaseViewController<SummaryReactor> {
             collectionView.cellTapEvent
                 .compactMap { item in
                     switch item {
+                    case .favorite(let item):
+                        SummaryReactor.Action.itemSelected(ticker: item.ticker)
                     case .topRank(let item):
                         SummaryReactor.Action.itemSelected(ticker: item.ticker)
                     }

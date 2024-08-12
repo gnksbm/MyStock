@@ -11,7 +11,6 @@ import UIKit
 import Core
 import DesignSystem
 import Domain
-import FeatureDependency
 
 import RxSwift
 
