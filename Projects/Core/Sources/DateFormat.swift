@@ -15,6 +15,7 @@ public enum DateFormat: String {
     case dailyChartRequest = "HHmmss"
     case accessToken = "yyyy-MM-dd HH:mm:ss"
     case onlyYMD = "yyyyMMdd"
+    case updatedDate = "M/d HH:mm:ss 업데이트"
     
     fileprivate var formatter: DateFormatter {
         if let formatter = Self.cachedStorage[self] {

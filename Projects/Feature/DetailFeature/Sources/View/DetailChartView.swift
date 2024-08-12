@@ -9,6 +9,7 @@
 import SwiftUI
 import Charts
 
+import DesignSystem
 import Domain
 
 extension CandleData: Identifiable {
@@ -17,6 +18,19 @@ extension CandleData: Identifiable {
 
 final class DetailChartViewModel: ObservableObject {
     @Published var chartDatas: [CandleData] = []
+    
+    var lowestPrice: Double {
+        guard let min = chartDatas.map { $0.closingPrice }.min()
+        else { return 0 }
+        return min
+    }
+    
+    var chartRange: ClosedRange<Double> {
+        let arr = chartDatas.map { $0.closingPrice }
+        guard let min = arr.min(),
+              let max = arr.max() else { return 0...0 }
+        return min...max
+    }
 }
 
 struct DetailChartView: View {
@@ -26,13 +40,31 @@ struct DetailChartView: View {
         Chart(viewModel.chartDatas) {
             AreaMark(
                 x: .value("Date", $0.date),
+                yStart: .value("Price", viewModel.lowestPrice),
+                yEnd: .value("Price", $0.closingPrice)
+            )
+            .foregroundStyle(
+                .linearGradient(
+                    colors: [
+                        DesignSystemAsset.whiteCandle.swiftUIColor,
+                        .clear
+                    ],
+                    startPoint: .top, 
+                    endPoint: .bottom
+                )
+            )
+            LineMark(
+                x: .value("Date", $0.date),
                 y: .value("Price", $0.closingPrice)
             )
-            .foregroundStyle(by: .value("Food Item", $0.closingPrice))
+            .foregroundStyle(DesignSystemAsset.whiteCandle.swiftUIColor)
         }
-        .onChange(of: viewModel.chartDatas, perform: { value in
-            print(value)
-        })
+        .contentTransition(.interpolate)
+        .clipped()
+        .chartYScale(
+            domain: viewModel.chartRange,
+            range: .plotDimension(padding: 10)
+        )
     }
 }
 
