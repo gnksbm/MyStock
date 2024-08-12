@@ -61,5 +61,22 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
             )
             .map { $0.compactMap { $0.element } }
         }
+        .withUnretained(self)
+        .flatMap { useCase, items in
+            Observable.zip(
+                items.map { item in
+                    var copy = item
+                    return useCase.searchStocksRepository.searchStocks(
+                        searchTerm: item.ticker
+                    )
+                    .map { results in
+                        if let name = results.first?.name {
+                            copy.name = name
+                        }
+                        return copy
+                    }
+                }
+            )
+        }
     }
 }
