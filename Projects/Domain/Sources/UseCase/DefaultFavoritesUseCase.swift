@@ -56,8 +56,10 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
                                 marketDivision: .stockETFETN
                             )
                         )
+                        .materialize()
                     }
             )
+            .map { $0.compactMap { $0.element } }
         }
     }
 }
