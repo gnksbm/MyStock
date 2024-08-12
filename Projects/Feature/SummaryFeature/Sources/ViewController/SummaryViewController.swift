@@ -16,6 +16,18 @@ public final class SummaryViewController: BaseViewController<SummaryReactor> {
         let state = reactor.state.share()
         
         disposeBag.insert {
+            state.map { $0.favoriteItems }
+                .observe(on: MainScheduler.instance)
+                .withUnretained(self)
+                .subscribe(
+                    onNext: { vc, items in
+                        vc.collectionView.replaceItem(
+                            for: .favorite,
+                            items: items.map { .favorite($0) }
+                        )
+                    }
+                )
+            
             state.map { $0.topVolumeItems }
                 .observe(on: MainScheduler.instance)
                 .withUnretained(self)

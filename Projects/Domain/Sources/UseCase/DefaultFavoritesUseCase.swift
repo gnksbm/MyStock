@@ -44,10 +44,9 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
         .withUnretained(self)
         .flatMap { useCase, tuple in
             let (token, favoriteList) = tuple
-            return Observable.zip(
-                favoriteList
+            return Observable.from(favoriteList)
                     .filter { $0.marketType == .domestic }
-                    .map { favorite in
+                    .flatMap { favorite in
                         useCase.domesticPriceRepository.fetchCurrentPriceItem(
                             request: KISDomesticCurrentPriceRequest(
                                 userInfo: useCase.userInfo,
@@ -56,15 +55,17 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
                                 marketDivision: .stockETFETN
                             )
                         )
-                        .materialize()
+                        .catch { error in
+                            dump(error)
+                            return .empty()
+                        }
                     }
-            )
-            .map { $0.compactMap { $0.element } }
+                    .toArray()
         }
         .withUnretained(self)
         .flatMap { useCase, items in
-            Observable.zip(
-                items.map { item in
+            Observable.from(items)
+                .flatMap { item in
                     var copy = item
                     return useCase.searchStocksRepository.searchStocks(
                         searchTerm: item.ticker
@@ -76,7 +77,7 @@ public final class DefaultFavoritesUseCase: FavoritesUseCase {
                         return copy
                     }
                 }
-            )
+                .toArray()
         }
     }
 }

@@ -24,18 +24,19 @@ final class SummaryCollectionView:
                 let item = NSCollectionLayoutItem(
                     layoutSize: NSCollectionLayoutSize(
                         widthDimension: .fractionalWidth(1),
-                        heightDimension: .estimated(40)
+                        heightDimension: .fractionalHeight(1)
                     )
                 )
-                let group = NSCollectionLayoutGroup.vertical(
+                let groupDemension = 0.85/2
+                let group = NSCollectionLayoutGroup.horizontal(
                     layoutSize: NSCollectionLayoutSize(
-                        widthDimension: .fractionalWidth(0.85/2),
-                        heightDimension: .estimated(40)
+                        widthDimension: .fractionalWidth(groupDemension),
+                        heightDimension: .fractionalWidth(groupDemension)
                     ),
-                    subitems: [item, item, item]
+                    subitems: [item, item]
                 )
                 group.contentInsets = NSDirectionalEdgeInsets(
-                    top: 0,
+                    top: 15,
                     leading: 0,
                     bottom: 0,
                     trailing: 30
@@ -99,15 +100,31 @@ final class SummaryCollectionView:
     }
     
     override func createCellProvider() -> CellProvider {
-        let topVolumeRegistration = TopRankCVCell.makeRegistration()
+        let topRankRegistration = TopRankCVCell.makeRegistration()
+        let favoriteRegistration = FavoriteCVCell.makeRegistration()
         return { collectionView, indexPath, item in
             switch Section.allCases[indexPath.section] {
             case .favorite:
-                return nil
+                if case .favorite(let response) = item {
+                    let cell = collectionView.dequeueConfiguredReusableCell(
+                        using: favoriteRegistration,
+                        for: indexPath,
+                        item: response
+                    )
+                    if let collectionView = collectionView as? Self {
+                        let tapGesture = UITapGestureRecognizer()
+                        cell.addGestureRecognizer(tapGesture)
+                        tapGesture.rx.event
+                            .map { _ in item }
+                            .bind(to: collectionView.cellTapEvent)
+                            .disposed(by: cell.disposeBag)
+                    }
+                    return cell
+                } else { return nil }
             case .topVolume, .topMarketCap:
                 if case .topRank(let response) = item {
                     let cell = collectionView.dequeueConfiguredReusableCell(
-                        using: topVolumeRegistration,
+                        using: topRankRegistration,
                         for: indexPath,
                         item: response
                     )
