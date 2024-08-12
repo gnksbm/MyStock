@@ -9,14 +9,14 @@
 import UIKit
 
 import Core
-import DesignSystem
 import Domain
 
 import SnapKit
 import RxSwift
 
-final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
-    static func makeRegistration() -> Registration<KISCurrentPriceResponse> {
+public final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
+    public static func makeRegistration(
+    ) -> Registration<KISCurrentPriceResponse> {
         Registration { cell, _, item in
             cell.iconImageView.image = item.image
             cell.nameLabel.text = item.name
@@ -30,7 +30,7 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         }
     }
     
-    var disposeBag = DisposeBag()
+    public var disposeBag = DisposeBag()
     
     private let iconImageView = {
         let imageView = UIImageView()
@@ -72,7 +72,7 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         return label
     }()
     
-    override func prepareForReuse() {
+    public override func prepareForReuse() {
         super.prepareForReuse()
         disposeBag = DisposeBag()
         iconImageView.image = nil
@@ -84,14 +84,14 @@ final class FavoriteCVCell: BaseCVCell, RegistrableCellType {
         rateLabel.text = nil
     }
     
-    override func configureUI() {
+    public override func configureUI() {
         clipsToBounds = true
         layer.cornerRadius = DesignSystemAsset.Radius.medium
         layer.borderWidth = 1
         layer.borderColor = DesignSystemAsset.accentColor.color.cgColor
     }
     
-    override func configureLayout() {
+    public override func configureLayout() {
         [
             iconImageView,
             nameLabel,
