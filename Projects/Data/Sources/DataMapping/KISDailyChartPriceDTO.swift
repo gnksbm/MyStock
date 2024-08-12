@@ -37,7 +37,8 @@ extension KISDailyChartPriceDTO {
                     openingPrice: $0.stckOprc,
                     highestPrice: $0.stckHgpr,
                     lowestPrice: $0.stckLwpr,
-                    closingPrice: $0.stckPrpr
+                    closingPrice: $0.stckPrpr,
+                    dateFormat: .dailyChartResponse
                 )
             }
         )

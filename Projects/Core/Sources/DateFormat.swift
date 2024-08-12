@@ -11,9 +11,10 @@ import Foundation
 public enum DateFormat: String {
     private static var cachedStorage = [DateFormat: DateFormatter]()
     
-    case dailyChartInput = "yyyyMMddHHmmss"
+    case dailyChartResponse = "yyyyMMddHHmmss"
+    case dailyChartRequest = "HHmmss"
     case accessToken = "yyyy-MM-dd HH:mm:ss"
-    case holiday = "yyyyMMdd"
+    case onlyYMD = "yyyyMMdd"
     
     fileprivate var formatter: DateFormatter {
         if let formatter = Self.cachedStorage[self] {
@@ -43,4 +44,3 @@ public extension Date {
         dateFormat.formatter.string(from: self)
     }
 }
-

@@ -19,8 +19,8 @@ struct HolidayDTO: Codable {
 extension HolidayDTO {
     var toDomain: [HolidayResponse] {
         body.items.item.compactMap { item in
-            guard let date = item.locdate
-                .formatted(dateFormat: .dailyChartInput) else { return nil }
+            guard let date = item.locdate.formatted(dateFormat: .onlyYMD)
+            else { return nil }
             return HolidayResponse(
                 date: date,
                 isHoliday: item.isHoliday == "Y",

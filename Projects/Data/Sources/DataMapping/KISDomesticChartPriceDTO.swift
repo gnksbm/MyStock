@@ -32,7 +32,8 @@ extension KISDomesticChartPriceDTO {
                 openingPrice: $0.stckOprc,
                 highestPrice: $0.stckHgpr,
                 lowestPrice: $0.stckLwpr,
-                closingPrice: $0.stckClpr
+                closingPrice: $0.stckClpr,
+                dateFormat: .onlyYMD
             )
         }
     }

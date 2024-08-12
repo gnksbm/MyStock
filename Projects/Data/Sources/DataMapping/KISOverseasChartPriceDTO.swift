@@ -23,7 +23,8 @@ extension KISOverseasChartPriceDTO {
                 openingPrice: $0.ovrsNmixOprc,
                 highestPrice: $0.ovrsNmixHgpr,
                 lowestPrice: $0.ovrsNmixLwpr,
-                closingPrice: $0.ovrsNmixPrpr
+                closingPrice: $0.ovrsNmixPrpr,
+                dateFormat: .onlyYMD
             )
         }
     }

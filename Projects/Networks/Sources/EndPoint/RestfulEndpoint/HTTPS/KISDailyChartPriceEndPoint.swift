@@ -21,7 +21,9 @@ public struct KISDailyChartPriceEndPoint: KISEndPoint {
     public var query: [String : String] {
         [
             "FID_ETC_CLS_CODE": "",
-            "FID_INPUT_HOUR_1": "090000",
+            "FID_INPUT_HOUR_1": Date.now.formatted(
+                dateFormat: .dailyChartRequest
+            ),
             "FID_PW_DATA_INCU_YN": "N",
         ].merging {
             request.quries.toHTTPQuery
