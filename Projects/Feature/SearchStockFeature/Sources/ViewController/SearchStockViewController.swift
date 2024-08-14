@@ -72,8 +72,12 @@ final class SearchStockViewController: BaseViewController<SearchStockReactor> {
                 .observe(on: MainScheduler.asyncInstance)
                 .withUnretained(self)
                 .subscribe(
-                    onNext: { _, _ in
-                        // TODO: Loading 화면 노출
+                    onNext: { vc, isSearching in
+                        if isSearching {
+                            vc.showActivityIndicator()
+                        } else {
+                            vc.hideActivityIndicator()
+                        }
                     }
                 )
         }
