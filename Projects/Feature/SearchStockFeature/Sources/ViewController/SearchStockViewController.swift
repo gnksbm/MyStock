@@ -19,10 +19,10 @@ import RxCocoa
 import SnapKit
 
 final class SearchStockViewController: BaseViewController<SearchStockReactor> {
-    private lazy var searchTextField: UITextField = {
-        let textField = UITextField()
-        textField.placeholder = "종목명, 종목코드를 입력하세요."
-        return textField
+    private lazy var searchController = {
+        let searchController = UISearchController()
+        searchController.searchBar.placeholder = "종목명, 종목코드를 입력하세요."
+        return searchController
     }()
     
     private let searchCollectionView = SearchCollectionView()
@@ -36,8 +36,11 @@ final class SearchStockViewController: BaseViewController<SearchStockReactor> {
     
     override func bindAction(reactor: SearchStockReactor) {
         disposeBag.insert {
-            searchTextField.rx.controlEvent(.editingDidEndOnExit)
-                .withLatestFrom(searchTextField.rx.text.orEmpty) { $1 }
+            searchController.searchBar.searchTextField.rx
+                .controlEvent(.editingDidEndOnExit)
+                .withLatestFrom(
+                    searchController.searchBar.searchTextField.rx.text.orEmpty
+                ) { $1 }
                 .asObservable()
                 .map {
                     SearchStockReactor.Action
@@ -77,7 +80,7 @@ final class SearchStockViewController: BaseViewController<SearchStockReactor> {
     }
     
     override func configureLayout() {
-        [searchTextField, searchCollectionView].forEach {
+        [searchCollectionView].forEach {
             view.addSubview($0)
         }
         
@@ -85,7 +88,7 @@ final class SearchStockViewController: BaseViewController<SearchStockReactor> {
     }
     
     private func configureNavigation() {
-        navigationItem.titleView = searchTextField
+        navigationItem.searchController = searchController
     }
     
     private func hideKeyboardOnTapAndOrDrag() {
@@ -95,7 +98,7 @@ final class SearchStockViewController: BaseViewController<SearchStockReactor> {
             .withUnretained(self)
             .subscribe(
                 onNext: { vc, _ in
-                    vc.searchTextField.endEditing(true)
+                    vc.searchController.searchBar.endEditing(true)
                 }
             )
             .disposed(by: disposeBag)
